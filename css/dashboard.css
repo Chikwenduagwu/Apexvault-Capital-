@@ -1,0 +1,560 @@
+/* css/dashboard.css */
+/* ═══════════════════════════════════════════
+   Dashboard & Page-Specific Styles
+   Palette: Olive Green / Pine Tree / Cornsilk
+═══════════════════════════════════════════ */
+
+/* ── DASHBOARD HEADER ────────────────── */
+.dash-header {
+  padding: 28px 16px 0;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.dash-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.dash-greeting {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+.dash-name { font-size: 22px; margin-top: 3px; color: var(--pine); }
+
+.avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--text-white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 16px;
+  flex-shrink: 0;
+  border: 2px solid var(--earth);
+}
+
+/* ── BALANCE HERO CARD ───────────────── */
+.balance-hero {
+  background: linear-gradient(135deg, var(--pine) 0%, var(--primary) 100%);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  color: var(--text-white);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.balance-hero::before {
+  content: '';
+  position: absolute; top: -50px; right: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(221,161,94,0.12);
+}
+.balance-hero::after {
+  content: '';
+  position: absolute; bottom: -60px; left: -20px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(254,250,224,0.06);
+}
+.balance-label {
+  font-size: 11px; letter-spacing: 1px;
+  text-transform: uppercase; opacity: 0.65;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+}
+.balance-amount {
+  font-size: 38px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  margin: 8px 0 4px;
+  letter-spacing: -1px;
+  color: #FEFAE0;
+}
+.balance-sub { font-size: 12px; opacity: 0.6; }
+.balance-actions {
+  display: flex; gap: 10px;
+  margin-top: 20px;
+  position: relative; z-index: 1;
+}
+.balance-actions .btn {
+  flex: 1; padding: 11px; font-size: 13px;
+  background: rgba(254,250,224,0.14);
+  color: var(--text-white);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(254,250,224,0.22);
+  backdrop-filter: blur(4px);
+}
+.balance-actions .btn:hover { background: rgba(221,161,94,0.28); }
+
+/* ── STATS GRID ──────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-card-label {
+  font-size: 10px; color: var(--text-muted);
+  font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+.stat-card-value {
+  font-size: 19px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; margin-top: 6px;
+  color: var(--pine);
+}
+.stat-card-icon {
+  width: 34px; height: 34px;
+  background: var(--card-bg);
+  border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+}
+
+/* ── INVESTMENT LIST ─────────────────── */
+.inv-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.inv-item:last-child { border-bottom: none; }
+.inv-plan { font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--pine); }
+.inv-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.inv-amount { font-weight: 800; font-family: 'Montserrat', sans-serif; font-size: 15px; text-align: right; color: var(--pine); }
+.inv-roi { font-size: 12px; color: var(--primary); font-weight: 600; }
+
+/* ── MINE PAGE ───────────────────────── */
+.mine-page { text-align: center; padding: 28px 16px; max-width: 480px; margin: 0 auto; }
+.circle-wrapper {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin: 20px auto;
+}
+.circle-inner {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center;
+}
+.circle-pct {
+  font-size: 32px; font-family: 'Montserrat', sans-serif;
+  font-weight: 800; color: var(--primary);
+}
+.circle-label { font-size: 10px; color: var(--text-muted); letter-spacing: 0.8px; font-weight: 700; }
+.mine-profit-est {
+  background: var(--earth-lt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px; margin: 0 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mine-profit-label { font-size: 13px; color: var(--text-muted); }
+.mine-profit-val {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 20px;
+  color: var(--primary);
+}
+#claim-btn {
+  background: var(--earth-lt);
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  transition: all 0.3s ease;
+}
+#claim-btn.ready {
+  background: var(--primary);
+  color: var(--text-white);
+  border-color: var(--primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+}
+#claim-btn:not(.ready) { cursor: not-allowed; }
+.countdown-display {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px; font-weight: 800;
+  color: var(--pine); letter-spacing: 3px;
+  margin: 6px 0;
+}
+
+/* ── PLAN CARDS ──────────────────────── */
+.plan-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative; overflow: hidden;
+  background: var(--card-bg);
+}
+.plan-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.plan-card.featured {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, var(--pine) 0%, var(--primary) 100%);
+  color: var(--text-white);
+}
+.plan-card.featured .plan-roi  { color: var(--earth); }
+.plan-card.featured .plan-name { color: var(--text-white); }
+.plan-card.featured .plan-roi-label,
+.plan-card.featured .plan-range { color: rgba(254,250,224,0.65); }
+.plan-name { font-size: 17px; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--pine); }
+.plan-roi { font-size: 38px; font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--primary); line-height: 1; }
+.plan-roi-label { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+.plan-range { font-size: 13px; color: var(--text-muted); margin-top: 10px; }
+.plan-badge {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--earth); color: var(--pine);
+  font-size: 10px; font-weight: 800;
+  padding: 4px 10px; border-radius: 99px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── REFERRAL PAGE ───────────────────── */
+.ref-code-box {
+  background: var(--earth-lt);
+  border-radius: var(--radius-sm);
+  padding: 22px; text-align: center;
+  border: 2px dashed var(--border); margin: 16px 0;
+}
+.ref-code {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px; font-weight: 800;
+  letter-spacing: 5px; color: var(--primary); margin: 8px 0;
+}
+.ref-link { font-size: 12px; color: var(--text-muted); word-break: break-all; }
+
+/* ── WITHDRAWAL LIST ─────────────────── */
+.withdrawal-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.withdrawal-item:last-child { border-bottom: none; }
+
+/* ── DEPOSIT ADDRESS BOX ─────────────── */
+.deposit-addr-box {
+  background: var(--bg-deep);
+  border: 1.5px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.deposit-addr-network {
+  font-size: 10px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--primary);
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 6px;
+}
+.deposit-addr-value {
+  font-family: monospace; font-size: 12px;
+  word-break: break-all; color: var(--pine);
+  margin-bottom: 6px; line-height: 1.5;
+}
+.deposit-addr-copy {
+  font-size: 11px; font-weight: 600;
+  color: var(--primary); cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.deposit-addr-copy:hover { color: var(--pine); }
+
+/* ── EMPTY STATE ─────────────────────── */
+.empty-state { text-align: center; padding: 44px 24px; color: var(--text-muted); }
+.empty-state svg { margin: 0 auto 16px; opacity: 0.3; }
+.empty-state h3 { color: var(--pine); font-size: 16px; margin-bottom: 8px; }
+.empty-state p { font-size: 13px; }
+
+@media (min-width:768px) {
+  .page-content, .dash-header { max-width: 640px; }
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width:1024px) {
+  .page-content, .dash-header { max-width: 820px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   Modern UI/UX Upgrade Layer (ADD AFTER your existing CSS)
+   Uses same palette tokens: --pine, --primary, --earth, --earth-lt,
+   --card-bg, --border, --text-muted, --text-white, etc.
+───────────────────────────────────────────────────────────── */
+
+:root{
+  /* motion + elevation tokens (non-breaking additions) */
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --ease-spring: cubic-bezier(.16, 1, .3, 1);
+  --dur-1: 160ms;
+  --dur-2: 260ms;
+  --dur-3: 520ms;
+
+  --shadow-modern: 0 18px 50px rgba(0,0,0,.10);
+  --shadow-modern-sm: 0 10px 28px rgba(0,0,0,.08);
+  --ring: 0 0 0 4px rgba(221,161,94,.22); /* earth tint ring */
+}
+
+/* Respect accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}
+
+/* Better tap/keyboard UX without changing layout */
+:where(.btn, .plan-card, .deposit-addr-copy, #claim-btn):focus-visible{
+  outline: none;
+  box-shadow: var(--ring), var(--shadow-modern-sm);
+}
+
+/* ── Page entrance micro-animations (safe + subtle) ─────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); filter: saturate(.95); }
+  to   { opacity: 1; transform: translateY(0);  filter: saturate(1); }
+}
+.dash-header,
+.balance-hero,
+.stats-grid,
+.mine-page,
+.ref-code-box,
+.deposit-addr-box {
+  animation: fadeUp var(--dur-3) var(--ease-out) both;
+}
+
+/* Stagger common repeating items (no HTML changes required) */
+.stats-grid > *:nth-child(1),
+.inv-item:nth-child(1),
+.withdrawal-item:nth-child(1) { animation: fadeUp var(--dur-3) var(--ease-out) both; }
+.stats-grid > *:nth-child(2),
+.inv-item:nth-child(2),
+.withdrawal-item:nth-child(2) { animation: fadeUp var(--dur-3) var(--ease-out) 60ms both; }
+.stats-grid > *:nth-child(3),
+.inv-item:nth-child(3),
+.withdrawal-item:nth-child(3) { animation: fadeUp var(--dur-3) var(--ease-out) 120ms both; }
+.stats-grid > *:nth-child(4),
+.inv-item:nth-child(4),
+.withdrawal-item:nth-child(4) { animation: fadeUp var(--dur-3) var(--ease-out) 180ms both; }
+
+/* ── Header polish ─────────────────────────────────────────── */
+.dash-header-top { gap: 12px; }
+.dash-name { letter-spacing: -0.3px; }
+
+/* Avatar: richer depth + subtle gradient using same palette */
+.avatar{
+  background: linear-gradient(135deg, var(--primary) 0%, var(--pine) 100%);
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+  transition: transform var(--dur-2) var(--ease-spring), box-shadow var(--dur-2) var(--ease-out);
+}
+.avatar:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(0,0,0,.14);
+}
+
+/* ── Balance hero: animated gradient + modern glow ──────────── */
+@keyframes gradientShift {
+  0%   { background-position: 0% 30%; }
+  50%  { background-position: 100% 70%; }
+  100% { background-position: 0% 30%; }
+}
+.balance-hero{
+  background-size: 220% 220%;
+  animation: gradientShift 10s var(--ease-out) infinite;
+  box-shadow: var(--shadow-modern);
+  border: 1px solid rgba(254,250,224,0.12);
+  transform: translateZ(0); /* smoother animation */
+}
+.balance-hero:hover{
+  box-shadow: 0 24px 70px rgba(0,0,0,.14);
+}
+
+/* Make the existing decorative circles feel “premium” */
+.balance-hero::before{
+  filter: blur(0.2px);
+  transform: translateZ(0);
+}
+.balance-hero::after{
+  filter: blur(0.2px);
+  transform: translateZ(0);
+}
+
+/* Balance buttons: more modern glass + crisp interactions */
+.balance-actions .btn{
+  transition:
+    transform var(--dur-1) var(--ease-spring),
+    background var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
+.balance-actions .btn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(254,250,224,0.35);
+  box-shadow: 0 14px 28px rgba(0,0,0,.14);
+}
+.balance-actions .btn:active{
+  transform: translateY(0px) scale(.99);
+}
+
+/* ── Stats cards: elevate + icon polish (works with existing markup) ── */
+.stats-grid > *{
+  border-radius: var(--radius);
+  transition:
+    transform var(--dur-2) var(--ease-spring),
+    box-shadow var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    background var(--dur-2) var(--ease-out);
+  box-shadow: 0 10px 26px rgba(0,0,0,.06);
+  border: 1.5px solid var(--border);
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--earth-lt));
+}
+.stats-grid > *:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-modern-sm);
+  border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+}
+.stat-card-icon{
+  transition: transform var(--dur-2) var(--ease-spring), border-color var(--dur-2) var(--ease-out);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 85%, var(--earth-lt)) 0%, var(--card-bg) 100%);
+}
+.stats-grid > *:hover .stat-card-icon{
+  transform: translateY(-1px) scale(1.03);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+}
+
+/* ── Investment/Withdrawal rows: nicer hover without layout breaking ── */
+.inv-item,
+.withdrawal-item{
+  transition: background var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-spring);
+  border-radius: 12px; /* doesn’t break; only visible on hover bg */
+}
+.inv-item:hover,
+.withdrawal-item:hover{
+  background: linear-gradient(
+    90deg,
+    rgba(221,161,94,0.10) 0%,
+    rgba(254,250,224,0.00) 70%
+  );
+  transform: translateX(2px);
+}
+
+/* ── Plan cards: more “product” feel + animated sheen on hover ───────── */
+@keyframes sheen {
+  from { transform: translateX(-120%) skewX(-12deg); opacity: 0; }
+  30%  { opacity: .35; }
+  to   { transform: translateX(140%) skewX(-12deg); opacity: 0; }
+}
+.plan-card{
+  box-shadow: 0 12px 30px rgba(0,0,0,.06);
+  will-change: transform;
+}
+.plan-card::before{
+  /* Adds a sheen overlay without interfering with your existing layout */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(254,250,224,0.22) 45%,
+    transparent 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-120%) skewX(-12deg);
+}
+.plan-card:hover::before{
+  opacity: 1;
+  animation: sheen 700ms var(--ease-out);
+}
+.plan-card:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-modern-sm);
+}
+
+/* Featured plan: richer contrast (same palette) */
+.plan-card.featured{
+  box-shadow: 0 22px 70px rgba(0,0,0,.16);
+  border-color: rgba(254,250,224,0.18);
+}
+.plan-card.featured:hover{
+  transform: translateY(-3px) scale(1.01);
+}
+
+/* ── Mine page: subtle “alive” feeling ─────────────────────── */
+@keyframes softPulse {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
+}
+.circle-wrapper{
+  animation: softPulse 2.8s var(--ease-out) infinite;
+}
+
+/* Claim button: clearer states + nicer motion */
+#claim-btn{
+  transition:
+    transform var(--dur-1) var(--ease-spring),
+    box-shadow var(--dur-2) var(--ease-out),
+    background var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out);
+}
+#claim-btn.ready:hover{
+  transform: translateY(-1px);
+}
+#claim-btn.ready:active{
+  transform: translateY(0) scale(.99);
+}
+
+/* ── Referral box: animated dashed border “scan” ───────────── */
+@keyframes dashMove {
+  to { background-position: 18px 0; }
+}
+.ref-code-box{
+  position: relative;
+  overflow: hidden;
+  /* keep your dashed border, but add a subtle animated highlight */
+  background-image: linear-gradient(
+    90deg,
+    rgba(221,161,94,0.10),
+    rgba(254,250,224,0.00) 55%
+  );
+}
+.ref-code{
+  text-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+/* ── Deposit box: clearer hierarchy + hover affordance ───────── */
+.deposit-addr-box{
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+  transition: transform var(--dur-2) var(--ease-spring), box-shadow var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+}
+.deposit-addr-box:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-modern-sm);
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border-dark));
+}
+.deposit-addr-copy{
+  transition: transform var(--dur-1) var(--ease-spring), color var(--dur-2) var(--ease-out);
+}
+.deposit-addr-copy:hover{
+  transform: translateY(-1px);
+}
+
+/* ── Typography tweaks for a more modern “tight” look ───────── */
+.balance-amount,
+.plan-roi,
+.circle-pct,
+.countdown-display{
+  font-kerning: normal;
+  text-rendering: geometricPrecision;
+}
+
+/* Optional: slightly nicer separation on large screens */
+@media (min-width:768px){
+  .balance-hero{ border-radius: calc(var(--radius) + 2px); }
+}

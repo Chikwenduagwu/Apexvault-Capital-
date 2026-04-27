@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mine Profit — EarthROI</title>
+<link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/dashboard.css"/>
+</head>
+<body>
+<main class="mine-page">
+  <h1 style="font-size:22px;margin-bottom:4px;">Daily Profit Mining</h1>
+  <p class="text-muted">Accumulates every 24 hours from your active investments.</p>
+
+  <div class="circle-wrapper" id="circle-container">
+    <div class="circle-inner">
+      <div class="circle-pct" id="circle-pct">0%</div>
+      <div class="circle-label">COMPLETE</div>
+    </div>
+  </div>
+
+  <div id="status-label" class="text-muted" style="margin-bottom:6px;font-size:13px;">Calculating…</div>
+  <div class="countdown-display" id="countdown">--:--:--</div>
+
+  <div class="mine-profit-est" style="margin-top:20px;">
+    <div>
+      <div class="mine-profit-label">Today's Profit</div>
+      <div style="font-size:11px;color:var(--text-muted);">From active investments</div>
+    </div>
+    <div class="mine-profit-val" id="daily-profit-est">$0.00</div>
+  </div>
+
+  <button id="claim-btn" class="btn btn-full btn-lg" style="margin:0 0 28px;" onclick="doClaim()">
+    Claim Profit
+  </button>
+
+  <div style="text-align:left;width:100%;">
+    <div class="section-title">Recent Claims</div>
+    <div class="card" id="claims-list">
+      <div class="text-muted text-center" style="padding:16px 0;">No claims yet.</div>
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="invest.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Invest
+  </a>
+  <a href="mine.html" class="active">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Mine
+  </a>
+  <a href="dashboard.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Home
+  </a>
+  <a href="referral.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Referral
+  </a>
+  <a href="profile.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+  </a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/roi-engine.js"></script>
+<script src="js/ui-effects.js"></script>
+<script>
+let circle = null, currentUser = null, claimStatus = null, ticker = null;
+
+async function init() {
+  currentUser = await requireAuth();
+  if (!currentUser) return;
+  const profile = await getProfile(currentUser.id);
+
+  circle = ROIEngine.buildProgressCircle(document.getElementById('circle-container'));
+  claimStatus = ROIEngine.calcClaimStatus(profile.last_claim_at);
+  updateUI(claimStatus);
+  setTimeout(() => circle.update(claimStatus.percentComplete), 200);
+
+  if (!claimStatus.canClaim) {
+    ticker = setInterval(() => {
+      claimStatus = ROIEngine.calcClaimStatus(profile.last_claim_at);
+      updateUI(claimStatus);
+      circle.update(claimStatus.percentComplete);
+      if (claimStatus.canClaim) clearInterval(ticker);
+    }, 1000);
+  }
+
+  const daily = await ROIEngine.calcDailyProfit(currentUser.id);
+  document.getElementById('daily-profit-est').textContent = formatMoney(daily);
+
+  const { data: claims } = await sb.from('profit_claims')
+    .select('amount, claimed_at').eq('user_id', currentUser.id)
+    .order('claimed_at', { ascending:false }).limit(6);
+
+  if (claims?.length > 0) {
+    document.getElementById('claims-list').innerHTML = claims.map(c => `
+      <div class="withdrawal-item">
+        <div>
+          <div style="font-weight:700;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--pine);">Profit Claimed</div>
+          <div style="font-size:12px;color:var(--text-muted);">${new Date(c.claimed_at).toLocaleString()}</div>
+        </div>
+        <div style="font-weight:800;color:var(--primary);font-family:'Montserrat',sans-serif;">${formatMoney(c.amount)}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function updateUI(status) {
+  const pct = Math.round(status.percentComplete * 100);
+  document.getElementById('circle-pct').textContent = pct + '%';
+  const btn = document.getElementById('claim-btn');
+  if (status.canClaim) {
+    document.getElementById('countdown').textContent = 'Ready!';
+    document.getElementById('status-label').textContent = 'Your profit is ready to claim';
+    btn.classList.add('ready'); btn.textContent = 'Claim Profit';
+  } else {
+    document.getElementById('countdown').textContent = ROIEngine.formatCountdown(status.hoursRemaining);
+    document.getElementById('status-label').textContent = 'Next claim available in';
+    btn.classList.remove('ready'); btn.textContent = 'Not Yet Available';
+  }
+}
+
+async function doClaim() {
+  if (!claimStatus?.canClaim) { Toast.show('Please wait until 24 hours have passed.', 'warning'); return; }
+  const btn = document.getElementById('claim-btn');
+  setLoading(btn, true, 'Claiming…');
+  try {
+    const result = await ROIEngine.claimProfit(currentUser.id);
+    if (result.success) {
+      Toast.show(`${formatMoney(result.profit_claimed)} claimed!`, 'success');
+      clearInterval(ticker);
+      setTimeout(() => window.location.reload(), 1400);
+    } else {
+      Toast.show(result.error || 'Claim failed.', 'error');
+      setLoading(btn, false);
+    }
+  } catch(err) {
+    Toast.show(err.message || 'An error occurred.', 'error');
+    setLoading(btn, false);
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Dashboard — EarthROI</title>
+<link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">Earth<span>ROI</span></div>
+    <nav class="admin-nav">
+      <div class="admin-nav-item active" data-tab="overview">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
+      </div>
+      <div class="admin-nav-item" data-tab="users">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Users
+      </div>
+      <div class="admin-nav-item" data-tab="withdrawals">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        Withdrawals
+      </div>
+      <div class="admin-nav-item" data-tab="deposits">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Deposits
+      </div>
+      <div class="admin-nav-item" data-tab="investments">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Investments
+      </div>
+      <div class="admin-nav-item" data-tab="settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <div class="admin-nav-item" onclick="doLogout()" style="color:rgba(254,250,224,0.35);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="admin-main">
+    <div class="admin-top-bar">
+      <div class="admin-page-title" id="page-title">Overview</div>
+      <div style="font-size:13px;color:var(--text-muted);" id="admin-name">Admin</div>
+    </div>
+
+    <!-- ════ OVERVIEW ════ -->
+    <div id="tab-overview">
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Total Deposits</div>
+          <div class="admin-stat-value" id="stat-deposits">—</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Total Withdrawals</div>
+          <div class="admin-stat-value" id="stat-withdrawals">—</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Total Users</div>
+          <div class="admin-stat-value" id="stat-users">—</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Active Investments</div>
+          <div class="admin-stat-value" id="stat-investments">—</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Pending Withdrawals</div>
+          <div class="admin-stat-value" id="stat-pending-w">—</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Pending Deposits</div>
+          <div class="admin-stat-value" id="stat-pending-d">—</div>
+        </div>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">Pending Withdrawals</div>
+          <button class="btn btn-sm btn-ghost" onclick="switchTab('withdrawals')">View All</button>
+        </div>
+        <div id="overview-withdrawals"><div class="text-muted">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ════ USERS ════ -->
+    <div id="tab-users" style="display:none;">
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">User Management</div>
+          <span class="text-muted" style="font-size:13px;" id="users-count">—</span>
+        </div>
+        <div class="admin-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="user-search" placeholder="Search by name or email…" oninput="filterUsers()"/>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Balance</th><th>Deposited</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody id="users-tbody"><tr><td colspan="6" class="text-muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ WITHDRAWALS ════ -->
+    <div id="tab-withdrawals" style="display:none;">
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">Withdrawal Queue</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Amount</th><th>Network</th><th>Wallet</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="withdrawals-tbody"><tr><td colspan="7" class="text-muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ DEPOSITS ════ -->
+    <div id="tab-deposits" style="display:none;">
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">Deposit Requests</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Amount</th><th>TX Hash</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="deposits-tbody"><tr><td colspan="6" class="text-muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ INVESTMENTS ════ -->
+    <div id="tab-investments" style="display:none;">
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">All Investments</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Daily ROI</th><th>Earned</th><th>Expires</th><th>Status</th></tr></thead>
+            <tbody id="investments-tbody"><tr><td colspan="7" class="text-muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SETTINGS ════ -->
+    <div id="tab-settings" style="display:none;">
+
+      <!-- Deposit Addresses -->
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="display:inline;vertical-align:middle;margin-right:6px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Deposit Addresses
+          </div>
+        </div>
+        <div class="settings-grid" id="settings-deposit-grid">
+          <div class="text-muted">Loading…</div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="saveSettings('deposit')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save Deposit Settings
+        </button>
+      </div>
+
+      <!-- Withdrawal Settings -->
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="display:inline;vertical-align:middle;margin-right:6px;"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+            Withdrawal Settings
+          </div>
+        </div>
+        <div class="settings-grid" id="settings-withdrawal-grid">
+          <div class="text-muted">Loading…</div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="saveSettings('withdrawal')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save Withdrawal Settings
+        </button>
+      </div>
+
+    </div><!-- /tab-settings -->
+
+  </main>
+</div><!-- /admin-layout -->
+
+<!-- Edit User Modal -->
+<div class="modal-overlay" id="edit-user-modal" style="display:none;">
+  <div class="modal">
+    <div class="modal-title">Edit User</div>
+    <input type="hidden" id="edit-user-id"/>
+    <div class="form-group">
+      <label class="form-label">Balance (USD)</label>
+      <input class="form-input" type="number" id="edit-balance" step="0.01"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Account Status</label>
+      <select class="form-input" id="edit-banned">
+        <option value="false">Active</option>
+        <option value="true">Banned</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" style="background:var(--pine);" onclick="saveUserEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/ui-effects.js"></script>
+<script>
+/* ══════════════════════════════════════
+   ADMIN DASHBOARD CONTROLLER
+══════════════════════════════════════ */
+let allUsers = [];
+let allSettings = {};
+
+const TAB_LABELS = {
+  overview:'Overview', users:'Users', withdrawals:'Withdrawals',
+  deposits:'Deposits', investments:'Investments', settings:'Settings'
+};
+
+/* ── INIT ─────────────────────────── */
+(async () => {
+  const result = await requireAdmin();
+  if (!result) return;
+  document.getElementById('admin-name').textContent = result.profile.full_name || 'Admin';
+
+  // Sidebar nav clicks
+  document.querySelectorAll('.admin-nav-item[data-tab]').forEach(el => {
+    el.addEventListener('click', () => switchTab(el.dataset.tab));
+  });
+
+  await loadOverview();
+})();
+
+/* ── TAB SWITCHER ─────────────────── */
+async function switchTab(tab) {
+  document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+  document.getElementById('tab-' + tab).style.display = 'block';
+  document.querySelectorAll('.admin-nav-item[data-tab]').forEach(el =>
+    el.classList.toggle('active', el.dataset.tab === tab));
+  document.getElementById('page-title').textContent = TAB_LABELS[tab] || tab;
+  const loaders = {
+    users: loadUsers, withdrawals: loadWithdrawals,
+    deposits: loadDeposits, investments: loadInvestments,
+    settings: loadSettings
+  };
+  if (loaders[tab]) await loaders[tab]();
+}
+
+/* ── OVERVIEW ─────────────────────── */
+async function loadOverview() {
+  const [
+    { count: userCount },
+    { data: confirmedDeps },
+    { data: approvedWiths },
+    { count: activeInv },
+    { count: pendingW },
+    { count: pendingD }
+  ] = await Promise.all([
+    sb.from('profiles').select('id',{count:'exact',head:true}),
+    sb.from('deposits').select('amount').eq('status','confirmed'),
+    sb.from('withdrawals').select('amount').eq('status','approved'),
+    sb.from('investments').select('id',{count:'exact',head:true}).eq('status','active'),
+    sb.from('withdrawals').select('id',{count:'exact',head:true}).eq('status','pending'),
+    sb.from('deposits').select('id',{count:'exact',head:true}).eq('status','pending'),
+  ]);
+
+  const totalDep  = (confirmedDeps||[]).reduce((s,d)=>s+parseFloat(d.amount),0);
+  const totalWith = (approvedWiths||[]).reduce((s,w)=>s+parseFloat(w.amount),0);
+
+  document.getElementById('stat-deposits').textContent    = formatMoney(totalDep);
+  document.getElementById('stat-withdrawals').textContent = formatMoney(totalWith);
+  document.getElementById('stat-users').textContent       = userCount || 0;
+  document.getElementById('stat-investments').textContent = activeInv || 0;
+  document.getElementById('stat-pending-w').textContent   = pendingW || 0;
+  document.getElementById('stat-pending-d').textContent   = pendingD || 0;
+
+  const { data: pw } = await sb.from('withdrawals')
+    .select('*, profiles(full_name,email)')
+    .eq('status','pending').order('requested_at',{ascending:false}).limit(5);
+
+  const el = document.getElementById('overview-withdrawals');
+  if (!pw?.length) { el.innerHTML = '<div class="text-muted">No pending withdrawals.</div>'; return; }
+  el.innerHTML = `<table class="admin-table"><thead><tr><th>User</th><th>Amount</th><th>Network</th><th>Date</th><th>Actions</th></tr></thead><tbody>
+    ${pw.map(w=>`<tr>
+      <td><strong>${w.profiles?.full_name||'—'}</strong><br/><span style="font-size:11px;color:var(--text-muted);">${w.profiles?.email||''}</span></td>
+      <td><strong>${formatMoney(w.amount)}</strong></td>
+      <td>${w.network}</td>
+      <td>${new Date(w.requested_at).toLocaleDateString()}</td>
+      <td style="display:flex;gap:6px;">
+        <button class="btn-approve" onclick="processWithdrawal('${w.id}','${w.user_id}',${w.amount},'approved')">Approve</button>
+        <button class="btn-decline" onclick="processWithdrawal('${w.id}','${w.user_id}',${w.amount},'declined')">Decline</button>
+      </td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+/* ── USERS ────────────────────────── */
+async function loadUsers() {
+  const { data } = await sb.from('profiles').select('*').order('created_at',{ascending:false});
+  allUsers = data || [];
+  document.getElementById('users-count').textContent = allUsers.length + ' users';
+  renderUsers(allUsers);
+}
+function renderUsers(users) {
+  document.getElementById('users-tbody').innerHTML = users.map(u=>`
+    <tr>
+      <td><strong>${u.full_name||'—'}</strong><br/><span style="font-size:11px;color:var(--text-muted);">${u.email}</span></td>
+      <td><strong>${formatMoney(u.balance)}</strong></td>
+      <td>${formatMoney(u.total_deposited)}</td>
+      <td><span class="badge ${u.is_banned?'badge-declined':'badge-active'}">${u.is_banned?'Banned':'Active'}</span></td>
+      <td>${new Date(u.created_at).toLocaleDateString()}</td>
+      <td><button class="btn btn-sm btn-ghost" onclick="openEditModal('${u.id}',${u.balance},${u.is_banned})">Edit</button></td>
+    </tr>`).join('') || '<tr><td colspan="6" class="text-muted">No users.</td></tr>';
+}
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase();
+  renderUsers(allUsers.filter(u=>u.full_name?.toLowerCase().includes(q)||u.email?.toLowerCase().includes(q)));
+}
+function openEditModal(id, balance, banned) {
+  document.getElementById('edit-user-id').value   = id;
+  document.getElementById('edit-balance').value   = parseFloat(balance||0).toFixed(2);
+  document.getElementById('edit-banned').value    = String(banned);
+  document.getElementById('edit-user-modal').style.display = 'flex';
+}
+function closeEditModal() { document.getElementById('edit-user-modal').style.display = 'none'; }
+async function saveUserEdit() {
+  const id      = document.getElementById('edit-user-id').value;
+  const balance = parseFloat(document.getElementById('edit-balance').value);
+  const banned  = document.getElementById('edit-banned').value === 'true';
+  const { error } = await sb.from('profiles').update({balance, is_banned:banned}).eq('id',id);
+  if (error) { Toast.show(error.message,'error'); return; }
+  Toast.show('User updated.','success');
+  closeEditModal(); await loadUsers();
+}
+
+/* ── WITHDRAWALS ──────────────────── */
+async function loadWithdrawals() {
+  const { data } = await sb.from('withdrawals')
+    .select('*, profiles(full_name,email)')
+    .order('requested_at',{ascending:false});
+  document.getElementById('withdrawals-tbody').innerHTML = (data||[]).map(w=>`
+    <tr>
+      <td><strong>${w.profiles?.full_name||'—'}</strong><br/><span style="font-size:11px;color:var(--text-muted);">${w.profiles?.email||''}</span></td>
+      <td><strong>${formatMoney(w.amount)}</strong></td>
+      <td>${w.network}</td>
+      <td style="font-family:monospace;font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;">${w.wallet_address}</td>
+      <td>${new Date(w.requested_at).toLocaleDateString()}</td>
+      <td><span class="badge badge-${w.status}">${w.status}</span></td>
+      <td>${w.status==='pending'?`
+        <div style="display:flex;gap:6px;">
+          <button class="btn-approve" onclick="processWithdrawal('${w.id}','${w.user_id}',${w.amount},'approved')">Approve</button>
+          <button class="btn-decline" onclick="processWithdrawal('${w.id}','${w.user_id}',${w.amount},'declined')">Decline</button>
+        </div>`:'—'}</td>
+    </tr>`).join('') || '<tr><td colspan="7" class="text-muted">No withdrawals.</td></tr>';
+}
+async function processWithdrawal(id, userId, amount, status) {
+  if (status === 'declined') {
+    // refund balance
+    const { data: prof } = await sb.from('profiles').select('balance').eq('id',userId).single();
+    await sb.from('profiles').update({ balance: parseFloat(prof.balance)+parseFloat(amount) }).eq('id',userId);
+  } else if (status === 'approved') {
+    const { data: prof } = await sb.from('profiles').select('total_withdrawn').eq('id',userId).single();
+    await sb.from('profiles').update({ total_withdrawn: parseFloat(prof.total_withdrawn||0)+parseFloat(amount) }).eq('id',userId);
+  }
+  await sb.from('withdrawals').update({ status, processed_at: new Date().toISOString() }).eq('id',id);
+  Toast.show(`Withdrawal ${status}.`, status==='approved'?'success':'info');
+  await loadWithdrawals(); await loadOverview();
+}
+
+/* ── DEPOSITS ─────────────────────── */
+async function loadDeposits() {
+  const { data } = await sb.from('deposits')
+    .select('*, profiles(full_name,email)')
+    .order('created_at',{ascending:false});
+  document.getElementById('deposits-tbody').innerHTML = (data||[]).map(d=>`
+    <tr>
+      <td><strong>${d.profiles?.full_name||'—'}</strong><br/><span style="font-size:11px;color:var(--text-muted);">${d.profiles?.email||''}</span></td>
+      <td><strong>${formatMoney(d.amount)}</strong></td>
+      <td style="font-family:monospace;font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;">${d.tx_hash||'—'}</td>
+      <td>${new Date(d.created_at).toLocaleDateString()}</td>
+      <td><span class="badge badge-${d.status}">${d.status}</span></td>
+      <td>${d.status==='pending'?`
+        <div style="display:flex;gap:6px;">
+          <button class="btn-approve" onclick="confirmDeposit('${d.id}','${d.user_id}',${d.amount})">Confirm</button>
+          <button class="btn-decline" onclick="rejectDeposit('${d.id}')">Reject</button>
+        </div>`:'—'}</td>
+    </tr>`).join('') || '<tr><td colspan="6" class="text-muted">No deposits.</td></tr>';
+}
+async function confirmDeposit(depId, userId, amount) {
+  const { data: prof } = await sb.from('profiles').select('balance,total_deposited').eq('id',userId).single();
+  await sb.from('profiles').update({
+    balance: parseFloat(prof.balance)+parseFloat(amount),
+    total_deposited: parseFloat(prof.total_deposited)+parseFloat(amount)
+  }).eq('id',userId);
+  await sb.from('deposits').update({ status:'confirmed' }).eq('id',depId);
+  Toast.show('Deposit confirmed and balance credited.','success');
+  await loadDeposits(); await loadOverview();
+}
+async function rejectDeposit(depId) {
+  await sb.from('deposits').update({ status:'failed' }).eq('id',depId);
+  Toast.show('Deposit rejected.','info');
+  await loadDeposits();
+}
+
+/* ── INVESTMENTS ──────────────────── */
+async function loadInvestments() {
+  const { data } = await sb.from('investments')
+    .select('*, profiles(full_name), plans(name)')
+    .order('created_at',{ascending:false});
+  document.getElementById('investments-tbody').innerHTML = (data||[]).map(inv=>`
+    <tr>
+      <td>${inv.profiles?.full_name||'—'}</td>
+      <td>${inv.plans?.name||'—'}</td>
+      <td><strong>${formatMoney(inv.amount)}</strong></td>
+      <td>${inv.daily_roi_percent}%</td>
+      <td>${formatMoney(inv.total_profit_earned)}</td>
+      <td>${new Date(inv.expires_at).toLocaleDateString()}</td>
+      <td><span class="badge badge-${inv.status}">${inv.status}</span></td>
+    </tr>`).join('') || '<tr><td colspan="7" class="text-muted">No investments.</td></tr>';
+}
+
+/* ── SETTINGS ─────────────────────── */
+// Deposit setting keys with labels and types
+const DEPOSIT_SETTINGS = [
+  { key:'deposit_usdt_trc20', label:'USDT Address (TRC20)',        tag:'USDT · TRC20',  type:'text' },
+  { key:'deposit_usdt_bep20', label:'USDT Address (BEP20 / BSC)', tag:'USDT · BEP20',  type:'text' },
+  { key:'deposit_btc',        label:'Bitcoin Address (BTC)',       tag:'BTC',           type:'text' },
+  { key:'deposit_eth',        label:'Ethereum Address (ETH)',      tag:'ETH',           type:'text' },
+  { key:'deposit_min',        label:'Minimum Deposit (USD)',       tag:'',              type:'number' },
+  { key:'deposit_note',       label:'Deposit Instructions',        tag:'',              type:'textarea' },
+];
+const WITHDRAWAL_SETTINGS = [
+  { key:'withdrawal_networks', label:'Available Networks (comma-separated)', tag:'', type:'text' },
+  { key:'withdrawal_min',      label:'Minimum Withdrawal (USD)',             tag:'', type:'number' },
+  { key:'withdrawal_fee',      label:'Processing Fee (USD)',                 tag:'', type:'number' },
+  { key:'withdrawal_note',     label:'Withdrawal Instructions',              tag:'', type:'textarea' },
+];
+
+async function loadSettings() {
+  allSettings = await getAllSettings();
+
+  const renderSettingsGrid = (items, containerId) => {
+    document.getElementById(containerId).innerHTML = items.map(item => {
+      const val = allSettings[item.key]?.value || '';
+      const tagHtml = item.tag ? `<span class="settings-network-tag">${item.tag}</span><br/>` : '';
+      const inputHtml = item.type === 'textarea'
+        ? `<textarea class="form-input" id="setting-${item.key}" rows="2">${val}</textarea>`
+        : `<input class="form-input" type="${item.type}" id="setting-${item.key}" value="${val.replace(/"/g,'&quot;')}"/>`;
+      return `
+        <div class="settings-item">
+          ${tagHtml}
+          <label class="settings-label">${item.label}</label>
+          ${inputHtml}
+        </div>`;
+    }).join('');
+  };
+
+  renderSettingsGrid(DEPOSIT_SETTINGS,    'settings-deposit-grid');
+  renderSettingsGrid(WITHDRAWAL_SETTINGS, 'settings-withdrawal-grid');
+}
+
+async function saveSettings(category) {
+  const items = category === 'deposit' ? DEPOSIT_SETTINGS : WITHDRAWAL_SETTINGS;
+  let saved = 0;
+
+  for (const item of items) {
+    const el = document.getElementById('setting-' + item.key);
+    if (!el) continue;
+    const value = el.value.trim();
+    const { error } = await sb.from('platform_settings')
+      .update({ value, updated_at: new Date().toISOString() })
+      .eq('key', item.key);
+    if (!error) saved++;
+  }
+
+  if (saved === items.length) {
+    Toast.show(`${category === 'deposit' ? 'Deposit' : 'Withdrawal'} settings saved!`, 'success');
+    allSettings = await getAllSettings(); // refresh cache
+  } else {
+    Toast.show('Some settings failed to save. Check console.', 'error');
+  }
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = 'admin-login.html';
+}
+</script>
+</body>
+</html>

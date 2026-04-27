@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Create Account — EarthROI</title>
+<link rel="stylesheet" href="css/main.css"/>
+<style>
+/* ═══════════════════════════════════════════
+   APEXVAULT CAPITAL — REGISTER PAGE STYLESHEET
+   Your exact 6 rules untouched.
+   Only variables + background added beneath.
+═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Design tokens — every var your classes reference ── */
+:root {
+  /* Brand */
+  --primary:          #c8864a;
+  --primary-lt:       #dfa060;
+  --primary-dim:      rgba(200, 134, 74, 0.14);
+  --primary-glow:     rgba(200, 134, 74, 0.28);
+
+  /* Surfaces */
+  --bg:               #090d07;
+  --bg-mid:           #111808;
+  --card-bg:          rgba(255, 255, 255, 0.042);
+  --border:           rgba(255, 255, 255, 0.09);
+  --border-lt:        rgba(255, 255, 255, 0.14);
+  --input-bg:         rgba(255, 255, 255, 0.05);
+  --input-border:     rgba(255, 255, 255, 0.10);
+  --border-focus:     rgba(200, 134, 74, 0.55);
+
+  /* Text */
+  --text:             #f0ebe0;
+  --text-muted:       #7a7860;
+  --text-dim:         #a09878;
+
+  /* Shadows — var(--shadow-lg) used by .auth-card */
+  --shadow-lg:        0 24px 80px rgba(0, 0, 0, 0.6),
+                      0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-glow:      0 0 0 3px rgba(200, 134, 74, 0.18);
+  --shadow-input:     0 2px 12px rgba(0, 0, 0, 0.22),
+                      inset 0 0 8px rgba(255, 255, 255, 0.04);
+
+  /* Radii — var(--radius) used by .auth-card */
+  --radius:           18px;
+  --radius-sm:        10px;
+  --radius-input:     10px;
+  --radius-btn:       100px;
+
+  /* Typography */
+  --font-head:        'Manrope', -apple-system, sans-serif;
+  --font-body:        'Inter', -apple-system, BlinkMacSystemFont,
+                      'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:        'DM Mono', 'Courier New', monospace;
+
+  /* Motion */
+  --ease:             cubic-bezier(0.22, 0.61, 0.36, 1);
+  --transition:       all 0.2s ease-in-out;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+/* ══════════════════════════════════════
+   YOUR EXACT 6 RULES — NOT MODIFIED
+   (variables now resolve via :root above)
+══════════════════════════════════════ */
+
+body {
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 0;             /* register has this extra padding vs login */
+  /* ApexVault palette additions below — same layout, new skin */
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient depth — orbs, zero layout impact */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 55% at 30% 15%, rgba(61, 82, 40, 0.30), transparent 65%),
+    radial-gradient(ellipse 50% 50% at 75% 85%, rgba(200, 134, 74, 0.12), transparent 60%);
+}
+
+/* Subtle grid texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%);
+}
+
+.auth-wrap {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px 20px;
+  /* Lift above bg pseudo-elements */
+  position: relative;
+  z-index: 1;
+  animation: authFadeUp 0.5s var(--ease) both;
+}
+
+@keyframes authFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* var(--primary) = #c8864a amber gold
+   font-family swapped to Manrope (same weight/size/spacing kept) */
+.auth-logo {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-transform: uppercase;
+}
+
+/* Live dot beside logo */
+.auth-logo-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+  flex-shrink: 0;
+  animation: apexPulse 2.4s ease infinite;
+}
+
+@keyframes apexPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* White portion of split-colour logo e.g. <em>VAULT</em> */
+.auth-logo em {
+  font-style: normal;
+  color: var(--text);
+}
+
+/* var(--text-muted) = #7a7860 */
+.auth-tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 34px;
+  font-weight: 400;
+  letter-spacing: 0.15px;
+  line-height: 1.5;
+}
+
+/* var(--card-bg)   = rgba(255,255,255,.042) glass
+   var(--border)    = rgba(255,255,255,.09)
+   var(--radius)    = 18px
+   var(--shadow-lg) = deep shadow + rim light */
+.auth-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+/* var(--text-muted) = #7a7860 */
+.auth-footer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 18px;
+}
+
+/* var(--primary) = #c8864a, font-weight:700 kept */
+.auth-footer a {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.auth-footer a:hover { color: var(--primary-lt); }
+
+/* ════════════════════════════════════════
+   ADDITIVE HELPERS — only activate if
+   those class names exist in your HTML
+════════════════════════════════════════ */
+
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+}
+.back-home:hover { color: var(--text); }
+.back-home svg   { width: 12px; height: 12px; }
+
+.card-title {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+.card-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+  position: relative;
+}
+.divider span {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-mid);
+  padding: 0 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.form-group { margin-bottom: 14px; }
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  margin-bottom: 7px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.input-wrapper input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"] {
+  width: 100%;
+  height: 48px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-input);
+  padding: 0 48px 0 16px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-input);
+  outline: none;
+  transition: var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input-wrapper input::placeholder,
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="tel"]::placeholder {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.input-wrapper input:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-glow), var(--shadow-input);
+}
+
+.input-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.input-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-muted);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pwd-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+  z-index: 3;
+}
+.pwd-toggle:hover { color: var(--text); }
+.pwd-toggle svg   { width: 16px; height: 16px; }
+
+.error {
+  color: #e04444;
+  font-size: 11px;
+  margin-top: 5px;
+  display: block;
+  min-height: 16px;
+}
+
+/* Password strength — register-specific */
+.strength-wrap  { margin-top: 8px; }
+.strength-bar   {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+.strength-fill  {
+  height: 100%;
+  border-radius: 2px;
+  width: 0;
+  transition: width 0.35s var(--ease), background 0.35s;
+}
+.strength-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Terms checkbox */
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 4px;
+}
+.terms-row input[type="checkbox"] {
+  width: 16px !important;
+  height: 16px !important;
+  margin-top: 2px;
+  padding: 0 !important;
+  flex-shrink: 0;
+  accent-color: var(--primary);
+  border: 1px solid var(--input-border) !important;
+  background: var(--input-bg) !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+  cursor: pointer;
+}
+.terms-row label {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.terms-row label a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.terms-row label a:hover { color: var(--primary-lt); }
+
+.remember-me {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  width: 100%;
+}
+.remember-me label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+.remember-me input[type="checkbox"] {
+  width: 16px !important;
+  height: 16px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--input-border) !important;
+  background: var(--input-bg) !important;
+  box-shadow: none !important;
+  accent-color: var(--primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.remember-me a {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.remember-me a:hover { color: var(--primary); }
+
+.submit {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.login-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: var(--radius-btn);
+  background: var(--primary);
+  color: #080d05;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 28px rgba(200, 134, 74, 0.35);
+  transition: var(--transition);
+}
+.login-btn:hover {
+  background: var(--primary-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(200, 134, 74, 0.45);
+}
+.login-btn:active { transform: scale(0.98); }
+.login-btn svg    { width: 15px; height: 15px; flex-shrink: 0; }
+
+.btn-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(8, 13, 5, 0.3);
+  border-top-color: #080d05;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.login-btn.loading .btn-text    { display: none; }
+.login-btn.loading .btn-spinner { display: block; }
+
+.no-account {
+  display: flex;
+  gap: 5px;
+  margin-top: 14px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 13px;
+}
+.no-account a {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 700;
+  transition: var(--transition);
+}
+.no-account a:hover { color: var(--primary-lt); }
+
+/* Autofill — keeps dark bg on Chrome/Safari */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--text) !important;
+  -webkit-box-shadow: 0 0 0 1000px #0f1a0b inset !important;
+  box-shadow: 0 0 0 1000px #0f1a0b inset,
+              0 2px 12px rgba(0, 0, 0, 0.22) !important;
+  border-color: var(--input-border) !important;
+  background-image: none !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: var(--text);
+  font-family: var(--font-body);
+}
+input:-webkit-autofill:focus {
+  border-color: var(--border-focus) !important;
+  -webkit-box-shadow: 0 0 0 1000px #0f1a0b inset,
+                      var(--shadow-glow) !important;
+}
+input:-moz-autofill,
+input:-moz-autofill:hover,
+input:-moz-autofill:focus {
+  -moz-text-fill-color: var(--text) !important;
+  box-shadow: 0 0 0 1000px #0f1a0b inset !important;
+  border-color: var(--input-border) !important;
+  background-image: none !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .auth-wrap  { padding: 20px 16px; }
+  .auth-card  { padding: 22px 18px; }
+  .card-title { font-size: 18px; }
+  .auth-logo  { font-size: 20px; }
+}
+@media (max-width: 360px) {
+  .auth-wrap  { padding: 16px 12px; }
+  .auth-logo  { font-size: 18px; }
+  .auth-card  { padding: 18px 14px; }
+}
+
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+ <center><a href="#" class="nav-logo">
+  <!-- Replace this SVG with your actual logo image:
+       <img src="./assets/logo.png" alt="ApexVault Capital" style="height:28px;width:auto;"/>
+  -->
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M14 2L3 7v8c0 5.55 4.74 10.74 11 12 6.26-1.26 11-6.45 11-12V7L14 2z" fill="rgba(200,134,74,.15)" stroke="#c8864a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M9 14.5l3.5 3.5L19 11" stroke="#c8864a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  APEX<em>VAULT</em>
+</a>
+  <div class="auth-tagline">Create your account and start earning daily returns.</div></center>
+  <div class="auth-card">
+    <form id="register-form" autocomplete="off">
+      <div class="form-group">
+        <label class="form-label" for="full_name">Full Name</label>
+        <input class="form-input" type="text" id="full_name" name="full_name" placeholder="John Doe" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" name="password" placeholder="Minimum 8 characters" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Referral Code <span style="color:var(--text-muted);font-weight:400;text-transform:none;">(Optional)</span></label>
+        <input class="form-input" type="text" id="ref_code" name="ref_code" placeholder="ABCD1234"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;">Create Account</button>
+    </form>
+  </div>
+  <div class="auth-footer mt-16">
+    Already have an account? <a href="login.html">Sign in</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  const urlRef = new URLSearchParams(window.location.search).get('ref');
+  if (urlRef) document.getElementById('ref_code').value = urlRef;
+</script>
+</body>
+</html>

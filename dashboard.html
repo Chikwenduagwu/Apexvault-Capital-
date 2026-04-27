@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard — ApexVault</title>
+<link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/dashboard.css"/>
+</head>
+<body>
+
+<header class="dash-header">
+  <div class="dash-header-top">
+    <div>
+      <div class="dash-greeting">Good day,</div>
+      <div class="dash-name" id="user-name">Loading…</div>
+    </div>
+    <div class="avatar" id="user-avatar">–</div>
+  </div>
+</header>
+
+<main class="page-content" style="padding-top:0;">
+
+  <div class="balance-hero">
+    <div class="balance-label">Available Balance</div>
+    <div class="balance-amount" id="balance-amount">$0.00</div>
+    <div class="balance-sub">Total Earned: <span id="total-earned">$0.00</span></div>
+    <div class="balance-actions">
+      <a href="invest.html" class="btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Invest
+      </a>
+      <a href="profile.html" class="btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Deposit
+      </a>
+      <a href="referral.html" class="btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Refer
+      </a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="stat-card-label">Total Deposited</div>
+      <div class="stat-card-value" id="total-deposited">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+      </div>
+      <div class="stat-card-label">Withdrawn</div>
+      <div class="stat-card-value" id="total-withdrawn">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="stat-card-label">Daily Profit</div>
+      <div class="stat-card-value" id="daily-profit">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="stat-card-label">Referral Earned</div>
+      <div class="stat-card-value" id="ref-earnings">$0</div>
+    </div>
+  </div>
+
+  <div class="section-title">Active Investments</div>
+  <div class="card" id="investments-list">
+    <div class="empty-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <h3>No active investments</h3>
+      <p>Choose a plan to begin earning daily returns.</p>
+      <a href="invest.html" class="btn btn-primary btn-sm" style="margin-top:16px;display:inline-flex;">Invest Now</a>
+    </div>
+  </div>
+
+</main>
+
+<nav class="bottom-nav">
+  <a href="invest.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    Invest
+  </a>
+  <a href="mine.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Mine
+  </a>
+  <a href="dashboard.html" class="active">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Home
+  </a>
+  <a href="referral.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Referral
+  </a>
+  <a href="profile.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Profile
+  </a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/roi-engine.js"></script>
+<script src="js/ui-effects.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  const profile = await getProfile(user.id);
+
+  document.getElementById('user-name').textContent    = profile.full_name || 'Investor';
+  document.getElementById('user-avatar').textContent  = (profile.full_name || 'U')[0].toUpperCase();
+  document.getElementById('balance-amount').textContent = formatMoney(profile.balance);
+  document.getElementById('total-deposited').textContent = formatMoney(profile.total_deposited);
+  document.getElementById('total-withdrawn').textContent = formatMoney(profile.total_withdrawn);
+  document.getElementById('ref-earnings').textContent    = formatMoney(profile.referral_earnings);
+  document.getElementById('total-earned').textContent    = formatMoney(profile.referral_earnings);
+
+  const daily = await ROIEngine.calcDailyProfit(user.id);
+  document.getElementById('daily-profit').textContent = formatMoney(daily);
+
+  const { data: investments } = await sb.from('investments')
+    .select('*, plans(name)')
+    .eq('user_id', user.id).eq('status','active')
+    .order('started_at', { ascending:false });
+
+  if (investments?.length > 0) {
+    document.getElementById('investments-list').innerHTML = investments.map(inv => `
+      <div class="inv-item">
+        <div>
+          <div class="inv-plan">${inv.plans?.name || 'Plan'}</div>
+          <div class="inv-date">${new Date(inv.started_at).toLocaleDateString()}</div>
+        </div>
+        <div>
+          <div class="inv-amount">${formatMoney(inv.amount)}</div>
+          <div class="inv-roi">+${inv.daily_roi_percent}%/day</div>
+        </div>
+      </div>
+    `).join('');
+  }
+})();
+</script>
+</body>
+</html>

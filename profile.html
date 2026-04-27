@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Profile — EarthROI</title>
+<link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/dashboard.css"/>
+</head>
+<body>
+<main class="page-content">
+
+  <div class="page-header">
+    <a href="dashboard.html" class="back-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <h1>Profile</h1>
+  </div>
+
+  <!-- User Info -->
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+      <div class="avatar" id="user-avatar" style="width:54px;height:54px;font-size:20px;">–</div>
+      <div>
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:var(--pine);" id="user-name">Loading…</div>
+        <div class="text-muted" id="user-email">–</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <div style="display:flex;justify-content:space-between;font-size:14px;">
+        <span class="text-muted">Member Since</span>
+        <span style="font-weight:600;color:var(--pine);" id="member-since">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;">
+        <span class="text-muted">Available Balance</span>
+        <span style="font-weight:800;color:var(--primary);font-size:16px;" id="profile-balance">$0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DEPOSIT SECTION ── -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="section-title">Deposit Funds</div>
+
+    <!-- Deposit addresses loaded dynamically from platform_settings -->
+    <div id="deposit-addresses">
+      <div class="text-muted" style="padding:8px 0;">Loading deposit addresses…</div>
+    </div>
+
+    <div id="deposit-note" class="info-box" style="margin:14px 0;"></div>
+
+    <div style="height:1px;background:var(--border);margin:16px 0;"></div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">After sending, paste your TX hash below to credit your account.</p>
+
+    <div class="form-group">
+      <label class="form-label">Amount (USD)</label>
+      <input class="form-input" type="number" id="deposit-amount" placeholder="e.g. 100.00" min="10"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Transaction Hash</label>
+      <input class="form-input" type="text" id="deposit-tx" placeholder="Paste your TX hash here"/>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="submitDeposit()">Submit Deposit</button>
+  </div>
+
+  <!-- ── WITHDRAWAL SECTION ── -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="section-title">Request Withdrawal</div>
+
+    <div id="withdrawal-note" class="info-box" style="margin-bottom:16px;"></div>
+
+    <div class="form-group">
+      <label class="form-label">Amount (USD)</label>
+      <input class="form-input" type="number" id="withdraw-amount" placeholder="Minimum $10"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Withdrawal Network</label>
+      <select class="form-input" id="withdraw-network">
+        <option value="">Loading networks…</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your Wallet Address</label>
+      <input class="form-input" type="text" id="withdraw-wallet" placeholder="Your wallet address"/>
+    </div>
+    <div id="withdraw-fee-note" class="text-muted" style="font-size:12px;margin-bottom:14px;"></div>
+    <button class="btn btn-outline btn-full" onclick="submitWithdrawal()">Request Withdrawal</button>
+  </div>
+
+  <!-- Withdrawal History -->
+  <div class="section-title">Withdrawal History</div>
+  <div class="card" id="withdrawal-history" style="margin-bottom:24px;">
+    <div class="text-muted text-center" style="padding:16px;">No withdrawals yet.</div>
+  </div>
+
+  <button id="logout-btn" class="btn btn-ghost btn-full" style="max-width:320px;margin:0 auto;display:flex;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Sign Out
+  </button>
+
+</main>
+
+<nav class="bottom-nav">
+  <a href="invest.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Invest
+  </a>
+  <a href="mine.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Mine
+  </a>
+  <a href="dashboard.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Home
+  </a>
+  <a href="referral.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Referral
+  </a>
+  <a href="profile.html" class="active">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+  </a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui-effects.js"></script>
+<script>
+let currentUser = null, userProfile = null, settings = {}, withdrawMin = 10, withdrawFee = 1;
+
+/* ── Deposit address labels ───────────── */
+const ADDR_KEYS = {
+  deposit_usdt_trc20: 'USDT · TRC20',
+  deposit_usdt_bep20: 'USDT · BEP20',
+  deposit_btc:        'Bitcoin · BTC',
+  deposit_eth:        'Ethereum · ETH'
+};
+
+(async () => {
+  currentUser = await requireAuth(); if (!currentUser) return;
+  userProfile = await getProfile(currentUser.id);
+
+  /* populate profile card */
+  document.getElementById('user-name').textContent    = userProfile.full_name || 'Investor';
+  document.getElementById('user-email').textContent   = currentUser.email;
+  document.getElementById('user-avatar').textContent  = (userProfile.full_name || 'U')[0].toUpperCase();
+  document.getElementById('profile-balance').textContent = formatMoney(userProfile.balance);
+  document.getElementById('member-since').textContent = new Date(userProfile.created_at).toLocaleDateString();
+
+  /* load all platform settings */
+  settings = await getAllSettings();
+
+  /* ── render deposit addresses ── */
+  const placeholders = ['TXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','bc1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'];
+  const addrHtml = Object.entries(ADDR_KEYS).map(([key, label]) => {
+    const addr = settings[key]?.value;
+    if (!addr || placeholders.includes(addr)) return '';
+    return `
+      <div class="deposit-addr-box">
+        <div class="deposit-addr-network">${label}</div>
+        <div class="deposit-addr-value" id="addr-${key}">${addr}</div>
+        <span class="deposit-addr-copy" onclick="copyAddr('${key}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy address
+        </span>
+      </div>`;
+  }).join('');
+
+  document.getElementById('deposit-addresses').innerHTML =
+    addrHtml || '<div class="info-box">Deposit addresses not yet configured. Contact support.</div>';
+
+  /* deposit note — hide box if empty */
+  const note = settings['deposit_note']?.value || '';
+  const noteEl = document.getElementById('deposit-note');
+  if (note) { noteEl.textContent = note; } else { noteEl.style.display = 'none'; }
+
+  /* ── render withdrawal networks ── */
+  withdrawMin  = parseFloat(settings['withdrawal_min']?.value  || 10);
+  withdrawFee  = parseFloat(settings['withdrawal_fee']?.value  || 1);
+  const nets   = (settings['withdrawal_networks']?.value || 'USDT-TRC20').split(',').map(n => n.trim()).filter(Boolean);
+
+  const sel = document.getElementById('withdraw-network');
+  sel.innerHTML = nets.map(n => `<option value="${n}">${n}</option>`).join('');
+
+  const wNote = settings['withdrawal_note']?.value || '';
+  const wNoteEl = document.getElementById('withdrawal-note');
+  if (wNote) { wNoteEl.textContent = wNote; } else { wNoteEl.style.display = 'none'; }
+  document.getElementById('withdraw-fee-note').textContent =
+    `Processing fee: $${withdrawFee.toFixed(2)} · Minimum: $${withdrawMin.toFixed(2)}`;
+
+  /* ── withdrawal history ── */
+  const { data: withdrawals } = await sb.from('withdrawals')
+    .select('*').eq('user_id', currentUser.id)
+    .order('requested_at', { ascending: false }).limit(10);
+
+  if (withdrawals?.length > 0) {
+    const badge = { pending:'badge-pending', approved:'badge-approved', declined:'badge-declined' };
+    document.getElementById('withdrawal-history').innerHTML = withdrawals.map(w => `
+      <div class="withdrawal-item">
+        <div>
+          <div style="font-weight:700;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--pine);">${formatMoney(w.amount)} · ${w.network}</div>
+          <div style="font-size:12px;color:var(--text-muted);">${new Date(w.requested_at).toLocaleDateString()}</div>
+        </div>
+        <span class="badge ${badge[w.status]||''}">${w.status}</span>
+      </div>`).join('');
+  }
+})();
+
+function copyAddr(key) {
+  const val = document.getElementById('addr-' + key)?.textContent;
+  if (val) navigator.clipboard.writeText(val).then(() => Toast.show('Address copied!', 'success'));
+}
+
+async function submitDeposit() {
+  const amount = parseFloat(document.getElementById('deposit-amount').value);
+  const txHash = document.getElementById('deposit-tx').value.trim();
+  const depMin = parseFloat(settings['deposit_min']?.value || 10);
+
+  if (!amount || amount < depMin) { Toast.show(`Minimum deposit is $${depMin}.`, 'warning'); return; }
+  if (!txHash)                    { Toast.show('Please enter your transaction hash.', 'warning'); return; }
+
+  const { error } = await sb.from('deposits').insert({
+    user_id: currentUser.id, amount, tx_hash: txHash, status: 'pending'
+  });
+  if (error) { Toast.show(error.message, 'error'); return; }
+
+  Toast.show('Deposit submitted! Admin will confirm within 24 hours.', 'success');
+  document.getElementById('deposit-amount').value = '';
+  document.getElementById('deposit-tx').value = '';
+}
+
+async function submitWithdrawal() {
+  const amount  = parseFloat(document.getElementById('withdraw-amount').value);
+  const wallet  = document.getElementById('withdraw-wallet').value.trim();
+  const network = document.getElementById('withdraw-network').value;
+
+  if (!amount || amount < withdrawMin) { Toast.show(`Minimum withdrawal is $${withdrawMin}.`, 'warning'); return; }
+  if (!wallet)                          { Toast.show('Please enter your wallet address.', 'warning'); return; }
+  if (amount + withdrawFee > userProfile.balance) {
+    Toast.show(`Insufficient balance (incl. $${withdrawFee} fee).`, 'error'); return;
+  }
+
+  const { error } = await sb.from('withdrawals').insert({
+    user_id: currentUser.id, amount, wallet_address: wallet, network, status: 'pending'
+  });
+  if (error) { Toast.show(error.message, 'error'); return; }
+
+  /* hold balance immediately */
+  await sb.from('profiles')
+    .update({ balance: userProfile.balance - amount - withdrawFee })
+    .eq('id', currentUser.id);
+
+  Toast.show('Withdrawal requested! Processing within 24 hours.', 'success');
+  setTimeout(() => window.location.reload(), 1400);
+}
+</script>
+</body>
+</html>

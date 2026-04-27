@@ -7,7 +7,132 @@
 <link rel="stylesheet" href="css/main.css"/>
 <link rel="stylesheet" href="css/dashboard.css"/>
 <style>
-  .plans-list { display:flex; flex-direction:column; gap:16px; }
+/* ── Plan cards grid ── */
+.plans-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Upgraded plan card */
+.plan-card-v2 {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  position: relative;
+}
+.plan-card-v2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(96,108,56,0.18);
+  border-color: var(--primary);
+}
+.plan-card-v2.featured {
+  border-color: var(--primary);
+  box-shadow: 0 6px 30px rgba(96,108,56,0.2);
+}
+
+/* Coloured top bar per plan */
+.plan-header {
+  padding: 20px 22px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.plan-header-olive  { background: linear-gradient(135deg,var(--pine) 0%,var(--primary) 100%); }
+.plan-header-earth  { background: linear-gradient(135deg,#7a5800 0%,var(--earth) 100%); }
+.plan-header-pine   { background: linear-gradient(135deg,#1a3a0a 0%,#3a5c1e 100%); }
+
+.plan-header-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 18px;
+  color: var(--text-white); letter-spacing: 0.5px;
+}
+.plan-header-roi {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 26px;
+  color: var(--earth-lt);
+  display: flex; align-items: baseline; gap: 3px;
+}
+.plan-header-roi small {
+  font-size: 12px; font-weight: 600;
+  color: rgba(254,250,224,0.7);
+}
+.plan-featured-tag {
+  position: absolute; top: 0; right: 20px;
+  background: var(--earth);
+  color: var(--pine);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 800;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 0 0 8px 8px;
+}
+
+.plan-body { padding: 18px 22px 20px; }
+
+.plan-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.plan-stat {
+  background: var(--earth-lt);
+  padding: 12px 10px;
+  text-align: center;
+}
+.plan-stat-val {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 14px;
+  color: var(--pine); line-height: 1;
+}
+.plan-stat-label {
+  font-size: 10px; color: var(--text-muted);
+  font-weight: 600; margin-top: 4px;
+  letter-spacing: 0.3px; text-transform: uppercase;
+}
+
+.plan-desc {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.6; margin-bottom: 16px;
+}
+
+.plan-invest-btn {
+  width: 100%; padding: 13px;
+  background: var(--primary); color: var(--text-white);
+  border: none; border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.plan-invest-btn:hover { background: var(--primary-hv); }
+.plan-card-v2.featured .plan-invest-btn {
+  background: var(--earth);
+  color: var(--pine);
+}
+.plan-card-v2.featured .plan-invest-btn:hover { background: var(--earth-lt); }
+
+/* Modal calculator */
+.calc-row {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.calc-row:last-child { border-bottom: none; }
+.calc-label { color: var(--text-muted); }
+.calc-val { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--pine); }
+.calc-val.highlight { color: var(--primary); font-size: 18px; }
 </style>
 </head>
 <body>
@@ -18,31 +143,37 @@
     </a>
     <h1>Investment Plans</h1>
   </div>
-  <p class="text-muted" style="margin-bottom:24px;">All returns are claimable every 24 hours from your Mine page.</p>
-  <div id="plans-list" class="plans-list">
-    <div class="text-muted text-center" style="padding:24px;">Loading plans…</div>
+  <p class="text-muted" style="margin-bottom:24px;">Choose a plan · returns claimable every 24h on the Mine page.</p>
+
+  <div id="plans-grid" class="plans-grid">
+    <!-- skeleton -->
+    <div style="height:220px;background:linear-gradient(90deg,#F0EBD4 25%,#E8E2C8 50%,#F0EBD4 75%);background-size:200% 100%;border-radius:20px;animation:shimmer 1.4s infinite;"></div>
+    <div style="height:220px;background:linear-gradient(90deg,#F0EBD4 25%,#E8E2C8 50%,#F0EBD4 75%);background-size:200% 100%;border-radius:20px;animation:shimmer 1.4s infinite;transition-delay:.1s"></div>
+    <style>@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}</style>
   </div>
 </main>
 
+<!-- Invest modal -->
 <div class="modal-overlay" id="invest-modal" style="display:none;">
   <div class="modal">
     <div class="modal-title" id="modal-plan-name">Invest</div>
-    <p class="text-muted" id="modal-plan-info" style="margin-bottom:18px;font-size:13px;"></p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;" id="modal-plan-info"></p>
+
     <div class="form-group">
-      <label class="form-label">Investment Amount (USD)</label>
-      <input class="form-input" type="number" id="invest-amount" placeholder="Enter amount" min="0"/>
+      <label class="form-label">Amount (USD)</label>
+      <input class="form-input" type="number" id="invest-amount" placeholder="Enter amount"/>
     </div>
-    <div class="info-box" style="margin-bottom:4px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-        <span>Daily Return</span><strong id="modal-daily-return">$0.00</strong>
-      </div>
-      <div style="display:flex;justify-content:space-between;">
-        <span>Total (30 days)</span><strong id="modal-total-return">$0.00</strong>
-      </div>
+
+    <!-- Live calculator -->
+    <div style="background:var(--earth-lt);border-radius:12px;padding:4px 14px;margin-bottom:16px;">
+      <div class="calc-row"><span class="calc-label">Daily Return</span><span class="calc-val" id="m-daily">$0.00</span></div>
+      <div class="calc-row"><span class="calc-label">Total (plan duration)</span><span class="calc-val highlight" id="m-total">$0.00</span></div>
+      <div class="calc-row"><span class="calc-label">Your Balance</span><span class="calc-val" id="m-balance">$0.00</span></div>
     </div>
+
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" id="confirm-invest-btn" onclick="confirmInvest()">Confirm</button>
+      <button class="btn btn-primary" id="confirm-invest-btn" onclick="confirmInvest()">Confirm Investment</button>
     </div>
   </div>
 </div>
@@ -73,70 +204,102 @@
 <script>
 let selectedPlan = null, currentUser = null, userProfile = null;
 
+const HEADER_CLASSES = ['plan-header-olive','plan-header-earth','plan-header-pine'];
+
 (async () => {
-  currentUser  = await requireAuth();
-  if (!currentUser) return;
-  userProfile  = await getProfile(currentUser.id);
+  currentUser = await requireAuth(); if (!currentUser) return;
+  userProfile = await getProfile(currentUser.id);
 
-  const { data: plans } = await sb.from('plans').select('*').eq('is_active',true).order('min_amount');
-  if (!plans?.length) { document.getElementById('plans-list').innerHTML = '<div class="text-muted text-center">No plans available.</div>'; return; }
+  const { data: plans, error } = await sb.from('plans').select('*').eq('is_active',true).order('min_amount');
+  if (error || !plans?.length) {
+    document.getElementById('plans-grid').innerHTML = '<p class="text-muted text-center" style="padding:32px 0;">No active investment plans available.</p>';
+    return;
+  }
 
-  const featIdx = 1;
-  document.getElementById('plans-list').innerHTML = plans.map((plan, i) => `
-    <div class="plan-card ${i===featIdx?'featured':''}" onclick='openModal(${JSON.stringify(plan).replace(/'/g,"&#39;")})'>
-      ${i===featIdx ? '<div class="plan-badge">POPULAR</div>' : ''}
-      <div class="plan-name">${plan.name}</div>
-      <div style="margin-top:12px;">
-        <div class="plan-roi">${plan.daily_roi_percent}%</div>
-        <div class="plan-roi-label">Daily Return</div>
+  /* pick the middle plan as featured */
+  const featIdx = Math.floor(plans.length / 2);
+
+  document.getElementById('plans-grid').innerHTML = plans.map((p, i) => {
+    const hClass = HEADER_CLASSES[i % HEADER_CLASSES.length];
+    const isFeat = i === featIdx;
+    const daily   = formatMoney(p.min_amount * p.daily_roi_percent / 100);
+    const totalAt = formatMoney(p.min_amount * p.daily_roi_percent / 100 * p.duration_days);
+    return `
+    <div class="plan-card-v2 ${isFeat ? 'featured' : ''}" onclick="openModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+      ${isFeat ? '<div class="plan-featured-tag">Most Popular</div>' : ''}
+      <div class="plan-header ${hClass}">
+        <div class="plan-header-name">${p.name}</div>
+        <div class="plan-header-roi">${p.daily_roi_percent}<small>% / day</small></div>
       </div>
-      <div class="plan-range">$${Number(plan.min_amount).toLocaleString()} – $${Number(plan.max_amount).toLocaleString()}</div>
-      <div class="plan-range" style="margin-top:4px;">${plan.duration_days}-day term · ${plan.description || ''}</div>
-      <button class="btn btn-sm" style="margin-top:16px;${i===featIdx?'background:rgba(254,250,224,0.2);color:var(--text-white);border:1px solid rgba(254,250,224,0.35);':'border:1.5px solid var(--primary);color:var(--primary);background:transparent;'}">
-        Invest Now
-      </button>
-    </div>
-  `).join('');
+      <div class="plan-body">
+        <div class="plan-stats-row">
+          <div class="plan-stat">
+            <div class="plan-stat-val">$${Number(p.min_amount).toLocaleString()}</div>
+            <div class="plan-stat-label">Min</div>
+          </div>
+          <div class="plan-stat">
+            <div class="plan-stat-val">${p.duration_days}d</div>
+            <div class="plan-stat-label">Term</div>
+          </div>
+          <div class="plan-stat">
+            <div class="plan-stat-val">$${Number(p.max_amount).toLocaleString()}</div>
+            <div class="plan-stat-label">Max</div>
+          </div>
+        </div>
+        <p class="plan-desc">${p.description || 'Earn daily returns on your capital with this plan.'}</p>
+        <button class="plan-invest-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Invest Now
+        </button>
+      </div>
+    </div>`;
+  }).join('');
 })();
 
 function openModal(plan) {
   selectedPlan = plan;
   document.getElementById('invest-modal').style.display = 'flex';
-  document.getElementById('modal-plan-name').textContent = `Invest in ${plan.name}`;
-  document.getElementById('modal-plan-info').textContent = `${plan.daily_roi_percent}% daily for ${plan.duration_days} days · Min: $${plan.min_amount} · Max: $${plan.max_amount}`;
+  document.getElementById('modal-plan-name').textContent = `Invest — ${plan.name}`;
+  document.getElementById('modal-plan-info').textContent =
+    `${plan.daily_roi_percent}% daily · ${plan.duration_days}-day term · $${plan.min_amount}–$${Number(plan.max_amount).toLocaleString()}`;
   document.getElementById('invest-amount').value = '';
-  document.getElementById('modal-daily-return').textContent = '$0.00';
-  document.getElementById('modal-total-return').textContent = '$0.00';
-  document.getElementById('invest-amount').oninput = (e) => {
+  document.getElementById('m-daily').textContent = '$0.00';
+  document.getElementById('m-total').textContent = '$0.00';
+  document.getElementById('m-balance').textContent = formatMoney(userProfile?.balance || 0);
+
+  document.getElementById('invest-amount').oninput = e => {
     const amt = parseFloat(e.target.value) || 0;
-    document.getElementById('modal-daily-return').textContent = formatMoney(amt * plan.daily_roi_percent / 100);
-    document.getElementById('modal-total-return').textContent = formatMoney(amt * plan.daily_roi_percent / 100 * plan.duration_days);
+    document.getElementById('m-daily').textContent = formatMoney(amt * plan.daily_roi_percent / 100);
+    document.getElementById('m-total').textContent = formatMoney(amt * plan.daily_roi_percent / 100 * plan.duration_days);
   };
 }
 function closeModal() { document.getElementById('invest-modal').style.display = 'none'; }
 
 async function confirmInvest() {
   const amount = parseFloat(document.getElementById('invest-amount').value);
-  if (!amount) { Toast.show('Please enter an amount.', 'warning'); return; }
-  if (amount < selectedPlan.min_amount) { Toast.show(`Minimum is $${selectedPlan.min_amount}.`, 'warning'); return; }
-  if (amount > selectedPlan.max_amount) { Toast.show(`Maximum is $${selectedPlan.max_amount}.`, 'warning'); return; }
-  if (amount > userProfile.balance)     { Toast.show('Insufficient balance. Deposit first.', 'error'); return; }
+  if (!amount || isNaN(amount))         { Toast.show('Enter a valid amount.','warning'); return; }
+  if (amount < selectedPlan.min_amount) { Toast.show(`Minimum is $${selectedPlan.min_amount}.`,'warning'); return; }
+  if (amount > selectedPlan.max_amount) { Toast.show(`Maximum is $${selectedPlan.max_amount}.`,'warning'); return; }
+  if (amount > (userProfile?.balance||0)){ Toast.show('Insufficient balance. Please deposit first.','error'); return; }
 
   const btn = document.getElementById('confirm-invest-btn');
   setLoading(btn, true, 'Processing…');
 
-  const expiresAt = new Date(); expiresAt.setDate(expiresAt.getDate() + selectedPlan.duration_days);
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + selectedPlan.duration_days);
 
-  const { error: invErr } = await sb.from('investments').insert({
-    user_id: currentUser.id, plan_id: selectedPlan.id,
-    amount, daily_roi_percent: selectedPlan.daily_roi_percent,
+  const { error } = await sb.from('investments').insert({
+    user_id: currentUser.id,
+    plan_id: selectedPlan.id,
+    amount,
+    daily_roi_percent: selectedPlan.daily_roi_percent,
     expires_at: expiresAt.toISOString()
   });
-  if (invErr) { Toast.show(invErr.message, 'error'); setLoading(btn, false); return; }
+  if (error) { Toast.show(error.message,'error'); setLoading(btn,false); return; }
 
   await sb.from('profiles').update({
     balance: userProfile.balance - amount,
-    total_deposited: userProfile.total_deposited + amount
+    total_deposited: (userProfile.total_deposited||0) + amount
   }).eq('id', currentUser.id);
 
   Toast.show(`${formatMoney(amount)} invested in ${selectedPlan.name}!`, 'success');

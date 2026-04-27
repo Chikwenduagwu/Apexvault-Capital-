@@ -35,6 +35,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
         Investments
       </div>
+      <div class="admin-nav-item" data-tab="plans">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Plans
+      </div>
       <div class="admin-nav-item" data-tab="settings">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         Settings
@@ -158,6 +162,37 @@
       </div>
     </div>
 
+    <!-- ════ PLANS ════ -->
+    <div id="tab-plans" style="display:none;">
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div class="admin-panel-title">Investment Plans</div>
+          <button class="btn btn-primary btn-sm" onclick="openPlanModal(null)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Plan
+          </button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Daily ROI</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Term</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="plans-tbody">
+              <tr><td colspan="7" class="text-muted">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- ════ SETTINGS ════ -->
     <div id="tab-settings" style="display:none;">
 
@@ -223,6 +258,51 @@
   </div>
 </div>
 
+<!-- Plan Create / Edit Modal -->
+<div class="modal-overlay" id="plan-modal" style="display:none;">
+  <div class="modal">
+    <div class="modal-title" id="plan-modal-title">New Plan</div>
+    <input type="hidden" id="plan-id"/>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Plan Name</label>
+        <input class="form-input" type="text" id="plan-name" placeholder="e.g. Starter"/>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Daily ROI (%)</label>
+        <input class="form-input" type="number" id="plan-roi" placeholder="e.g. 2.5" step="0.1"/>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Min Amount ($)</label>
+        <input class="form-input" type="number" id="plan-min" placeholder="e.g. 100"/>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Max Amount ($)</label>
+        <input class="form-input" type="number" id="plan-max" placeholder="e.g. 9999"/>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Duration (days)</label>
+        <input class="form-input" type="number" id="plan-days" placeholder="e.g. 30"/>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Status</label>
+        <select class="form-input" id="plan-active">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:12px;">
+      <label class="form-label">Description</label>
+      <input class="form-input" type="text" id="plan-desc" placeholder="Short description for users"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePlanModal()">Cancel</button>
+      <button class="btn btn-primary" style="background:var(--pine);" onclick="savePlan()">Save Plan</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/supabase-config.js"></script>
@@ -237,7 +317,7 @@ let allSettings = {};
 
 const TAB_LABELS = {
   overview:'Overview', users:'Users', withdrawals:'Withdrawals',
-  deposits:'Deposits', investments:'Investments', settings:'Settings'
+  deposits:'Deposits', investments:'Investments', plans:'Plans', settings:'Settings'
 };
 
 /* ── INIT ─────────────────────────── */
@@ -264,7 +344,7 @@ async function switchTab(tab) {
   const loaders = {
     users: loadUsers, withdrawals: loadWithdrawals,
     deposits: loadDeposits, investments: loadInvestments,
-    settings: loadSettings
+    plans: loadPlans, settings: loadSettings
   };
   if (loaders[tab]) await loaders[tab]();
 }
@@ -507,6 +587,97 @@ async function saveSettings(category) {
 async function doLogout() {
   await sb.auth.signOut();
   window.location.href = 'admin-login.html';
+}
+
+/* ══ PLANS CRUD ══════════════════════ */
+async function loadPlans() {
+  // Admins can see all plans (active + inactive) via the new RLS policy
+  const { data, error } = await sb.from('plans').select('*').order('min_amount');
+  if (error) { Toast.show(error.message, 'error'); return; }
+
+  document.getElementById('plans-tbody').innerHTML = (data||[]).map(p => `
+    <tr>
+      <td><strong>${p.name}</strong><br/><span style="font-size:11px;color:var(--text-muted);">${p.description||''}</span></td>
+      <td><strong style="color:var(--primary);">${p.daily_roi_percent}%</strong></td>
+      <td>$${Number(p.min_amount).toLocaleString()}</td>
+      <td>$${Number(p.max_amount).toLocaleString()}</td>
+      <td>${p.duration_days} days</td>
+      <td><span class="badge ${p.is_active?'badge-active':'badge-declined'}">${p.is_active?'Active':'Inactive'}</span></td>
+      <td style="display:flex;gap:6px;">
+        <button class="btn btn-sm btn-ghost" onclick='openPlanModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>Edit</button>
+        <button class="btn-decline" onclick="deletePlan('${p.id}','${p.name}')">Delete</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" class="text-muted">No plans yet. Create one.</td></tr>';
+}
+
+function openPlanModal(plan) {
+  document.getElementById('plan-modal').style.display = 'flex';
+  if (plan) {
+    document.getElementById('plan-modal-title').textContent = `Edit Plan — ${plan.name}`;
+    document.getElementById('plan-id').value      = plan.id;
+    document.getElementById('plan-name').value    = plan.name;
+    document.getElementById('plan-roi').value     = plan.daily_roi_percent;
+    document.getElementById('plan-min').value     = plan.min_amount;
+    document.getElementById('plan-max').value     = plan.max_amount;
+    document.getElementById('plan-days').value    = plan.duration_days;
+    document.getElementById('plan-desc').value    = plan.description || '';
+    document.getElementById('plan-active').value  = String(plan.is_active);
+  } else {
+    document.getElementById('plan-modal-title').textContent = 'Create New Plan';
+    document.getElementById('plan-id').value = '';
+    ['plan-name','plan-roi','plan-min','plan-max','plan-days','plan-desc'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('plan-active').value = 'true';
+  }
+}
+
+function closePlanModal() {
+  document.getElementById('plan-modal').style.display = 'none';
+}
+
+async function savePlan() {
+  const id       = document.getElementById('plan-id').value.trim();
+  const name     = document.getElementById('plan-name').value.trim();
+  const roi      = parseFloat(document.getElementById('plan-roi').value);
+  const min      = parseFloat(document.getElementById('plan-min').value);
+  const max      = parseFloat(document.getElementById('plan-max').value);
+  const days     = parseInt(document.getElementById('plan-days').value);
+  const desc     = document.getElementById('plan-desc').value.trim();
+  const isActive = document.getElementById('plan-active').value === 'true';
+
+  if (!name)           { Toast.show('Plan name is required.','warning'); return; }
+  if (!roi || roi<=0)  { Toast.show('Daily ROI must be greater than 0.','warning'); return; }
+  if (!min || min<=0)  { Toast.show('Minimum amount is required.','warning'); return; }
+  if (!max || max<=min){ Toast.show('Maximum must be greater than minimum.','warning'); return; }
+  if (!days || days<=0){ Toast.show('Duration in days is required.','warning'); return; }
+
+  const payload = {
+    name, description: desc,
+    daily_roi_percent: roi,
+    min_amount: min, max_amount: max,
+    duration_days: days, is_active: isActive
+  };
+
+  let error;
+  if (id) {
+    ({ error } = await sb.from('plans').update(payload).eq('id', id));
+  } else {
+    ({ error } = await sb.from('plans').insert(payload));
+  }
+
+  if (error) { Toast.show(error.message, 'error'); return; }
+  Toast.show(id ? 'Plan updated!' : 'Plan created!', 'success');
+  closePlanModal();
+  await loadPlans();
+}
+
+async function deletePlan(id, name) {
+  if (!confirm(`Delete plan "${name}"? This cannot be undone.`)) return;
+  const { error } = await sb.from('plans').delete().eq('id', id);
+  if (error) { Toast.show(error.message, 'error'); return; }
+  Toast.show(`Plan "${name}" deleted.`, 'info');
+  await loadPlans();
 }
 </script>
 </body>

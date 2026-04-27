@@ -6,97 +6,346 @@
 <title>Profile — EarthROI</title>
 <link rel="stylesheet" href="css/main.css"/>
 <link rel="stylesheet" href="css/dashboard.css"/>
+<style>
+/* ── Profile hero banner ── */
+.profile-banner {
+  background: linear-gradient(135deg, var(--pine) 0%, var(--primary) 100%);
+  border-radius: 20px;
+  padding: 28px 24px 56px;
+  position: relative;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+.profile-banner::before {
+  content:'';
+  position:absolute; top:-40px; right:-40px;
+  width:180px; height:180px; border-radius:50%;
+  background:rgba(221,161,94,.12);
+}
+.profile-banner::after {
+  content:'';
+  position:absolute; bottom:-60px; left:-20px;
+  width:200px; height:200px; border-radius:50%;
+  background:rgba(254,250,224,.05);
+}
+.profile-banner-top {
+  display:flex; align-items:center;
+  justify-content:space-between;
+  position:relative; z-index:1;
+}
+.profile-avatar-wrap { position:relative; }
+.profile-avatar {
+  width:64px; height:64px;
+  border-radius:50%;
+  background:var(--earth);
+  color:var(--pine);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Montserrat',sans-serif;
+  font-weight:800; font-size:24px;
+  border:3px solid rgba(254,250,224,.3);
+}
+.profile-name {
+  font-family:'Montserrat',sans-serif;
+  font-weight:800; font-size:20px;
+  color:var(--text-white); margin-top:12px;
+}
+.profile-email {
+  font-size:13px; color:rgba(254,250,224,.6); margin-top:2px;
+}
+.profile-since {
+  font-size:11px; color:rgba(254,250,224,.45);
+  margin-top:4px; font-weight:500;
+}
+.logout-icon-btn {
+  background:rgba(254,250,224,.12);
+  border:1px solid rgba(254,250,224,.2);
+  color:var(--text-white);
+  border-radius:10px; padding:10px;
+  cursor:pointer; transition:background .2s;
+  display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:1;
+}
+.logout-icon-btn:hover { background:rgba(254,250,224,.22); }
+
+/* Float balance card out of banner */
+.profile-balance-card {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 20px;
+  margin: -28px 12px 0;
+  position:relative; z-index:2;
+  box-shadow:0 8px 32px rgba(40,54,24,.12);
+  display:flex; justify-content:space-between;
+  align-items:center;
+}
+.pbc-item { text-align:center; }
+.pbc-val {
+  font-family:'Montserrat',sans-serif;
+  font-weight:800; font-size:16px; color:var(--pine);
+}
+.pbc-val.green { color:var(--primary); }
+.pbc-label {
+  font-size:10px; color:var(--text-muted);
+  font-weight:700; letter-spacing:.4px;
+  text-transform:uppercase; margin-top:3px;
+}
+.pbc-divider {
+  width:1px; height:36px; background:var(--border);
+}
+
+/* Action buttons row */
+.action-btns {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px; margin-top:20px;
+}
+.action-btn {
+  background:var(--card-bg);
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:16px 14px;
+  display:flex; flex-direction:column;
+  align-items:center; gap:8px;
+  cursor:pointer;
+  transition:all .2s ease;
+  font-family:'Montserrat',sans-serif;
+  font-size:13px; font-weight:700;
+  color:var(--pine);
+}
+.action-btn:hover {
+  border-color:var(--primary);
+  background:var(--earth-lt);
+  transform:translateY(-2px);
+}
+.action-btn.active-action {
+  border-color:var(--primary);
+  background:var(--earth-lt);
+}
+.action-btn svg { stroke:var(--primary); }
+.action-btn-icon {
+  width:40px; height:40px;
+  background:var(--earth-lt);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+}
+.action-btn:hover .action-btn-icon,
+.action-btn.active-action .action-btn-icon {
+  background:var(--primary);
+}
+.action-btn:hover svg,
+.action-btn.active-action svg { stroke:var(--text-white); }
+
+/* Slide-down panels */
+.slide-panel {
+  overflow:hidden; max-height:0;
+  transition:max-height .38s ease, opacity .3s ease;
+  opacity:0;
+}
+.slide-panel.open { max-height:900px; opacity:1; }
+.panel-inner {
+  background:var(--card-bg);
+  border:1.5px solid var(--primary);
+  border-radius:16px;
+  padding:20px; margin-top:12px;
+}
+.panel-title {
+  font-family:'Montserrat',sans-serif;
+  font-weight:800; font-size:15px;
+  color:var(--pine); margin-bottom:16px;
+  display:flex; align-items:center; gap:8px;
+}
+
+/* Deposit address box compact */
+.addr-box {
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+  margin-bottom:10px;
+  display:flex; align-items:center;
+  justify-content:space-between; gap:10px;
+}
+.addr-box-left {}
+.addr-network-tag {
+  font-size:10px; font-weight:800;
+  letter-spacing:.8px; text-transform:uppercase;
+  color:var(--primary);
+  font-family:'Montserrat',sans-serif;
+}
+.addr-value {
+  font-family:monospace; font-size:11px;
+  color:var(--pine); word-break:break-all;
+  margin-top:3px; line-height:1.4;
+  max-width:200px; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap;
+}
+.addr-copy-btn {
+  background:var(--earth-lt);
+  border:none; border-radius:8px;
+  padding:8px 10px; cursor:pointer;
+  transition:background .2s; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.addr-copy-btn:hover { background:var(--earth); }
+.addr-copy-btn svg { stroke:var(--pine); }
+
+/* Transaction log */
+.log-item {
+  display:flex; align-items:center;
+  justify-content:space-between;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+.log-item:last-child { border-bottom:none; }
+.log-icon {
+  width:36px; height:36px;
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-right:12px;
+}
+.log-icon.deposit  { background:#d4edda; }
+.log-icon.withdraw { background:#fff3cd; }
+.log-icon.profit   { background:#e8dff7; }
+.log-icon.deposit svg  { stroke:#1e5c2e; }
+.log-icon.withdraw svg { stroke:#7a5800; }
+.log-icon.profit svg   { stroke:#4527a0; }
+.log-label {
+  font-weight:700; font-family:'Montserrat',sans-serif;
+  font-size:13px; color:var(--pine);
+}
+.log-date { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.log-amount {
+  font-weight:800; font-family:'Montserrat',sans-serif;
+  font-size:14px; text-align:right;
+}
+.log-amount.pos { color:var(--primary); }
+.log-amount.neg { color:#8b1a1a; }
+.log-badge { font-size:10px; text-align:right; margin-top:2px; }
+</style>
 </head>
 <body>
-<main class="page-content">
+<main class="page-content" style="padding-top:20px;">
 
-  <div class="page-header">
-    <a href="dashboard.html" class="back-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-    </a>
-    <h1>Profile</h1>
-  </div>
-
-  <!-- User Info -->
-  <div class="card" style="margin-bottom:16px;">
-    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-      <div class="avatar" id="user-avatar" style="width:54px;height:54px;font-size:20px;">–</div>
-      <div>
-        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:var(--pine);" id="user-name">Loading…</div>
-        <div class="text-muted" id="user-email">–</div>
+  <!-- Profile Banner -->
+  <div class="profile-banner">
+    <div class="profile-banner-top">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar" id="user-avatar">–</div>
       </div>
+      <button class="logout-icon-btn" id="logout-btn" title="Sign Out">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
     </div>
-    <div style="display:flex;flex-direction:column;gap:11px;">
-      <div style="display:flex;justify-content:space-between;font-size:14px;">
-        <span class="text-muted">Member Since</span>
-        <span style="font-weight:600;color:var(--pine);" id="member-since">—</span>
+    <div class="profile-name" id="user-name">Loading…</div>
+    <div class="profile-email" id="user-email">—</div>
+    <div class="profile-since" id="member-since"></div>
+  </div>
+
+  <!-- Floating balance card -->
+  <div class="profile-balance-card">
+    <div class="pbc-item">
+      <div class="pbc-val green" id="bal-available">$0.00</div>
+      <div class="pbc-label">Balance</div>
+    </div>
+    <div class="pbc-divider"></div>
+    <div class="pbc-item">
+      <div class="pbc-val" id="bal-deposited">$0.00</div>
+      <div class="pbc-label">Deposited</div>
+    </div>
+    <div class="pbc-divider"></div>
+    <div class="pbc-item">
+      <div class="pbc-val" id="bal-withdrawn">$0.00</div>
+      <div class="pbc-label">Withdrawn</div>
+    </div>
+    <div class="pbc-divider"></div>
+    <div class="pbc-item">
+      <div class="pbc-val" id="bal-referral">$0.00</div>
+      <div class="pbc-label">Referral</div>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="action-btns" style="margin-top:20px;">
+    <div class="action-btn" id="btn-deposit" onclick="togglePanel('deposit')">
+      <div class="action-btn-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:14px;">
-        <span class="text-muted">Available Balance</span>
-        <span style="font-weight:800;color:var(--primary);font-size:16px;" id="profile-balance">$0.00</span>
+      Deposit
+    </div>
+    <div class="action-btn" id="btn-withdraw" onclick="togglePanel('withdraw')">
+      <div class="action-btn-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
       </div>
+      Withdraw
     </div>
   </div>
 
-  <!-- ── DEPOSIT SECTION ── -->
-  <div class="card" style="margin-bottom:16px;">
-    <div class="section-title">Deposit Funds</div>
+  <!-- DEPOSIT PANEL -->
+  <div class="slide-panel" id="panel-deposit">
+    <div class="panel-inner">
+      <div class="panel-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Deposit Funds
+      </div>
 
-    <!-- Deposit addresses loaded dynamically from platform_settings -->
-    <div id="deposit-addresses">
-      <div class="text-muted" style="padding:8px 0;">Loading deposit addresses…</div>
+      <!-- Addresses -->
+      <div id="deposit-addresses">
+        <p class="text-muted" style="font-size:12px;">Loading addresses…</p>
+      </div>
+
+      <div id="deposit-note" class="info-box" style="margin:12px 0;font-size:12px;"></div>
+
+      <div style="height:1px;background:var(--border);margin:16px 0;"></div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Paste your TX hash after sending to submit for confirmation.</p>
+
+      <div class="form-group">
+        <label class="form-label">Amount (USD)</label>
+        <input class="form-input" type="number" id="deposit-amount" placeholder="e.g. 100.00" min="10"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Transaction Hash</label>
+        <input class="form-input" type="text" id="deposit-tx" placeholder="Paste TX hash…"/>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitDeposit()">Submit Deposit</button>
     </div>
-
-    <div id="deposit-note" class="info-box" style="margin:14px 0;"></div>
-
-    <div style="height:1px;background:var(--border);margin:16px 0;"></div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">After sending, paste your TX hash below to credit your account.</p>
-
-    <div class="form-group">
-      <label class="form-label">Amount (USD)</label>
-      <input class="form-input" type="number" id="deposit-amount" placeholder="e.g. 100.00" min="10"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Transaction Hash</label>
-      <input class="form-input" type="text" id="deposit-tx" placeholder="Paste your TX hash here"/>
-    </div>
-    <button class="btn btn-primary btn-full" onclick="submitDeposit()">Submit Deposit</button>
   </div>
 
-  <!-- ── WITHDRAWAL SECTION ── -->
-  <div class="card" style="margin-bottom:16px;">
-    <div class="section-title">Request Withdrawal</div>
+  <!-- WITHDRAWAL PANEL -->
+  <div class="slide-panel" id="panel-withdraw">
+    <div class="panel-inner">
+      <div class="panel-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
+        Request Withdrawal
+      </div>
 
-    <div id="withdrawal-note" class="info-box" style="margin-bottom:16px;"></div>
+      <div id="withdrawal-note" class="info-box" style="margin-bottom:14px;font-size:12px;"></div>
 
-    <div class="form-group">
-      <label class="form-label">Amount (USD)</label>
-      <input class="form-input" type="number" id="withdraw-amount" placeholder="Minimum $10"/>
+      <div class="form-group">
+        <label class="form-label">Amount (USD)</label>
+        <input class="form-input" type="number" id="withdraw-amount" placeholder="Minimum $10"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Network</label>
+        <select class="form-input" id="withdraw-network">
+          <option value="">Loading…</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Wallet Address</label>
+        <input class="form-input" type="text" id="withdraw-wallet" placeholder="Your wallet address"/>
+      </div>
+      <p id="withdraw-fee-note" class="text-muted" style="font-size:12px;margin-bottom:14px;"></p>
+      <button class="btn btn-outline btn-full" onclick="submitWithdrawal()">Request Withdrawal</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Withdrawal Network</label>
-      <select class="form-input" id="withdraw-network">
-        <option value="">Loading networks…</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Your Wallet Address</label>
-      <input class="form-input" type="text" id="withdraw-wallet" placeholder="Your wallet address"/>
-    </div>
-    <div id="withdraw-fee-note" class="text-muted" style="font-size:12px;margin-bottom:14px;"></div>
-    <button class="btn btn-outline btn-full" onclick="submitWithdrawal()">Request Withdrawal</button>
   </div>
 
-  <!-- Withdrawal History -->
-  <div class="section-title">Withdrawal History</div>
-  <div class="card" id="withdrawal-history" style="margin-bottom:24px;">
-    <div class="text-muted text-center" style="padding:16px;">No withdrawals yet.</div>
+  <!-- ACTIVITY LOG -->
+  <div style="margin-top:24px;">
+    <div class="section-title">Activity Log</div>
+    <div class="card" id="activity-log">
+      <div class="text-muted text-center" style="padding:20px;">Loading activity…</div>
+    </div>
   </div>
-
-  <button id="logout-btn" class="btn btn-ghost btn-full" style="max-width:320px;margin:0 auto;display:flex;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-    Sign Out
-  </button>
 
 </main>
 
@@ -127,7 +376,11 @@
 <script>
 let currentUser = null, userProfile = null, settings = {}, withdrawMin = 10, withdrawFee = 1;
 
-/* ── Deposit address labels ───────────── */
+const PLACEHOLDERS = [
+  'TXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  '0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  'bc1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+];
 const ADDR_KEYS = {
   deposit_usdt_trc20: 'USDT · TRC20',
   deposit_usdt_bep20: 'USDT · BEP20',
@@ -135,121 +388,169 @@ const ADDR_KEYS = {
   deposit_eth:        'Ethereum · ETH'
 };
 
+/* ── Panel toggle ──────────────────── */
+function togglePanel(name) {
+  const panel = document.getElementById('panel-' + name);
+  const btn   = document.getElementById('btn-' + name);
+  const other = name === 'deposit' ? 'withdraw' : 'deposit';
+  const otherPanel = document.getElementById('panel-' + other);
+  const otherBtn   = document.getElementById('btn-' + other);
+
+  const isOpen = panel.classList.contains('open');
+
+  // close both first
+  otherPanel.classList.remove('open');
+  otherBtn.classList.remove('active-action');
+
+  if (isOpen) {
+    panel.classList.remove('open');
+    btn.classList.remove('active-action');
+  } else {
+    panel.classList.add('open');
+    btn.classList.add('active-action');
+    setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'nearest'}), 50);
+  }
+}
+
+/* ── Init ──────────────────────────── */
 (async () => {
   currentUser = await requireAuth(); if (!currentUser) return;
   userProfile = await getProfile(currentUser.id);
 
-  /* populate profile card */
-  document.getElementById('user-name').textContent    = userProfile.full_name || 'Investor';
-  document.getElementById('user-email').textContent   = currentUser.email;
-  document.getElementById('user-avatar').textContent  = (userProfile.full_name || 'U')[0].toUpperCase();
-  document.getElementById('profile-balance').textContent = formatMoney(userProfile.balance);
-  document.getElementById('member-since').textContent = new Date(userProfile.created_at).toLocaleDateString();
+  // Banner
+  const initials = (userProfile.full_name || 'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('user-avatar').textContent   = initials;
+  document.getElementById('user-name').textContent     = userProfile.full_name || 'Investor';
+  document.getElementById('user-email').textContent    = currentUser.email;
+  document.getElementById('member-since').textContent  = 'Member since ' + new Date(userProfile.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'});
 
-  /* load all platform settings */
+  // Balance cards
+  document.getElementById('bal-available').textContent = formatMoney(userProfile.balance);
+  document.getElementById('bal-deposited').textContent = formatMoney(userProfile.total_deposited);
+  document.getElementById('bal-withdrawn').textContent = formatMoney(userProfile.total_withdrawn);
+  document.getElementById('bal-referral').textContent  = formatMoney(userProfile.referral_earnings);
+
+  // Settings
   settings = await getAllSettings();
 
-  /* ── render deposit addresses ── */
-  const placeholders = ['TXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','bc1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'];
+  // Deposit addresses
   const addrHtml = Object.entries(ADDR_KEYS).map(([key, label]) => {
-    const addr = settings[key]?.value;
-    if (!addr || placeholders.includes(addr)) return '';
+    const addr = settings[key]?.value || '';
+    if (!addr || PLACEHOLDERS.includes(addr)) return '';
     return `
-      <div class="deposit-addr-box">
-        <div class="deposit-addr-network">${label}</div>
-        <div class="deposit-addr-value" id="addr-${key}">${addr}</div>
-        <span class="deposit-addr-copy" onclick="copyAddr('${key}')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          Copy address
-        </span>
+      <div class="addr-box">
+        <div class="addr-box-left">
+          <div class="addr-network-tag">${label}</div>
+          <div class="addr-value" id="addr-${key}" title="${addr}">${addr}</div>
+        </div>
+        <button class="addr-copy-btn" onclick="copyAddr('${key}','${addr}')" title="Copy">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
       </div>`;
   }).join('');
-
   document.getElementById('deposit-addresses').innerHTML =
-    addrHtml || '<div class="info-box">Deposit addresses not yet configured. Contact support.</div>';
+    addrHtml || '<div class="info-box" style="font-size:12px;">Deposit addresses not yet configured. Contact support.</div>';
 
-  /* deposit note — hide box if empty */
   const note = settings['deposit_note']?.value || '';
   const noteEl = document.getElementById('deposit-note');
   if (note) { noteEl.textContent = note; } else { noteEl.style.display = 'none'; }
 
-  /* ── render withdrawal networks ── */
-  withdrawMin  = parseFloat(settings['withdrawal_min']?.value  || 10);
-  withdrawFee  = parseFloat(settings['withdrawal_fee']?.value  || 1);
-  const nets   = (settings['withdrawal_networks']?.value || 'USDT-TRC20').split(',').map(n => n.trim()).filter(Boolean);
-
-  const sel = document.getElementById('withdraw-network');
-  sel.innerHTML = nets.map(n => `<option value="${n}">${n}</option>`).join('');
+  // Withdrawal
+  withdrawMin = parseFloat(settings['withdrawal_min']?.value || 10);
+  withdrawFee = parseFloat(settings['withdrawal_fee']?.value || 1);
+  const nets  = (settings['withdrawal_networks']?.value || 'USDT-TRC20').split(',').map(n=>n.trim()).filter(Boolean);
+  document.getElementById('withdraw-network').innerHTML = nets.map(n => `<option value="${n}">${n}</option>`).join('');
 
   const wNote = settings['withdrawal_note']?.value || '';
   const wNoteEl = document.getElementById('withdrawal-note');
   if (wNote) { wNoteEl.textContent = wNote; } else { wNoteEl.style.display = 'none'; }
   document.getElementById('withdraw-fee-note').textContent =
-    `Processing fee: $${withdrawFee.toFixed(2)} · Minimum: $${withdrawMin.toFixed(2)}`;
+    `Fee: $${withdrawFee.toFixed(2)} deducted · Min: $${withdrawMin.toFixed(2)}`;
 
-  /* ── withdrawal history ── */
-  const { data: withdrawals } = await sb.from('withdrawals')
-    .select('*').eq('user_id', currentUser.id)
-    .order('requested_at', { ascending: false }).limit(10);
+  // Activity log — merge deposits + withdrawals + profit claims
+  const [depRes, withRes, profRes] = await Promise.all([
+    sb.from('deposits').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(20),
+    sb.from('withdrawals').select('*').eq('user_id', currentUser.id).order('requested_at',{ascending:false}).limit(20),
+    sb.from('profit_claims').select('*').eq('user_id', currentUser.id).order('claimed_at',{ascending:false}).limit(20),
+  ]);
 
-  if (withdrawals?.length > 0) {
-    const badge = { pending:'badge-pending', approved:'badge-approved', declined:'badge-declined' };
-    document.getElementById('withdrawal-history').innerHTML = withdrawals.map(w => `
-      <div class="withdrawal-item">
-        <div>
-          <div style="font-weight:700;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--pine);">${formatMoney(w.amount)} · ${w.network}</div>
-          <div style="font-size:12px;color:var(--text-muted);">${new Date(w.requested_at).toLocaleDateString()}</div>
+  const logs = [
+    ...(depRes.data||[]).map(d=>({type:'deposit',   date:new Date(d.created_at),   amount:d.amount, status:d.status,  network:''})),
+    ...(withRes.data||[]).map(w=>({type:'withdraw',  date:new Date(w.requested_at), amount:w.amount, status:w.status,  network:w.network})),
+    ...(profRes.data||[]).map(p=>({type:'profit',    date:new Date(p.claimed_at),   amount:p.amount, status:'claimed', network:''})),
+  ].sort((a,b) => b.date - a.date).slice(0, 30);
+
+  const ICONS = {
+    deposit:  `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+    withdraw: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>`,
+    profit:   `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  };
+  const BADGE_MAP = { pending:'badge-pending', confirmed:'badge-approved', approved:'badge-approved', declined:'badge-declined', failed:'badge-declined', claimed:'badge-active' };
+  const LABELS = { deposit:'Deposit', withdraw:'Withdrawal', profit:'Profit Claimed' };
+
+  const logEl = document.getElementById('activity-log');
+  if (!logs.length) {
+    logEl.innerHTML = '<div class="text-muted text-center" style="padding:20px;">No activity yet.</div>';
+  } else {
+    logEl.innerHTML = logs.map(l => `
+      <div class="log-item">
+        <div style="display:flex;align-items:center;flex:1;">
+          <div class="log-icon ${l.type}">${ICONS[l.type]}</div>
+          <div>
+            <div class="log-label">${LABELS[l.type]}${l.network ? ' · '+l.network : ''}</div>
+            <div class="log-date">${l.date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ${l.date.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
         </div>
-        <span class="badge ${badge[w.status]||''}">${w.status}</span>
+        <div>
+          <div class="log-amount ${l.type==='withdraw'?'neg':'pos'}">${l.type==='withdraw'?'−':'+'} ${formatMoney(l.amount)}</div>
+          <div class="log-badge"><span class="badge ${BADGE_MAP[l.status]||''}">${l.status}</span></div>
+        </div>
       </div>`).join('');
   }
 })();
 
-function copyAddr(key) {
-  const val = document.getElementById('addr-' + key)?.textContent;
-  if (val) navigator.clipboard.writeText(val).then(() => Toast.show('Address copied!', 'success'));
+function copyAddr(key, addr) {
+  navigator.clipboard.writeText(addr).then(() => Toast.show('Address copied!','success'));
 }
 
 async function submitDeposit() {
   const amount = parseFloat(document.getElementById('deposit-amount').value);
   const txHash = document.getElementById('deposit-tx').value.trim();
   const depMin = parseFloat(settings['deposit_min']?.value || 10);
-
-  if (!amount || amount < depMin) { Toast.show(`Minimum deposit is $${depMin}.`, 'warning'); return; }
-  if (!txHash)                    { Toast.show('Please enter your transaction hash.', 'warning'); return; }
+  if (!amount || amount < depMin) { Toast.show(`Minimum deposit is $${depMin}.`,'warning'); return; }
+  if (!txHash)                    { Toast.show('Please paste your transaction hash.','warning'); return; }
 
   const { error } = await sb.from('deposits').insert({
     user_id: currentUser.id, amount, tx_hash: txHash, status: 'pending'
   });
-  if (error) { Toast.show(error.message, 'error'); return; }
+  if (error) { Toast.show(error.message,'error'); return; }
 
-  Toast.show('Deposit submitted! Admin will confirm within 24 hours.', 'success');
+  Toast.show('Deposit submitted! Admin will confirm within 24h.','success');
   document.getElementById('deposit-amount').value = '';
   document.getElementById('deposit-tx').value = '';
+  setTimeout(() => window.location.reload(), 1400);
 }
 
 async function submitWithdrawal() {
   const amount  = parseFloat(document.getElementById('withdraw-amount').value);
   const wallet  = document.getElementById('withdraw-wallet').value.trim();
   const network = document.getElementById('withdraw-network').value;
-
-  if (!amount || amount < withdrawMin) { Toast.show(`Minimum withdrawal is $${withdrawMin}.`, 'warning'); return; }
-  if (!wallet)                          { Toast.show('Please enter your wallet address.', 'warning'); return; }
-  if (amount + withdrawFee > userProfile.balance) {
-    Toast.show(`Insufficient balance (incl. $${withdrawFee} fee).`, 'error'); return;
+  if (!amount || amount < withdrawMin) { Toast.show(`Minimum withdrawal is $${withdrawMin}.`,'warning'); return; }
+  if (!wallet)                          { Toast.show('Please enter your wallet address.','warning'); return; }
+  if ((amount + withdrawFee) > (userProfile?.balance || 0)) {
+    Toast.show(`Insufficient balance (including $${withdrawFee} fee).`,'error'); return;
   }
 
   const { error } = await sb.from('withdrawals').insert({
     user_id: currentUser.id, amount, wallet_address: wallet, network, status: 'pending'
   });
-  if (error) { Toast.show(error.message, 'error'); return; }
+  if (error) { Toast.show(error.message,'error'); return; }
 
-  /* hold balance immediately */
   await sb.from('profiles')
     .update({ balance: userProfile.balance - amount - withdrawFee })
     .eq('id', currentUser.id);
 
-  Toast.show('Withdrawal requested! Processing within 24 hours.', 'success');
+  Toast.show('Withdrawal requested! Processing within 24h.','success');
   setTimeout(() => window.location.reload(), 1400);
 }
 </script>

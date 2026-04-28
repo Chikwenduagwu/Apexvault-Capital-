@@ -4,44 +4,251 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mine Profit — EarthROI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="css/main.css"/>
-<link rel="stylesheet" href="css/dashboard.css"/>
+<style>
+* { font-family: 'DM Sans', sans-serif; }
+
+body {
+  background: #F4F0E4;
+  padding-bottom: 80px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO (dark top section) ─────── */
+.mine-hero {
+  background: linear-gradient(160deg, #283618 0%, #3a5020 60%, #606C38 100%);
+  padding: 52px 22px 80px;
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+.mine-hero::before {
+  content:''; position:absolute; top:-80px; left:50%;
+  transform:translateX(-50%);
+  width:320px; height:320px; border-radius:50%;
+  background:rgba(221,161,94,.08); pointer-events:none;
+}
+.mine-hero-top {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:28px; position:relative; z-index:1;
+}
+.mine-page-title {
+  font-size:17px; font-weight:700; color:#FEFAE0;
+}
+.mine-page-sub {
+  font-size:11px; color:rgba(254,250,224,.45);
+  font-weight:400; margin-top:1px;
+}
+
+/* Circle progress */
+.mine-circle-wrap {
+  position:relative; display:inline-flex;
+  align-items:center; justify-content:center;
+  margin:0 auto 20px;
+  z-index:1;
+}
+.mine-circle-inner {
+  position:absolute;
+  display:flex; flex-direction:column; align-items:center;
+}
+.mine-circle-pct {
+  font-size:38px; font-weight:700;
+  color:#FEFAE0; letter-spacing:-1px; line-height:1;
+}
+.mine-circle-label {
+  font-size:10px; font-weight:600;
+  color:rgba(254,250,224,.45);
+  letter-spacing:1.5px; text-transform:uppercase;
+  margin-top:4px;
+}
+
+.mine-status-label {
+  font-size:12px; color:rgba(254,250,224,.5);
+  position:relative; z-index:1;
+  margin-bottom:6px;
+}
+.mine-countdown {
+  font-family:'DM Mono',monospace;
+  font-size:32px; font-weight:500;
+  color:#FEFAE0; letter-spacing:4px;
+  position:relative; z-index:1;
+  margin-bottom:0;
+}
+.mine-countdown.ready {
+  color:#DDA15E; font-size:22px; letter-spacing:1px;
+  font-family:'DM Sans',sans-serif; font-weight:700;
+}
+
+/* ── FLOATING CARDS ──────────────── */
+.mine-cards {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:-36px 16px 0;
+  position:relative; z-index:10;
+}
+.mine-mini-card {
+  background:#FEFAE0;
+  border-radius:16px; padding:16px;
+  box-shadow:0 4px 20px rgba(40,54,24,.12);
+}
+.mine-mini-label {
+  font-size:10px; font-weight:600;
+  color:#9a9278; text-transform:uppercase;
+  letter-spacing:.5px; margin-bottom:6px;
+}
+.mine-mini-val {
+  font-size:20px; font-weight:700;
+  color:#283618; letter-spacing:-.5px;
+}
+.mine-mini-sub {
+  font-size:11px; color:#9a9278;
+  margin-top:2px;
+}
+
+/* ── CLAIM BUTTON ────────────────── */
+.mine-claim-wrap {
+  padding:20px 16px 0;
+}
+.mine-claim-btn {
+  width:100%; padding:17px;
+  border:none; border-radius:16px;
+  font-size:16px; font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer; transition:all .25s;
+  display:flex; align-items:center;
+  justify-content:center; gap:10px;
+}
+.mine-claim-btn.locked {
+  background:#E8E2CA; color:#b0a98c; cursor:not-allowed;
+}
+.mine-claim-btn.ready {
+  background:linear-gradient(135deg,#606C38,#7a8a45);
+  color:#FEFAE0;
+  box-shadow:0 8px 28px rgba(96,108,56,.35);
+}
+.mine-claim-btn.ready:hover {
+  transform:translateY(-2px);
+  box-shadow:0 12px 36px rgba(96,108,56,.4);
+}
+
+/* ── CLAIMS HISTORY ──────────────── */
+.mine-history {
+  padding:20px 16px 0;
+}
+.mine-history-title {
+  font-size:15px; font-weight:700;
+  color:#283618; margin-bottom:14px;
+}
+.mine-claim-item {
+  background:#FEFAE0;
+  border-radius:14px;
+  padding:14px 16px;
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:10px;
+  box-shadow:0 1px 8px rgba(40,54,24,.05);
+}
+.mine-claim-icon {
+  width:40px; height:40px;
+  background:#D4E0C8;
+  border-radius:11px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  font-size:18px;
+}
+.mine-claim-label {
+  font-size:13px; font-weight:700; color:#283618;
+}
+.mine-claim-date {
+  font-size:11px; color:#9a9278; margin-top:1px;
+}
+.mine-claim-amount {
+  margin-left:auto;
+  font-size:16px; font-weight:700;
+  color:#606C38;
+  font-family:'DM Mono',monospace;
+}
+
+/* ── BOTTOM NAV ──────────────────── */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  height:68px;
+  background:#FEFAE0;
+  border-top:1px solid rgba(212,201,168,.5);
+  display:flex; align-items:center; justify-content:space-around;
+  z-index:100;
+  box-shadow:0 -4px 20px rgba(40,54,24,.08);
+}
+.bottom-nav a {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:8px 10px; border-radius:10px;
+  color:#b0a98c; font-size:10px; font-weight:600;
+  letter-spacing:.3px; text-decoration:none;
+  transition:color .18s; min-width:52px;
+}
+.bottom-nav a.active, .bottom-nav a:hover { color:#606C38; }
+.bottom-nav a.active svg, .bottom-nav a:hover svg { stroke:#606C38; }
+.bottom-nav svg { stroke:currentColor; transition:stroke .18s; }
+</style>
 </head>
 <body>
-<main class="mine-page">
-  <h1 style="font-size:22px;margin-bottom:4px;">Daily Profit Mining</h1>
-  <p class="text-muted">Accumulates every 24 hours from your active investments.</p>
 
-  <div class="circle-wrapper" id="circle-container">
-    <div class="circle-inner">
-      <div class="circle-pct" id="circle-pct">0%</div>
-      <div class="circle-label">COMPLETE</div>
-    </div>
-  </div>
-
-  <div id="status-label" class="text-muted" style="margin-bottom:6px;font-size:13px;">Calculating…</div>
-  <div class="countdown-display" id="countdown">--:--:--</div>
-
-  <div class="mine-profit-est" style="margin-top:20px;">
+<!-- ═══ HERO ═══ -->
+<div class="mine-hero">
+  <div class="mine-hero-top">
     <div>
-      <div class="mine-profit-label">Today's Profit</div>
-      <div style="font-size:11px;color:var(--text-muted);">From active investments</div>
+      <div class="mine-page-title">Daily Mining</div>
+      <div class="mine-page-sub">Accumulates every 24 hours</div>
     </div>
-    <div class="mine-profit-val" id="daily-profit-est">$0.00</div>
+    <div style="width:40px;height:40px;border-radius:50%;background:rgba(254,250,224,.12);border:1px solid rgba(254,250,224,.2);display:flex;align-items:center;justify-content:center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(254,250,224,.7)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
   </div>
 
-  <button id="claim-btn" class="btn btn-full btn-lg" style="margin:0 0 28px;" onclick="doClaim()">
-    Claim Profit
+  <!-- SVG Progress Circle -->
+  <div class="mine-circle-wrap" id="circle-container">
+    <div class="mine-circle-inner">
+      <div class="mine-circle-pct" id="circle-pct">0%</div>
+      <div class="mine-circle-label">Complete</div>
+    </div>
+  </div>
+
+  <div class="mine-status-label" id="status-label">Calculating…</div>
+  <div class="mine-countdown" id="countdown">--:--:--</div>
+</div>
+
+<!-- ═══ FLOATING STAT CARDS ═══ -->
+<div class="mine-cards">
+  <div class="mine-mini-card">
+    <div class="mine-mini-label">Today's Profit</div>
+    <div class="mine-mini-val" id="daily-profit-est">$0.00</div>
+    <div class="mine-mini-sub">From investments</div>
+  </div>
+  <div class="mine-mini-card">
+    <div class="mine-mini-label">Total Claimed</div>
+    <div class="mine-mini-val" id="total-claimed">$0.00</div>
+    <div class="mine-mini-sub">All time</div>
+  </div>
+</div>
+
+<!-- ═══ CLAIM BUTTON ═══ -->
+<div class="mine-claim-wrap">
+  <button class="mine-claim-btn locked" id="claim-btn" onclick="doClaim()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span id="claim-btn-text">Not Yet Available</span>
   </button>
+</div>
 
-  <div style="text-align:left;width:100%;">
-    <div class="section-title">Recent Claims</div>
-    <div class="card" id="claims-list">
-      <div class="text-muted text-center" style="padding:16px 0;">No claims yet.</div>
-    </div>
+<!-- ═══ CLAIMS HISTORY ═══ -->
+<div class="mine-history">
+  <div class="mine-history-title">Claim History</div>
+  <div id="claims-list">
+    <div style="text-align:center;padding:28px 0;color:#b0a98c;font-size:14px;">No claims yet.</div>
   </div>
-</main>
+</div>
 
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <a href="invest.html">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Invest
@@ -65,19 +272,70 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/toast.js"></script>
 <script src="js/roi-engine.js"></script>
-<script src="js/ui-effects.js"></script>
 <script>
 let circle = null, currentUser = null, claimStatus = null, ticker = null;
 
+/* ── Build SVG progress ring (olive/earth palette) ── */
+function buildRing(container) {
+  const R = 90, CX = 110, CY = 110;
+  const CIRC = 2 * Math.PI * R;
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 220 220');
+  svg.setAttribute('width','220'); svg.setAttribute('height','220');
+
+  // Track
+  const track = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  track.setAttribute('cx',CX); track.setAttribute('cy',CY); track.setAttribute('r',R);
+  track.setAttribute('fill','none'); track.setAttribute('stroke','rgba(254,250,224,.1)');
+  track.setAttribute('stroke-width','12');
+
+  // Progress arc
+  const arc = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  arc.setAttribute('cx',CX); arc.setAttribute('cy',CY); arc.setAttribute('r',R);
+  arc.setAttribute('fill','none');
+  arc.setAttribute('stroke','url(#ringGrad)');
+  arc.setAttribute('stroke-width','12');
+  arc.setAttribute('stroke-linecap','round');
+  arc.setAttribute('stroke-dasharray',CIRC);
+  arc.setAttribute('stroke-dashoffset',CIRC);
+  arc.setAttribute('transform',`rotate(-90 ${CX} ${CY})`);
+  arc.style.transition = 'stroke-dashoffset 1.2s ease';
+
+  // Gradient def
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  defs.innerHTML = `<linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#606C38"/>
+    <stop offset="100%" stop-color="#DDA15E"/>
+  </linearGradient>`;
+
+  // Tip dot
+  const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dot.setAttribute('r','7'); dot.setAttribute('fill','#DDA15E');
+  dot.setAttribute('cx',CX); dot.setAttribute('cy',CY - R);
+  dot.setAttribute('transform',`rotate(-90 ${CX} ${CY})`);
+
+  svg.appendChild(defs); svg.appendChild(track); svg.appendChild(arc); svg.appendChild(dot);
+  container.appendChild(svg);
+
+  return {
+    update(p) {
+      p = Math.min(1, Math.max(0, p));
+      arc.setAttribute('stroke-dashoffset', CIRC * (1 - p));
+      const angle = -90 + p * 360;
+      dot.setAttribute('transform', `rotate(${angle} ${CX} ${CY})`);
+    }
+  };
+}
+
 async function init() {
-  currentUser = await requireAuth();
-  if (!currentUser) return;
+  currentUser = await requireAuth(); if (!currentUser) return;
   const profile = await getProfile(currentUser.id);
 
-  circle = ROIEngine.buildProgressCircle(document.getElementById('circle-container'));
+  circle = buildRing(document.getElementById('circle-container'));
   claimStatus = ROIEngine.calcClaimStatus(profile.last_claim_at);
   updateUI(claimStatus);
-  setTimeout(() => circle.update(claimStatus.percentComplete), 200);
+  setTimeout(() => circle.update(claimStatus.percentComplete), 250);
 
   if (!claimStatus.canClaim) {
     ticker = setInterval(() => {
@@ -88,58 +346,78 @@ async function init() {
     }, 1000);
   }
 
+  // Daily profit
   const daily = await ROIEngine.calcDailyProfit(currentUser.id);
   document.getElementById('daily-profit-est').textContent = formatMoney(daily);
 
+  // Total claimed
+  const { data: allClaims } = await sb.from('profit_claims')
+    .select('amount').eq('user_id', currentUser.id);
+  const total = (allClaims||[]).reduce((s,c) => s + parseFloat(c.amount), 0);
+  document.getElementById('total-claimed').textContent = formatMoney(total);
+
+  // Recent claims
   const { data: claims } = await sb.from('profit_claims')
-    .select('amount, claimed_at').eq('user_id', currentUser.id)
-    .order('claimed_at', { ascending:false }).limit(6);
+    .select('amount, claimed_at')
+    .eq('user_id', currentUser.id)
+    .order('claimed_at', { ascending:false }).limit(8);
 
   if (claims?.length > 0) {
-    document.getElementById('claims-list').innerHTML = claims.map(c => `
-      <div class="withdrawal-item">
-        <div>
-          <div style="font-weight:700;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--pine);">Profit Claimed</div>
-          <div style="font-size:12px;color:var(--text-muted);">${new Date(c.claimed_at).toLocaleString()}</div>
-        </div>
-        <div style="font-weight:800;color:var(--primary);font-family:'Montserrat',sans-serif;">${formatMoney(c.amount)}</div>
-      </div>
-    `).join('');
+    document.getElementById('claims-list').innerHTML = claims.map((c,i) => {
+      const icons = ['💰','🌿','✨','🎯','🌱','💎','🔑','⭐'];
+      const dt = new Date(c.claimed_at);
+      return `
+        <div class="mine-claim-item">
+          <div class="mine-claim-icon">${icons[i%icons.length]}</div>
+          <div>
+            <div class="mine-claim-label">Profit Claimed</div>
+            <div class="mine-claim-date">${dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ${dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+          <div class="mine-claim-amount">+${formatMoney(c.amount)}</div>
+        </div>`;
+    }).join('');
   }
 }
 
 function updateUI(status) {
   const pct = Math.round(status.percentComplete * 100);
   document.getElementById('circle-pct').textContent = pct + '%';
-  const btn = document.getElementById('claim-btn');
+  const btn     = document.getElementById('claim-btn');
+  const btnText = document.getElementById('claim-btn-text');
+
   if (status.canClaim) {
-    document.getElementById('countdown').textContent = 'Ready!';
-    document.getElementById('status-label').textContent = 'Your profit is ready to claim';
-    btn.classList.add('ready'); btn.textContent = 'Claim Profit';
+    document.getElementById('countdown').textContent = 'Ready to Claim!';
+    document.getElementById('countdown').className   = 'mine-countdown ready';
+    document.getElementById('status-label').textContent = '🟢 Your profit is ready';
+    btn.className = 'mine-claim-btn ready';
+    btnText.textContent = 'Claim Daily Profit';
   } else {
     document.getElementById('countdown').textContent = ROIEngine.formatCountdown(status.hoursRemaining);
-    document.getElementById('status-label').textContent = 'Next claim available in';
-    btn.classList.remove('ready'); btn.textContent = 'Not Yet Available';
+    document.getElementById('countdown').className   = 'mine-countdown';
+    document.getElementById('status-label').textContent = 'Next claim in';
+    btn.className = 'mine-claim-btn locked';
+    btnText.textContent = 'Not Yet Available';
   }
 }
 
 async function doClaim() {
-  if (!claimStatus?.canClaim) { Toast.show('Please wait until 24 hours have passed.', 'warning'); return; }
+  if (!claimStatus?.canClaim) { Toast.show('Wait until 24 hours have elapsed.','warning'); return; }
   const btn = document.getElementById('claim-btn');
-  setLoading(btn, true, 'Claiming…');
+  const btnText = document.getElementById('claim-btn-text');
+  btn.disabled = true; btnText.textContent = 'Claiming…';
   try {
     const result = await ROIEngine.claimProfit(currentUser.id);
     if (result.success) {
-      Toast.show(`${formatMoney(result.profit_claimed)} claimed!`, 'success');
+      Toast.show(`${formatMoney(result.profit_claimed)} claimed successfully!`,'success');
       clearInterval(ticker);
       setTimeout(() => window.location.reload(), 1400);
     } else {
-      Toast.show(result.error || 'Claim failed.', 'error');
-      setLoading(btn, false);
+      Toast.show(result.error || 'Claim failed. Try again.','error');
+      btn.disabled = false; btnText.textContent = 'Claim Daily Profit';
     }
   } catch(err) {
-    Toast.show(err.message || 'An error occurred.', 'error');
-    setLoading(btn, false);
+    Toast.show(err.message || 'An error occurred.','error');
+    btn.disabled = false; btnText.textContent = 'Claim Daily Profit';
   }
 }
 

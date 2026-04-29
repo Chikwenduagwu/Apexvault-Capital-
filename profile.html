@@ -410,6 +410,49 @@ select.pf-input { cursor:pointer; }
   <div class="p-since" id="member-since"></div>
 </div>
 
+
+
+
+<!-- ═══ DEPOSIT PANEL ═══ -->
+<div class="p-slide" id="panel-deposit">
+  <div class="p-panel">
+    <div class="p-panel-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Deposit Funds
+    </div>
+    <div id="deposit-addresses">
+      <p style="font-size:12px;color:#9a9278;">Loading addresses…</p>
+    </div>
+    <div id="deposit-note" class="info-box" style="margin:10px 0 14px;"></div>
+    <div style="height:1px;background:#E8E2CA;margin:14px 0;"></div>
+    <p style="font-size:12px;color:#9a9278;margin-bottom:13px;">Paste your TX hash below after sending to submit for confirmation.</p>
+    <label class="pf-label">Amount (USD)</label>
+    <input class="pf-input" type="number" id="deposit-amount" placeholder="e.g. 100.00" min="10"/>
+    <label class="pf-label">Transaction Hash</label>
+    <input class="pf-input" type="text" id="deposit-tx" placeholder="Paste TX hash here"/>
+    <button class="pf-btn" id="dep-btn" onclick="submitDeposit()">Submit Deposit</button>
+  </div>
+</div>
+
+<!-- ═══ WITHDRAW PANEL ═══ -->
+<div class="p-slide" id="panel-withdraw">
+  <div class="p-panel">
+    <div class="p-panel-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
+      Request Withdrawal
+    </div>
+    <div id="withdrawal-note" class="info-box" style="margin-bottom:14px;"></div>
+    <label class="pf-label">Amount (USD)</label>
+    <input class="pf-input" type="number" id="withdraw-amount" placeholder="Minimum $10"/>
+    <label class="pf-label">Network</label>
+    <select class="pf-input" id="withdraw-network"><option value="">Loading…</option></select>
+    <label class="pf-label">Wallet Address</label>
+    <input class="pf-input" type="text" id="withdraw-wallet" placeholder="Your wallet address"/>
+    <p id="withdraw-fee-note" style="font-size:12px;color:#9a9278;margin-bottom:14px;"></p>
+    <button class="pf-btn-outline" id="wd-btn" onclick="submitWithdrawal()">Request Withdrawal</button>
+  </div>
+</div>
+
 <!-- ═══ FLOATING BALANCE CARD ═══ -->
 <div class="p-balance-card">
   <div class="pbc-item">

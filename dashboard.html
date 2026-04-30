@@ -407,6 +407,88 @@ select.d-form-input { cursor: pointer; }
   line-height: 1.5;
 }
 </style>
+
+<style>
+:root {
+  --pine-tree: #3a5f5f;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+/* Container at top */
+#toast-section {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+}
+
+/* Toast */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: var(--white);
+  border: 2px solid var(--pine-tree);
+
+  padding: 12px 14px;
+  border-radius: 0; /* square */
+
+  min-width: 260px;
+  max-width: 320px;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+
+  opacity: 0;
+  transform: translateY(-20px);
+
+  transition: 
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Show */
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hidden */
+.hidden {
+  display: none;
+}
+
+/* Flag */
+.flag {
+  width: 26px;
+  height: 18px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #ddd;
+}
+
+/* Text */
+.toast-text p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* Amount highlight */
+.toast-text span {
+  font-weight: 700;
+  color: var(--pine-tree);
+}
+/* Timestamp */
+.toast-time {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+</style>
 </head>
 <body>
 
@@ -608,7 +690,23 @@ select.d-form-input { cursor: pointer; }
     <p class="d-modal-note">Processed within 24 hours after . approval.</p>
   </div>
 </div>
+ <!-- Toast Notification -->
+<section id="toast-section">
 
+  <div id="toast" class="toast hidden">
+    <img id="flag" class="flag" src="" alt="country flag">
+    
+    <div class="toast-text">
+      <p id="toast-message"></p>
+    </div>
+  </div>
+
+  <!-- Sound -->
+  <audio id="toast-sound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+  </audio>
+
+</section>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/supabase-config.js"></script>
@@ -924,6 +1022,138 @@ async function submitWithdrawal() {
   btn.disabled=false; btn.textContent='Request Withdrawal';
   setTimeout(() => window.location.reload(), 1200);
 }
+</script>
+
+<script>
+const countries = [
+  { name: "USA", flag: "https://flagcdn.com/us.svg" },
+  { name: "UK", flag: "https://flagcdn.com/gb.svg" },
+  { name: "Canada", flag: "https://flagcdn.com/ca.svg" },
+  { name: "Germany", flag: "https://flagcdn.com/de.svg" },
+  { name: "Australia", flag: "https://flagcdn.com/au.svg" },
+  { name: "Nigeria", flag: "https://flagcdn.com/ng.svg" },
+  { name: "UAE", flag: "https://flagcdn.com/ae.svg" }
+];
+
+/* NEW: action types */
+const actions = [
+  "invested in vault",
+  "deposited",
+  "withdrew"
+];
+
+const toast = document.getElementById("toast");
+const message = document.getElementById("toast-message");
+const flag = document.getElementById("flag");
+const sound = document.getElementById("toast-sound");
+
+/* -------- SOUND FIX -------- */
+let soundUnlocked = false;
+
+function unlockSound() {
+  if (soundUnlocked) return;
+  sound.volume = 0;
+  sound.play().then(() => {
+    sound.pause();
+    sound.currentTime = 0;
+    soundUnlocked = true;
+  }).catch(() => {});
+}
+
+["click", "scroll", "keydown", "touchstart"].forEach(evt => {
+  document.addEventListener(evt, unlockSound, { once: true });
+});
+
+function playSound() {
+  if (!soundUnlocked) return;
+
+  sound.currentTime = 0;
+  sound.volume = 0.25;
+  sound.play().catch(() => {});
+}
+
+/* -------- RANDOM DATA -------- */
+function getRandomEmail() {
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const first = letters[Math.floor(Math.random() * letters.length)];
+  return `${first}***@gmail.com`;
+}
+
+function getRandomAmount() {
+  return (Math.floor(Math.random() * (10000 - 200 + 1)) + 200)
+    .toLocaleString();
+}
+
+function getRandomAction() {
+  return actions[Math.floor(Math.random() * actions.length)];
+}
+
+/* -------- TIME -------- */
+let timeInterval;
+
+function startLiveTime(element, startTime) {
+  clearInterval(timeInterval);
+
+  function update() {
+    const seconds = Math.floor((Date.now() - startTime) / 1000);
+    element.textContent = seconds < 5 ? "just now" : seconds + "s ago";
+  }
+
+  update();
+  timeInterval = setInterval(update, 1000);
+}
+
+/* -------- TOAST -------- */
+function showToast() {
+  const country = countries[Math.floor(Math.random() * countries.length)];
+  const email = getRandomEmail();
+  const amount = getRandomAmount();
+  const action = getRandomAction();
+
+  flag.src = country.flag;
+  flag.onerror = () => flag.style.display = "none";
+  flag.style.display = "block";
+
+  const now = Date.now();
+
+  message.innerHTML = `
+    ${email} from ${country.name} 
+    <strong>${action}</strong> 
+    <span>$${amount}</span>
+    <small class="toast-time">just now</small>
+  `;
+
+  const timeEl = message.querySelector(".toast-time");
+
+  toast.classList.remove("hidden");
+
+  setTimeout(() => {
+    toast.classList.add("show");
+    playSound();
+    startLiveTime(timeEl, now);
+  }, 100);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      toast.classList.add("hidden");
+      clearInterval(timeInterval);
+    }, 300);
+  }, 5000);
+}
+
+/* -------- LOOP -------- */
+function startToasts() {
+  function loop() {
+    showToast();
+    const delay = Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
+    setTimeout(loop, delay);
+  }
+  loop();
+}
+
+startToasts();
 </script>
 </body>
 </html>

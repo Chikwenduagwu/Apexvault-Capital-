@@ -3,2109 +3,1157 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ApexVault Capital — Asset-Backed Investment Platform</title>
+<title>Dashboard — Apex Vault</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/main.css"/>
 <style>
-/* ═══════════════════════════════════════════════
-   APEXVAULT CAPITAL — DESIGN SYSTEM
-   Inspired by: EarthROI reference (Manrope + glass)
-   Palette: Deep forest dark + amber gold
-═══════════════════════════════════════════════ */
-:root {
-  --pine:        #111a0d;
-  --pine-deep:   #090d07;
-  --pine-mid:    #182113;
-  --olive:       #3d5228;
-  --olive-lt:    #566e3a;
-  --earth:       #c8864a;
-  --earth-lt:    #dfa060;
-  --earth-dim:   rgba(200,134,74,.12);
-  --earth-glow:  rgba(200,134,74,.25);
-  --corn:        #f4efe0;
-  --corn-dim:    #c8c0a8;
-  --muted:       #7a7860;
-  --muted-lt:    #a09878;
-  --glass:       rgba(255,255,255,.045);
-  --glass-hover: rgba(255,255,255,.07);
-  --border:      rgba(255,255,255,.07);
-  --border-lt:   rgba(255,255,255,.13);
-  --green-pos:   #5faa3c;
-  --red-neg:     #e04444;
+/* ══ DASHBOARD — Apex Vault palette ══════════════════════════
+   Pine #283618 · Olive #606C38 · Cornsilk #FEFAE0 · Earth #DDA15E
+══════════════════════════════════════════════════════════ */
 
-  --font-head: 'Manrope', -apple-system, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: 'DM Mono', 'Courier New', monospace;
+* { font-family: 'DM Sans', sans-serif; }
 
-  --max-w:   1240px;
-  --gutter:  clamp(20px, 5vw, 64px);
-  --ease:    cubic-bezier(.22,.61,.36,1);
-  --ease-out:cubic-bezier(0,0,.2,1);
-  --r-xs:    3px;
-  --r-sm:    5px;
-  --r-md:    8px;
-  --r-lg:    12px;
-  --r-xl:    16px;
-  --r-2xl:   24px;
-}
-
-/* ── Reset ── */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
 body {
-  font-family: var(--font-body);
-  background: var(--pine-deep);
-  color: var(--corn);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-a { text-decoration:none; color:inherit; }
-ul { list-style:none; }
-img { display:block; max-width:100%; }
-button { font-family: inherit; cursor:pointer; }
-
-/* ── Keyframes ── */
-@keyframes marqueeLeft { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.7)} }
-@keyframes ldrFill { 0%{width:0} 65%{width:75%} 100%{width:100%} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-
-/* ═══════════════════════
-   PRELOADER
-═══════════════════════ */
-#loader {
-  position:fixed; inset:0;
-  background: var(--pine-deep);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  gap:28px; z-index:9000;
-  transition: opacity .7s var(--ease), visibility .7s;
-}
-#loader.hidden {
-  opacity:0 !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
-  transition: opacity .5s ease, visibility .5s !important;
-}
-.ldr-logo {
-  font-family: var(--font-head);
-  font-size:22px; font-weight:800;
-  letter-spacing:3px; color:var(--corn);
-}
-.ldr-logo em { font-style:normal; color:var(--earth); }
-.ldr-bar-wrap {
-  width:180px; height:2px;
-  background:var(--border); border-radius:2px; overflow:hidden;
-}
-.ldr-bar-fill {
-  height:100%;
-  background: linear-gradient(90deg, var(--olive-lt), var(--earth));
-  width:0; animation: ldrFill 1.8s var(--ease) forwards;
-}
-.ldr-text {
-  font-family:var(--font-mono); font-size:10px;
-  letter-spacing:2.5px; color:var(--muted); text-transform:uppercase;
+  background: #F4F0E4;
+  padding-bottom: 80px;
+  min-height: 100vh;
 }
 
-/* ═══════════════════════
-   TOP TICKER (fixed)
-═══════════════════════ */
-.ticker {
-  position:fixed; top:0; left:0; right:0;
-  height:32px;
-  background: var(--pine-mid);
-  border-bottom:1px solid var(--border);
-  overflow:hidden; z-index:200;
+/* ── HERO HEADER ─────────────────── */
+.d-hero {
+  background: linear-gradient(160deg, #283618 0%, #3a5020 55%, #606C38 100%);
+  padding: 52px 22px 72px;
+  position: relative;
+  overflow: hidden;
 }
-.ticker-track {
-  display:flex; align-items:center; height:100%;
-  width:max-content;
-  animation: marqueeLeft 38s linear infinite;
+.d-hero::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: rgba(221,161,94,.1);
+  pointer-events: none;
 }
-.ticker-item {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:0 22px; border-right:1px solid var(--border);
-  white-space:nowrap;
-}
-.tc-icon { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
-.tc-sym  { font-family:var(--font-mono); font-size:10.5px; font-weight:600; color:var(--corn-dim); }
-.tc-price{ font-family:var(--font-mono); font-size:10.5px; color:var(--corn); }
-.tc-up   { font-family:var(--font-mono); font-size:10.5px; color:var(--green-pos); }
-.tc-dn   { font-family:var(--font-mono); font-size:10.5px; color:var(--red-neg); }
-
-/* ═══════════════════════
-   NAVBAR
-═══════════════════════ */
-.nav {
-  position:fixed; top:32px; left:0; right:0; height:64px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 var(--gutter); z-index:100;
-  transition: background .3s var(--ease), border-color .3s, backdrop-filter .3s;
-  border-bottom:1px solid transparent;
-}
-.nav.scrolled {
-  background: rgba(9,13,7,.92);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border-color: var(--border);
-}
-.nav-logo {
-  font-family: var(--font-head);
-  font-size:16px; font-weight:800; letter-spacing:1.5px;
-  display:flex; align-items:center; gap:9px; flex-shrink:0;
-}
-.nav-logo em { font-style:normal; color:var(--earth); }
-.nav-logo-dot {
-  width:7px; height:7px; border-radius:50%;
-  background:var(--earth); box-shadow:0 0 10px var(--earth);
-  animation: pulse 2.4s ease infinite; flex-shrink:0;
-}
-.nav-links { display:flex; gap:32px; }
-.nav-links a {
-  font-family:var(--font-head); font-size:13px; font-weight:600;
-  color:var(--muted); transition:color .2s; letter-spacing:.3px;
-}
-.nav-links a:hover { color:var(--corn); }
-.nav-actions { display:flex; gap:8px; align-items:center; flex-shrink:0; }
-
-/* Buttons */
-.btn-ghost-sm {
-  padding:8px 16px; border-radius:100px;
-  font-family:var(--font-head); font-size:13px; font-weight:600;
-  color:var(--muted); border:1px solid var(--border);
-  background:transparent; transition:color .2s, border-color .2s;
-  white-space:nowrap;
-}
-.btn-ghost-sm:hover { color:var(--corn); border-color:var(--border-lt); }
-
-.btn-solid-sm {
-  padding:8px 20px; border-radius:100px;
-  font-family:var(--font-head); font-size:13px; font-weight:700;
-  color: #080d05; background:var(--earth);
-  border:none; transition:background .2s, transform .2s, box-shadow .2s;
-  white-space:nowrap; box-shadow:0 4px 20px rgba(200,134,74,.3);
-}
-.btn-solid-sm:hover { background:var(--earth-lt); transform:translateY(-1px); box-shadow:0 8px 28px rgba(200,134,74,.4); }
-
-/* Hamburger */
-.nav-hamburger {
-  display:none; flex-direction:column; justify-content:center; gap:5px;
-  width:36px; height:36px; background:none; border:none; padding:4px; flex-shrink:0;
-}
-.nav-hamburger span {
-  display:block; width:22px; height:2px;
-  background:var(--corn); border-radius:2px;
-  transition:transform .3s var(--ease), opacity .3s; transform-origin:center;
-}
-.nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
-.nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-
-/* Drawer */
-.nav-drawer {
-  position:fixed; top:0; left:0; right:0;
-  background:rgba(9,13,7,.98);
-  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
-  z-index:99; padding:0 var(--gutter) 28px;
-  padding-top:calc(32px + 64px);
-  transform:translateY(-110%); transition:transform .4s var(--ease);
-}
-.nav-drawer.open { transform:translateY(0); }
-.nav-drawer-close { display:flex; justify-content:flex-end; margin-bottom:16px; }
-.nav-drawer-links { display:flex; flex-direction:column; margin-bottom:24px; }
-.nav-drawer-links a {
-  font-family:var(--font-head); font-size:18px; font-weight:700; color:var(--corn);
-  padding:14px 0; border-bottom:1px solid var(--border); transition:color .2s;
-}
-.nav-drawer-links a:hover { color:var(--earth); }
-.nav-drawer-actions { display:flex; gap:10px; }
-.nav-drawer-actions .btn-ghost-sm,
-.nav-drawer-actions .btn-solid-sm { flex:1; text-align:center; padding:13px; font-size:14px; }
-
-/* ═══════════════════════
-   HERO
-═══════════════════════ */
-.hero-slider {
-      position: relative;
-      width: 100%;
-      height: 100svh;
-      min-height: 600px;
-      overflow: hidden;
-      background: #111;
-    }
-
-    /* ── Track ── */
-    .hs-track {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ── Each slide ── */
-    .hs-slide {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      background-image: var(--bg);
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: opacity;
-    }
-    .hs-slide.active { opacity: 1; }
-    .hs-slide.prev   { opacity: 0; }
-
-    /* Ken Burns zoom on active slide */
-    .hs-slide.active {
-      animation: kenBurns 6s ease-out both;
-    }
-    @keyframes kenBurns {
-      from { transform: scale(1.08); }
-      to   { transform: scale(1.0); }
-    }
-
-    /* ── Dark overlay — richer, more cinematic ── */
-    .hs-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(0,0,0,0.28) 0%,
-        rgba(0,0,0,0.52) 40%,
-        rgba(0,0,0,0.80) 100%
-      );
-    }
-
-    /* ── Content — slide 1 & 3: center (default) ── */
-    .hs-content {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0 24px;
-      padding-top: 80px;
-    }
-
-    /* ── Slide 2: left-align ── */
-    .hs-slide:nth-child(2) .hs-content {
-      align-items: flex-start;
-      text-align: left;
-      padding-left: clamp(32px, 8vw, 120px);
-      padding-right: clamp(32px, 8vw, 120px);
-    }
-    .hs-slide:nth-child(2) .hs-sub {
-      max-width: 460px;
-    }
-    .hs-slide:nth-child(2) .hs-btns {
-      justify-content: flex-start;
-    }
-
-    /* ── Eyebrow — with golden left-bar accent ── */
-    .hs-eyebrow {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont,
-             'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      font-size: clamp(0.62rem, 2.2vw, 0.76rem); /* –5% */
-      font-weight: 600;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.65);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.7s 0.3s ease, transform 0.7s 0.3s ease;
-    }
-    .hs-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 28px;
-      height: 2px;
-      background: #283618;
-      flex-shrink: 0;
-    }
-    .hs-slide.active .hs-eyebrow { opacity: 1; transform: none; }
-
-    /* ── Title — 5% smaller across the clamp range ── */
-    .hs-title {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont,
-             'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      font-size: clamp(2.47rem, 11.4vw, 6.18rem); /* –5% from 2.6/12vw/6.5 */
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      margin-bottom: 22px;
-      text-transform: uppercase;
-      text-shadow: 0 4px 32px rgba(0,0,0,0.45);
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.8s 0.5s ease, transform 0.8s 0.5s ease;
-    }
-    .hs-title em {
-      font-style: normal;
-      color: #DDA151;
-      text-shadow: 0 0 40px rgba(245,196,0,0.35);
-    }
-    .hs-slide.active .hs-title { opacity: 1; transform: none; }
-
-    /* ── Sub ── */
-    .hs-sub {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(0.81rem, 3vw, 1.05rem); /* –5% */
-      color: rgba(255,255,255,0.78);
-      font-weight: 300;
-      letter-spacing: 0.03em;
-      margin-bottom: 38px;
-      max-width: 520px;
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.7s 0.7s ease, transform 0.7s 0.7s ease;
-    }
-    .hs-slide.active .hs-sub { opacity: 1; transform: none; }
-
-    /* ── Buttons ── */
-    .hs-btns {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.7s 0.85s ease, transform 0.7s 0.85s ease;
-    }
-    .hs-slide.active .hs-btns { opacity: 1; transform: none; }
-
-    .hs-btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #DDA151;
-      color: #111;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont,
-             'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      font-size: 0.78rem; /* –5% */
-      font-weight: 800;
-      padding: 10px 15px;
-      border-radius: 4px;
-      letter-spacing: 0.1em;
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 6px 24px rgba(245,196,0,0.35);
-    }
-    .hs-btn-primary:hover {
-      background: #d4a800;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 32px rgba(245,196,0,0.5);
-    }
-
-    .hs-btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      color: #fff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont,
-             'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      font-size: 0.78rem; /* –5% */
-      font-weight: 700;
-      padding: 13px 26px;
-      border-radius: 4px;
-      letter-spacing: 0.1em;
-      text-decoration: none;
-      text-transform: uppercase;
-      border: 2px solid rgba(255,255,255,0.35);
-      transition: border-color 0.2s, background 0.2s, transform 0.2s, color 0.2s;
-    }
-    .hs-btn-ghost:hover {
-      border-color: #F5C400;
-      color: #F5C400;
-      background: rgba(245,196,0,0.06);
-      transform: translateY(-2px);
-    }
-
-    /* ── Top progress bar ── */
-    .hs-progress {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: rgba(255,255,255,0.15);
-      z-index: 20;
-    }
-    .hs-progress-fill {
-      height: 100%;
-      width: 0%;
-      background: #F5C400;
-      transition: width 0.08s linear;
-    }
-
-    /* ── Dot nav ── */
-    .hs-dots {
-      position: absolute;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 20;
-    }
-    .hs-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.6);
-      background: transparent;
-      cursor: pointer;
-      padding: 0;
-      transition: background 0.3s, border-color 0.3s, transform 0.3s;
-    }
-    .hs-dot.active {
-      background: #F5C400;
-      border-color: #F5C400;
-      transform: scale(1.3);
-    }
-    .hs-dot:hover:not(.active) {
-      border-color: #fff;
-      background: rgba(255,255,255,0.3);
-    }
-
-    /* ── Arrows ── */
-    .hs-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 20;
-      width: 48px;
-      height: 48px;
-      background: rgba(0,0,0,0.35);
-      border: 1.5px solid rgba(255,255,255,0.25);
-      border-radius: 50%;
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-    }
-    .hs-arrow svg { width: 20px; height: 20px; }
-    .hs-prev { left: 20px; }
-    .hs-next { right: 20px; }
-    .hs-arrow:hover {
-      background: #F5C400;
-      border-color: #F5C400;
-      color: #111;
-      transform: translateY(-50%) scale(1.08);
-    }
-
-    /* ── Scroll-down ── */
-    .hs-scroll-hint {
-      position: absolute;
-      bottom: 80px;
-      right: 24px;
-      z-index: 20;
-      color: rgba(255,255,255,0.55);
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: scrollBounce 2s ease-in-out infinite;
-      transition: color 0.2s;
-    }
-    .hs-scroll-hint:hover { color: #F5C400; }
-    .hs-scroll-hint svg { width: 24px; height: 24px; }
-    @keyframes scrollBounce {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(8px); }
-    }
-
-/* ═══════════════════════
-   SHARED SECTION STYLES
-═══════════════════════ */
-.section { padding:100px var(--gutter); }
-.sec-inner { max-width:var(--max-w); margin:0 auto; }
-
-.sec-eyebrow {
-  display:inline-block;
-  font-family:var(--font-head); font-size:11px; font-weight:700;
-  letter-spacing:2.5px; text-transform:uppercase;
-  color:var(--earth); margin-bottom:14px;
-}
-.sec-title {
-  font-family:var(--font-head);
-  font-size:clamp(30px,4vw,54px); font-weight:800;
-  line-height:1.06; letter-spacing:-1px; margin-bottom:14px;
-}
-.sec-sub {
-  font-size:15px; color:var(--corn-dim); line-height:1.8;
-  max-width:500px; margin-bottom:56px;
+.d-hero::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(254,250,224,.04);
+  pointer-events: none;
 }
 
-/* Scroll reveal */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s var(--ease), transform .65s var(--ease); }
-.rv.d1{transition-delay:.08s} .rv.d2{transition-delay:.16s}
-.rv.d3{transition-delay:.24s} .rv.d4{transition-delay:.32s}
-.rv.vis { opacity:1; transform:translateY(0); }
-
-/* ═══════════════════════
-   FEATURES (light bg, glass cards)
-   Mimicking reference bento grid
-═══════════════════════ */
-.sec-features { background:#f5f1e8; color:#111; }
-.sec-features .sec-eyebrow { color:var(--olive); }
-.sec-features .sec-title { color:#111; }
-.sec-features .sec-sub { color:#666; }
-
-.feat-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
+.d-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px; position: relative; z-index: 1;
 }
-/* Bento: first card spans 2 cols like reference */
-.feat-card-wide { grid-column: span 2; }
-
-.feat-card {
-  padding:32px; border-radius:var(--r-xl);
-  background:rgba(255,255,255,.8);
-  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(22,52,40,.06);
-  transition:transform .3s var(--ease), box-shadow .3s, border-color .3s;
-  position:relative; overflow:hidden;
+.d-greeting-wrap {}
+.d-time-label {
+  font-size: 11px; font-weight: 500;
+  color: rgba(254,250,224,.5);
+  letter-spacing: .8px; text-transform: uppercase;
+  margin-bottom: 2px;
 }
-.feat-card:hover {
-  transform:translateY(-5px);
-  box-shadow:0 24px 64px rgba(0,0,0,.1);
-  border-color:rgba(22,52,40,.14);
+.d-name {
+  font-size: 22px; font-weight: 700;
+  color: #FEFAE0; line-height: 1.1;
 }
-.feat-num {
-  font-family:var(--font-mono); font-size:10px;
-  color:#bbb; letter-spacing:1px; margin-bottom:18px;
-}
-.feat-icon-wrap {
-  width:52px; height:52px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  margin-bottom:20px;
-}
-.feat-icon-wrap.green { background:#e6f0e9; }
-.feat-icon-wrap.amber { background:#f5ede0; }
-.feat-icon-wrap.blue  { background:#e0eaf5; }
-.feat-icon-wrap svg { width:26px; height:26px; }
-.feat-name { font-family:var(--font-head); font-size:18px; font-weight:700; color:#111; margin-bottom:10px; line-height:1.25; }
-.feat-desc { font-size:13.5px; color:#555; line-height:1.78; }
-.feat-link {
-  display:inline-flex; align-items:center; gap:5px;
-  font-family:var(--font-head); font-size:13px; font-weight:700;
-  color:var(--olive); margin-top:20px; transition:gap .2s;
-}
-.feat-link:hover { gap:9px; }
-.feat-link svg { width:14px; height:14px; }
-
-/* Wide card inner layout */
-.feat-card-wide .feat-inner { display:flex; gap:32px; }
-.feat-wide-text { flex:1; }
-.feat-wide-stats { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-content:start; }
-.feat-stat-box {
-  background:rgba(255,255,255,.6); border-radius:var(--r-md);
-  border:1px solid rgba(22,52,40,.06); padding:18px 16px; text-align:center;
-}
-.feat-stat-val { font-family:var(--font-head); font-size:26px; font-weight:800; color:#163428; }
-.feat-stat-lbl { font-size:10px; font-weight:700; color:#888; letter-spacing:1px; text-transform:uppercase; margin-top:4px; }
-
-/* ═══════════════════════
-   HOW IT WORKS
-   4-step numbered like reference
-═══════════════════════ */
-.how-header {
-  display:flex; flex-direction:column;
-  gap:8px; margin-bottom:60px;
-}
-.steps-grid {
-  display:grid; grid-template-columns:repeat(4,1fr);
-  gap:1px; background:var(--border);
-  border:1px solid var(--border);
-  border-radius:var(--r-xl); overflow:hidden;
-  position:relative;
-}
-/* Progress line behind numbers */
-.steps-grid::before {
-  content:''; position:absolute;
-  top:52px; left:10%; right:10%; height:1px;
-  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
-  z-index:0; pointer-events:none;
-}
-.step {
-  padding:40px 28px; background:var(--pine-deep);
-  transition:background .3s; position:relative; z-index:1;
-}
-.step:hover { background:rgba(255,255,255,.025); }
-.step-num-circle {
-  width:44px; height:44px; border-radius:50%;
-  background:var(--earth); color:#080d05;
-  font-family:var(--font-head); font-size:16px; font-weight:800;
-  display:flex; align-items:center; justify-content:center;
-  margin-bottom:22px; position:relative; z-index:2;
-  box-shadow:0 0 0 4px var(--pine-deep), 0 0 0 5px rgba(200,134,74,.2);
-}
-.step-title { font-family:var(--font-head); font-size:16px; font-weight:700; margin-bottom:10px; }
-.step-desc { font-size:13px; color:var(--muted); line-height:1.7; }
-
-/* ═══════════════════════
-   MARKET OVERVIEW
-═══════════════════════ */
-.mkt-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; background-color:  }
-.mkt-tab {
-  padding:8px 18px; border-radius:100px;
-  font-family:var(--font-head); font-size:12px; font-weight:700;
-  color:var(--muted); background:var(--glass);
-  border:1px solid var(--border); transition:color .2s, background .2s, border-color .2s;
-}
-.mkt-tab:hover, .mkt-tab.active {
-  color:var(--earth); border-color:rgba(200,134,74,.4);
-  background:rgba(200,134,74,.09);
-}
-.tv-wrap {
-  border-radius:var(--r-lg); overflow:hidden;
-  border:1px solid var(--border); background:rgba(0,0,0,.3);
+.d-avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #DDA15E;
+  color: #283618;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 18px;
+  border: 2px solid rgba(254,250,224,.25);
+  flex-shrink: 0;
 }
 
-/* ═══════════════════════
-   METRICS BAND
-═══════════════════════ */
-.sec-metrics {
-  padding:72px var(--gutter);
-  background:var(--pine-mid);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
+.d-balance-label {
+  font-size: 11px; font-weight: 500;
+  color: rgba(254,250,224,.5);
+  letter-spacing: .6px; text-transform: uppercase;
+  position: relative; z-index: 1;
 }
-.metrics-grid {
-  display:grid; grid-template-columns:repeat(4,1fr);
-  gap:1px; background:var(--border);
-  border-radius:var(--r-lg); overflow:hidden;
-  max-width:var(--max-w); margin:0 auto;
+.d-balance-amount {
+  font-size: 44px; font-weight: 700;
+  color: #FEFAE0;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin: 6px 0 4px;
+  position: relative; z-index: 1;
 }
-.metric {
-  padding:40px 28px; background:var(--pine-mid);
-  text-align:center; transition:background .3s;
+.d-balance-sub {
+  font-size: 12px; font-weight: 400;
+  color: rgba(254,250,224,.45);
+  position: relative; z-index: 1;
 }
-.metric:hover { background:rgba(255,255,255,.03); }
-.metric-val {
-  font-family:var(--font-head);
-  font-size:44px; font-weight:800; color:var(--earth);
-  letter-spacing:-1.5px; line-height:1; margin-bottom:8px;
-}
-.metric-label {
-  font-family:var(--font-head); font-size:11px; font-weight:700;
-  color:var(--muted); letter-spacing:1px; text-transform:uppercase;
+.d-balance-change {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(111,207,151,.2);
+  color: #6fcf97;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 99px;
+  margin-left: 8px;
 }
 
-/* ═══════════════════════
-   PARTNERS MARQUEE
-   Black & white real logos
-═══════════════════════ */
-.sec-partners {
-  padding:64px 0;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  overflow:hidden;
-  background-color: ;
+/* ── ACTION BUTTONS ──────────────── */
+.d-actions {
+  display: flex; gap: 10px;
+  margin-top: 22px;
+  position: relative; z-index: 1;
 }
-.partners-label {
-  font-family:var(--font-head); font-size:11px; font-weight:700;
-  letter-spacing:2.5px; text-transform:uppercase;
-  color:var(--muted); text-align:center; margin-bottom:40px;
+.d-action-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  padding: 13px 8px;
+  background: rgba(254,250,224,.12);
+  border: 1px solid rgba(254,250,224,.18);
+  border-radius: 14px;
+  cursor: pointer; transition: background .2s;
+  color: #FEFAE0;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .2px;
+  text-decoration: none;
 }
-.partners-track-wrap {
-  overflow:hidden;
-  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+.d-action-btn:hover { background: rgba(254,250,224,.2); }
+.d-action-icon {
+  width: 36px; height: 36px;
+  background: rgba(221,161,94,.25);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
 }
-.partners-track {
-  display:flex; align-items:center;
-  animation: marqueeLeft 26s linear infinite; width:max-content;
+.d-action-icon svg { stroke: #DDA15E; }
+
+/* ── FLOATING STAT STRIP ─────────── */
+.d-stat-strip {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: -32px 16px 0;
+  position: relative; z-index: 10;
 }
-.partners-track-wrap:hover .partners-track { animation-play-state:paused; }
-.p-item {
-  display:flex; align-items:center; gap:16px;
-  padding:0 52px; border-right:1px solid var(--border); white-space:nowrap;
+.d-stat-pill {
+  background: #FEFAE0;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 20px rgba(40,54,24,.12);
+  display: flex; align-items: center; gap: 12px;
 }
-/* Real platform logos — SVG inline, rendered grayscale + white */
-.p-logo-wrap {
-  display:flex; align-items:center; gap:13px;
-  opacity:.55; transition:opacity .25s;
-  filter:brightness(0) invert(1);
+.d-stat-pill-icon {
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.p-item:hover .p-logo-wrap { opacity:.9; }
-.p-logo-img { height:28px; width:auto; display:block; }
-.p-name {
-  font-family:var(--font-head); font-size:17px; font-weight:700;
-  color:var(--corn); letter-spacing:.2px;
+.d-stat-pill-icon.olive { background: #EDE8D0; }
+.d-stat-pill-icon.earth { background: #F7E8D0; }
+.d-stat-pill-icon.pine  { background: #D4E0C8; }
+.d-stat-pill-icon.ref   { background: #E8D4F0; }
+.d-stat-pill-label {
+  font-size: 10px; font-weight: 600;
+  color: #9a9278; letter-spacing: .4px;
+  text-transform: uppercase;
+}
+.d-stat-pill-val {
+  font-size: 17px; font-weight: 700;
+  color: #283618; margin-top: 1px;
+  letter-spacing: -.3px;
 }
 
-/* ═══════════════════════
-   CTA SECTION
-   Glass card like reference
-═══════════════════════ */
-.sec-cta { padding:100px var(--gutter); position:relative; overflow:hidden; }
-.cta-glow {
-  position:absolute; inset:0; z-index:0;
-  background-color: white;
-}
-.cta-box {
-  position:relative; z-index:1;
-  max-width:var(--max-w); margin:0 auto;
-  background: black;
-  border:1px solid rgba(200,134,74,.18);
-  border-radius:3px; padding:80px 72px;
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  overflow:hidden;
-}
-/* Decorative glow inside box */
-.cta-box::before {
-  content:''; position:absolute;
-  top:-120px; right:-120px;
-  width:400px; height:400px; border-radius:50%;
-  background:rgba(200,134,74,.1); filter:blur(80px); pointer-events:none;
-}
-.cta-box-inner { position:relative; z-index:1; max-width:640px; }
-.cta-title {
-  font-family:var(--font-head);
-  font-size:clamp(32px,4.5vw,58px); font-weight:800;
-  letter-spacing:-1.5px; line-height:1.06; margin-bottom:18px;
-}
-.cta-title .accent { color:var(--earth); }
-.cta-sub { font-size:15px; color:var(--corn-dim); max-width:480px; line-height:1.78; margin-bottom:36px; }
-.cta-actions { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
-.cta-note {
-  margin-top:18px; font-size:12px; color:var(--muted);
-  display:flex; align-items:center; gap:7px;
+/* ── MAIN CONTENT ────────────────── */
+.d-content {
+  padding: 24px 16px;
+  display: flex; flex-direction: column; gap: 20px;
 }
 
-/* ═══════════════════════
-   FOOTER
-   Clean, Manrope, like reference
-═══════════════════════ */
-footer {
-  border-top:1px solid var(--border);
-  padding:64px var(--gutter) 0;
-  background: var(--pine-mid);
+/* Section header */
+.d-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
 }
-.footer-body {
-  max-width:var(--max-w); margin:0 auto;
-  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:48px; padding-bottom:48px;
-  border-bottom:1px solid var(--border);
+.d-section-title {
+  font-size: 15px; font-weight: 700;
+  color: #283618; letter-spacing: -.2px;
 }
-.f-logo {
-  font-family:var(--font-head); font-size:18px; font-weight:800;
-  letter-spacing:1.5px; margin-bottom:14px;
-  display:flex; align-items:center; gap:8px;
-}
-.f-logo em { font-style:normal; color:var(--earth); }
-.f-logo-dot { width:6px; height:6px; border-radius:50%; background:var(--earth); box-shadow:0 0 8px var(--earth); animation:pulse 2.4s ease infinite; }
-.f-desc { font-size:13px; color:var(--muted); line-height:1.78; max-width:260px; }
-.f-col-title {
-  font-family:var(--font-head); font-size:10px; font-weight:800;
-  color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:18px;
-}
-.f-links { display:flex; flex-direction:column; gap:11px; }
-.f-links a {
-  font-size:13px; color:var(--muted); transition:color .2s;
-  text-decoration:underline; text-decoration-color:transparent;
-  text-underline-offset:3px; transition:color .2s, text-decoration-color .2s;
-}
-.f-links a:hover { color:var(--corn); text-decoration-color:rgba(200,134,74,.4); }
-
-/* Footer social icons */
-.f-socials { display:flex; gap:10px; margin-top:20px; }
-.f-social-btn {
-  width:36px; height:36px; border-radius:50%;
-  border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
-  color:var(--muted); transition:color .2s, border-color .2s, background .2s;
-}
-.f-social-btn:hover { color:var(--earth); border-color:rgba(200,134,74,.4); background:rgba(200,134,74,.07); }
-.f-social-btn svg { width:16px; height:16px; }
-
-.footer-bar {
-  max-width:var(--max-w); margin:0 auto;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:18px 0 48px; font-size:12px; color:var(--muted);
+.d-section-sub {
+  font-size: 11px; font-weight: 500;
+  color: #9a9278; letter-spacing: .3px;
 }
 
-/* MT5 footer ticker */
-.footer-mt5 {
-  border-top:1px solid var(--border);
-  overflow:hidden; height:36px; background:rgba(0,0,0,.25);
+/* ── PROFIT CHART CARD ───────────── */
+.chart-card {
+  background: #FEFAE0;
+  border-radius: 20px;
+  padding: 20px 18px 12px;
+  box-shadow: 0 2px 16px rgba(40,54,24,.07);
 }
-.mt5-track {
-  display:flex; align-items:center; height:100%;
-  animation:marqueeLeft 50s linear infinite; width:max-content;
+.chart-period-row {
+  display: flex; gap: 6px; margin-bottom: 16px;
 }
-.mt5-item {
-  display:flex; align-items:center; gap:10px;
-  padding:0 22px; border-right:1px solid var(--border); height:100%; white-space:nowrap;
+.chart-period-btn {
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-size: 11px; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: all .18s;
+  background: #EDE8D0; color: #9a9278;
 }
-.mt5-pair { font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--corn-dim); }
-.mt5-bid  { font-family:var(--font-mono); font-size:11px; color:var(--corn); }
-.mt5-ask  { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
-.mt5-sep  { width:1px; height:14px; background:var(--border); }
-.mt5-spd  { font-family:var(--font-mono); font-size:10px; color:var(--muted); }
-.mt5-up   { font-family:var(--font-mono); font-size:11px; color:var(--green-pos); }
-.mt5-dn   { font-family:var(--font-mono); font-size:11px; color:var(--red-neg); }
-
-/* ═══════════════════════
-   RESPONSIVE
-═══════════════════════ */
-@media(max-width:1100px){
-  .hero-visual { display:none; }
-  .hero-content { max-width:100%; }
-  .feat-grid { grid-template-columns:1fr 1fr; }
-  .feat-card-wide { grid-column:span 2; }
-  .feat-card-wide .feat-inner { flex-direction:column; }
-  .steps-grid { grid-template-columns:1fr 1fr; border-radius:var(--r-lg); }
-  .metrics-grid { grid-template-columns:1fr 1fr; }
-  .footer-body { grid-template-columns:1fr 1fr; gap:32px; }
-  .cta-box { padding:56px 48px; }
+.chart-period-btn.active {
+  background: #606C38; color: #FEFAE0;
 }
-
-@media(max-width:768px){
-  .nav-links { display:none; }
-  .nav-actions { display:none; }
-  .nav-hamburger { display:flex; }
-  .nav { height:52px; }
-  .ticker { height:28px; }
-  .nav { top:28px; }
-  .hero { padding-top:calc(28px + 52px + 32px); padding-bottom:60px; }
-  .hero-title { font-size:clamp(34px,10.5vw,52px); letter-spacing:-1px; margin-bottom:16px; }
-  .hero-badge { font-size:10px; padding:5px 12px; margin-bottom:18px; }
-  .hero-sub { font-size:14px; margin-bottom:24px; }
-  .hero-cta { flex-direction:column; align-items:stretch; gap:10px; margin-bottom:36px; }
-  .hero-cta .btn-primary,
-  .hero-cta .btn-outline { width:100%; justify-content:center; padding:15px 20px; font-size:15px; }
-  .hero-stats { grid-template-columns:repeat(3,1fr); display:grid; gap:0; }
-  .stat { padding:0 10px 0 0; margin-right:0; border-right:1px solid var(--border); border-bottom:none; }
-  .stat:last-child { border-right:none; padding-right:0; }
-  .stat-val { font-size:20px; }
-  .stat-label { font-size:9px; line-height:1.4; }
-  .section { padding:64px var(--gutter); }
-  .sec-metrics { padding:48px var(--gutter); }
-  .sec-cta { padding:72px var(--gutter); }
-  .sec-partners { padding:52px 0; }
-  .sec-title { font-size:clamp(26px,7.5vw,38px); letter-spacing:-0.5px; }
-  .sec-sub { font-size:14px; margin-bottom:36px; }
-  .feat-grid { grid-template-columns:1fr; gap:14px; }
-  .feat-card-wide { grid-column:span 1; }
-  .feat-card-wide .feat-inner { flex-direction:column; }
-  .feat-wide-stats { grid-template-columns:1fr 1fr; }
-  .feat-card { padding:24px; }
-  .feat-name { font-size:16px; }
-  .steps-grid { grid-template-columns:1fr; border-radius:var(--r-md); }
-  .step { padding:28px 22px; }
-  .metrics-grid { grid-template-columns:1fr 1fr; }
-  .metric { padding:28px 16px; }
-  .metric-val { font-size:32px; }
-  .p-item { padding:0 32px; gap:12px; }
-  .p-name { font-size:15px; }
-  .p-logo-img { height:22px; }
-  .cta-box { padding:40px 28px; border-radius:var(--r-xl); }
-  .cta-title { font-size:clamp(28px,7vw,40px); }
-  .cta-actions { flex-direction:column; align-items:stretch; }
-  .cta-actions .btn-primary,
-  .cta-actions .btn-outline { width:100%; justify-content:center; padding:15px 20px; font-size:15px; }
-  footer { padding:48px var(--gutter) 0; }
-  .footer-body { grid-template-columns:1fr; gap:28px; padding-bottom:32px; }
-  .footer-bar { flex-direction:column; gap:6px; text-align:center; padding:16px 0 36px; }
-  .f-desc { max-width:100%; }
-  .mkt-tabs { gap:6px; }
-  .mkt-tab { padding:7px 14px; font-size:11px; }
+.chart-area {
+  width: 100%; height: 130px;
+  position: relative; overflow: visible;
+}
+.chart-svg { width: 100%; height: 100%; overflow: visible; }
+.chart-y-labels {
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  position: absolute; left: 0; top: 0; bottom: 0;
+  font-size: 9px; font-weight: 500;
+  color: #c4bfa8; font-family: 'DM Mono', monospace;
+  pointer-events: none;
+}
+.chart-x-labels {
+  display: flex; justify-content: space-between;
+  margin-top: 8px;
+  font-size: 10px; font-weight: 500; color: #c4bfa8;
+  padding: 0 2px;
+}
+.chart-tooltip {
+  position: absolute;
+  background: #283618; color: #FEFAE0;
+  font-size: 11px; font-weight: 600;
+  padding: 5px 10px; border-radius: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+  display: none;
+  z-index: 20;
+  transform: translate(-50%, -110%);
+}
+.chart-tooltip::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #283618;
 }
 
-@media(max-width:420px){
-  :root { --gutter:18px; }
-  .hero-title { font-size:clamp(30px,10vw,38px); }
-  .stat-val { font-size:18px; }
-  .stat-label { font-size:8px; }
-  .metrics-grid { grid-template-columns:1fr 1fr; }
+/* ── INVESTMENT CARDS ────────────── */
+.inv-card {
+  background: #FEFAE0;
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 1px 8px rgba(40,54,24,.06);
+  transition: transform .18s;
+}
+.inv-card:hover { transform: translateY(-1px); }
+.inv-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.inv-card-name {
+  font-size: 14px; font-weight: 700; color: #283618;
+}
+.inv-card-date {
+  font-size: 11px; color: #9a9278; margin-top: 1px;
+}
+.inv-card-right { margin-left: auto; text-align: right; }
+.inv-card-amount {
+  font-size: 15px; font-weight: 700; color: #283618;
+}
+.inv-card-roi {
+  font-size: 11px; font-weight: 600;
+  color: #606C38; margin-top: 2px;
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.inv-card-progress {
+  height: 3px; background: #EDE8D0; border-radius: 99px;
+  margin-top: 8px; overflow: hidden;
+}
+.inv-card-progress-fill {
+  height: 100%; background: linear-gradient(90deg,#606C38,#DDA15E);
+  border-radius: 99px;
 }
 
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+/* ── BOTTOM NAV ──────────────────── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 68px;
+  background: #FEFAE0;
+  border-top: 1px solid rgba(212,201,168,.5);
+  display: flex; align-items: center; justify-content: space-around;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(40,54,24,.08);
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: #b0a98c;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .3px;
+  text-decoration: none;
+  transition: color .18s;
+  min-width: 52px;
+}
+.bottom-nav a.active, .bottom-nav a:hover { color: #606C38; }
+.bottom-nav a.active svg, .bottom-nav a:hover svg { stroke: #606C38; }
+.bottom-nav svg { stroke: currentColor; transition: stroke .18s; }
+
+/* ── MODALS ──────────────────────── */
+.d-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(40,54,24,.45);
+  z-index: 500;
+  display: flex; align-items: flex-end;
+  backdrop-filter: blur(4px);
+  animation: fadeIn .22s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.d-modal-sheet {
+  width: 100%;
+  background: #FEFAE0;
+  border-radius: 24px 24px 0 0;
+  padding: 0 22px 36px;
+  animation: slideUp .28s ease;
+  max-height: 90vh; overflow-y: auto;
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+.d-modal-handle {
+  width: 40px; height: 4px;
+  background: #D4C9A8; border-radius: 99px;
+  margin: 14px auto 20px;
+}
+.d-modal-title {
+  font-size: 18px; font-weight: 700;
+  color: #283618; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.d-modal-title-icon {
+  width: 36px; height: 36px;
+  background: #EDE8D0; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
 }
 
-/* ═══════════════════════════════════════════
-   STATS COUNT-UP SECTION
-   Layout exactly matching the screenshot:
-   [6K+]    [25+]
-       [9K+]
-   [100K+]  [5M+]
-       [2M+]
-═══════════════════════════════════════════ */
-.stats-section {
-  background: #fff;
-  padding: 72px 24px 80px;
-}
-
-.stats-grid {
-  max-width: 580px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  row-gap: 56px;
-}
-
-/* Items that span full width (9K+, 2M+) */
-.s-item.full {
-  grid-column: 1 / -1;
-}
-
-.s-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.s-num {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 
-             'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  font-size: clamp(2.6rem, 9vw, 4rem);
-  font-weight: 800;
-  color: #111;
-  line-height: 1;
-  letter-spacing: -0.04em;
+/* Addr box inside modal */
+.modal-addr-box {
+  background: #F0EBD4;
+  border: 1px solid #D4C9A8;
+  border-radius: 12px;
+  padding: 13px 15px;
   margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-addr-net {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .8px; text-transform: uppercase;
+  color: #606C38;
+}
+.modal-addr-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; color: #283618;
+  margin-top: 3px;
+  max-width: 190px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.modal-copy-btn {
+  background: #DDA15E; border: none;
+  border-radius: 8px; padding: 8px 10px;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s;
+}
+.modal-copy-btn:hover { background: #c98d4a; }
+.modal-copy-btn svg { stroke: #283618; }
+
+.d-form-label {
+  font-size: 11px; font-weight: 700;
+  color: #9a9278; letter-spacing: .5px;
+  text-transform: uppercase; margin-bottom: 6px;
   display: block;
 }
+.d-form-input {
+  width: 100%; padding: 13px 15px;
+  background: #F0EBD4;
+  border: 1.5px solid #D4C9A8;
+  border-radius: 12px;
+  font-size: 15px; color: #283618;
+  outline: none; font-family: 'DM Sans', sans-serif;
+  transition: border-color .18s;
+  margin-bottom: 14px;
+}
+.d-form-input:focus { border-color: #606C38; }
+.d-form-input::placeholder { color: #b0a98c; }
+select.d-form-input { cursor: pointer; }
 
-.s-label {
+.d-modal-submit {
+  width: 100%; padding: 15px;
+  background: #606C38; color: #FEFAE0;
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background .2s;
   font-family: 'DM Sans', sans-serif;
-  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  margin-top: 4px;
+}
+.d-modal-submit:hover { background: #7a8a45; }
+.d-modal-submit:disabled { opacity: .55; cursor: not-allowed; }
+.d-modal-note {
+  font-size: 12px; color: #9a9278;
+  text-align: center; margin-top: 10px;
+  line-height: 1.5;
+}
+</style>
+
+<style>
+:root {
+  --pine-tree: #3a5f5f;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+/* Container at top */
+#toast-section {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+}
+
+/* Toast */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: var(--white);
+  border: 2px solid var(--pine-tree);
+
+  padding: 12px 14px;
+  border-radius: 0; /* square */
+
+  min-width: 260px;
+  max-width: 320px;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+
+  opacity: 0;
+  transform: translateY(-20px);
+
+  transition: 
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Show */
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hidden */
+.hidden {
+  display: none;
+}
+
+/* Flag */
+.flag {
+  width: 26px;
+  height: 18px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #ddd;
+}
+
+/* Text */
+.toast-text p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* Amount highlight */
+.toast-text span {
+  font-weight: 700;
+  color: var(--pine-tree);
+}
+/* Timestamp */
+.toast-time {
+  display: block;
+  font-size: 12px;
   color: #555;
-  font-weight: 400;
-  line-height: 1.45;
-  max-width: 185px;
-}
-
-@media (max-width: 480px) {
-  .stats-grid { max-width: 340px; row-gap: 44px; }
-  .s-num { font-size: 2.6rem; }
-  .logo-item { padding: 0 28px; }
-  .logo-item img { height: 22px; }
-  .mq-row.mid .logo-item img { height: 28px; }
-}
-
-
-/* ===== LANGUAGE WIDGET — SQUARE STYLE ===== */
-.lang-widget {
-    position: fixed;
-    left: 16px;
-    bottom: 20px;
-    z-index: 99999;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-.lang-current {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #1a202c;
-    color: #fff;
-    padding: 13px 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
-    font-weight: 700;
-    font-size: 16px;
-    min-width: 130px;
-    border: 2px solid rgba(255,255,255,0.08);
-    user-select: none;
-    transition: background 0.2s;
-}
-
-.lang-current:hover {
-    background: #2d3748;
-}
-
-.lang-current img {
-    width: 28px;
-    height: 19px;
-    object-fit: cover;
-    border-radius: 3px;
-    flex-shrink: 0;
-}
-
-.lang-caret {
-    margin-left: auto;
-    font-size: 10px;
-    opacity: 0.6;
-    transition: transform 0.2s;
-}
-
-.lang-widget.open .lang-caret {
-    transform: rotate(180deg);
-}
-
-/* DROPDOWN — opens upward */
-.lang-dropdown {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 0;
-    background: #1a202c;
-    border-radius: 12px;
-    overflow-y: auto;
-    max-height: 380px;
-    width: 220px;
-    display: none;
-    box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.08);
-    scrollbar-width: thin;
-    scrollbar-color: #4a5568 transparent;
-}
-
-.lang-dropdown::-webkit-scrollbar { width: 5px; }
-.lang-dropdown::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 10px; }
-
-.lang-dropdown.open {
-    display: block;
-    animation: dropUp 0.18s ease-out;
-}
-
-@keyframes dropUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.lang-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #e2e8f0;
-    transition: background 0.15s;
-    border-radius: 0;
-}
-
-.lang-item:first-child { border-radius: 12px 12px 0 0; }
-.lang-item:last-child  { border-radius: 0 0 12px 12px; }
-
-.lang-item:hover {
-    background: rgba(255,255,255,0.08);
-    color: #fff;
-}
-
-.lang-item img {
-    width: 26px;
-    height: 17px;
-    object-fit: cover;
-    border-radius: 3px;
-    flex-shrink: 0;
-}
-
-/* HIDE GOOGLE UI COMPLETELY */
-#google_translate_element {
-    display: none !important;
-    visibility: hidden !important;
-}
-
-.goog-te-banner-frame,
-.goog-te-banner-frame.skiptranslate,
-.skiptranslate,
-#goog-gt-tt,
-.goog-tooltip,
-.goog-tooltip-content,
-.goog-te-balloon-frame,
-.goog-te-menu-frame,
-.goog-te-spinner-pos {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    height: 0 !important;
-    overflow: hidden !important;
-}
-
-body.translated-ltr,
-body.translated-rtl {
-    margin-top: 0 !important;
-    top: 0 !important;
+  margin-top: 4px;
 }
 </style>
 </head>
 <body>
 
-<!-- ══ LOADER ═════════════════════════════════ -->
-<div id="loader">
-  <div class="ldr-logo">APEX<em>VAULT</em> CAPITAL</div>
-  <div class="ldr-bar-wrap"><div class="ldr-bar-fill"></div></div>
-  <div class="ldr-text">Initialising platform</div>
-</div>
-
-<!-- Early preloader dismiss — fires before any other JS -->
-<script>
-(function(){
-  var el=document.getElementById('loader');
-  if(!el) return;
-  var done=false;
-  function hide(){
-    if(done) return; done=true;
-    el.style.transition='opacity .6s ease, visibility .6s';
-    el.style.opacity='0';
-    el.style.visibility='hidden';
-    el.style.pointerEvents='none';
-  }
-  /* Absolute hard cap — always fires */
-  setTimeout(hide, 3500);
-  /* Let bar CSS animation complete (1.8s), then hide */
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(hide,1800); }, {once:true});
-  } else {
-    setTimeout(hide, 1800);
-  }
-  window.addEventListener('load', function(){ setTimeout(hide,400); }, {once:true});
-})();
-</script>
-
-<!-- ══ PRICE TICKER ═══════════════════════════ -->
-<div class="ticker">
-  <div class="ticker-track" id="tickerTrack"></div>
-</div>
-
-<!-- ══ NAVBAR ════════════════════════════════ -->
-<nav class="nav" id="nav">
-<a href="#" class="nav-logo">
-  <!-- Replace this SVG with your actual logo image:
-       <img src="./assets/logo.png" alt="ApexVault Capital" style="height:28px;width:auto;"/>
-  -->
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M14 2L3 7v8c0 5.55 4.74 10.74 11 12 6.26-1.26 11-6.45 11-12V7L14 2z" fill="rgba(200,134,74,.15)" stroke="#c8864a" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M9 14.5l3.5 3.5L19 11" stroke="#c8864a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  APEX<em>VAULT</em>
-</a>
-  <ul class="nav-links">
-    <li><a href="#features">Platform</a></li>
-  </ul>
-  <div class="nav-actions">
-    <a href="login.html" class="btn-ghost-sm">Sign In</a>
-    <a href="register.html" class="btn-solid-sm">Get Started</a>
+<!-- ═══ HERO HEADER ═══ -->
+<div class="d-hero">
+  <div class="d-topbar">
+    <div class="d-greeting-wrap">
+      <div class="d-time-label" id="time-label">Good morning</div>
+      <div class="d-name">Hi, <span id="user-name">Investor</span></div>
+    </div>
+    <div class="d-avatar" id="user-avatar">–</div>
   </div>
-  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
+
+  <div class="d-balance-label">Total Balance</div>
+  <div class="d-balance-amount" id="balance-amount">$0.00 <span class="d-balance-change" id="daily-change" style="display:none;font-size:12px;"></span></div>
+  <div class="d-balance-sub">Daily profit: <strong id="daily-profit-label" style="color:rgba(254,250,224,.7);">$0.00</strong></div>
+
+  <div class="d-actions">
+    <div class="d-action-btn" onclick="openDepositModal()">
+      <div class="d-action-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      Deposit
+    </div>
+    <div class="d-action-btn" onclick="openWithdrawModal()">
+      <div class="d-action-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
+      </div>
+      Withdraw
+    </div>
+    <a href="invest.html" class="d-action-btn">
+      <div class="d-action-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      Invest
+    </a>
+    <a href="referral.html" class="d-action-btn">
+      <div class="d-action-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      Refer
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FLOATING STAT STRIP ═══ -->
+<div class="d-stat-strip">
+  <div class="d-stat-pill">
+    <div class="d-stat-pill-icon olive">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#606C38" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <div>
+      <div class="d-stat-pill-label">Deposited</div>
+      <div class="d-stat-pill-val" id="total-deposited">$0</div>
+    </div>
+  </div>
+  <div class="d-stat-pill">
+    <div class="d-stat-pill-icon earth">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DDA15E" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+    </div>
+    <div>
+      <div class="d-stat-pill-label">Withdrawn</div>
+      <div class="d-stat-pill-val" id="total-withdrawn">$0</div>
+    </div>
+  </div>
+  <div class="d-stat-pill">
+    <div class="d-stat-pill-icon pine">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a5020" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div>
+      <div class="d-stat-pill-label">Daily Profit</div>
+      <div class="d-stat-pill-val" id="daily-profit">$0</div>
+    </div>
+  </div>
+  <div class="d-stat-pill">
+    <div class="d-stat-pill-icon ref">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c4da0" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    </div>
+    <div>
+      <div class="d-stat-pill-label">Referral</div>
+      <div class="d-stat-pill-val" id="ref-earnings">$0</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="d-content">
+
+  <!-- Profit Chart -->
+  <div class="chart-card">
+    <div class="d-section-head">
+      <div>
+        <div class="d-section-title">Profit Statistics</div>
+        <div class="d-section-sub" id="chart-change-label">Last 7 days</div>
+      </div>
+      <div class="chart-period-row">
+        <button class="chart-period-btn active" onclick="setChartPeriod(7,this)">1W</button>
+        <button class="chart-period-btn"        onclick="setChartPeriod(14,this)">2W</button>
+        <button class="chart-period-btn"        onclick="setChartPeriod(30,this)">1M</button>
+      </div>
+    </div>
+    <div class="chart-area" id="chartArea">
+      <div class="chart-tooltip" id="chartTooltip"></div>
+      <svg class="chart-svg" id="chartSvg" viewBox="0 0 340 130" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="chart-x-labels" id="chartXLabels"></div>
+  </div>
+
+  <!-- Active Investments -->
+  <div>
+    <div class="d-section-head">
+      <div class="d-section-title">Active Investments</div>
+      <a href="invest.html" style="font-size:12px;font-weight:600;color:#606C38;text-decoration:none;">+ New</a>
+    </div>
+    <div id="investments-list" style="display:flex;flex-direction:column;gap:10px;">
+      <!-- Loaded by JS -->
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="invest.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    Invest
+  </a>
+  <a href="mine.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Mine
+  </a>
+  <a href="dashboard.html" class="active">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Home
+  </a>
+  <a href="referral.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Referral
+  </a>
+  <a href="profile.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Profile
+  </a>
 </nav>
 
-<!-- Mobile drawer -->
-<div class="nav-drawer" id="navDrawer">
-  <div class="nav-drawer-close">
-    <button class="nav-hamburger open" id="drawerClose" aria-label="Close">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <nav class="nav-drawer-links">
-    <a href="#features" onclick="closeDrawer()">Platform</a>
-    <a href="#how" onclick="closeDrawer()">How It Works</a>
-    <a href="#market" onclick="closeDrawer()">Markets</a>
-    <a href="#partners" onclick="closeDrawer()">Partners</a>
-  </nav>
-  <div class="nav-drawer-actions">
-    <a href="login.html" class="btn-ghost-sm">Sign In</a>
-    <a href="register.html" class="btn-solid-sm">Get Started</a>
+<!-- ═══ DEPOSIT MODAL ═══ -->
+<div class="d-modal-overlay" id="deposit-modal" style="display:none;" onclick="closeOnOverlay(event,'deposit-modal')">
+  <div class="d-modal-sheet">
+    <div class="d-modal-handle"></div>
+    <div class="d-modal-title">
+      <div class="d-modal-title-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#606C38" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      Deposit Funds
+    </div>
+
+    <div id="modal-deposit-addresses">
+      <p style="font-size:13px;color:#9a9278;margin-bottom:12px;">Loading addresses…</p>
+    </div>
+    <div id="modal-deposit-note" style="font-size:12px;color:#9a9278;background:#F0EBD4;border-radius:10px;padding:10px 13px;margin-bottom:14px;line-height:1.5;"></div>
+
+    <label class="d-form-label">Amount (USD)</label>
+    <input class="d-form-input" type="number" id="dep-amount" placeholder="e.g. 100.00" min="10"/>
+
+    <label class="d-form-label">Transaction Hash</label>
+    <input class="d-form-input" type="text" id="dep-tx" placeholder="Paste TX hash after sending"/>
+
+    <button class="d-modal-submit" id="dep-submit-btn" onclick="submitDeposit()">Submit Deposit</button>
+    <p class="d-modal-note">Adm confirms within 24 hours after verifying your TX.</p>
   </div>
 </div>
 
-<!-- ══ HERO SLIDER ══ -->
-<section class="hero-slider" id="hero">
-
-  <!-- ── Slides ── -->
-  <div class="hs-track">
-
-    <!-- Slide 1 . Cargo container / freight -->
-    <div class="hs-slide active" style="--bg:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=85')">
-      <div class="hs-overlay"></div>
-      <div class="hs-content">
-        <span class="hs-eyebrow">Apexvault Capital</span>
-        <h1 class="hs-title">Bot<br><em>Trade</em></h1>
-        <p class="hs-sub">A powerful, all-in-one platform for trading stocks and cryptocurrencies.
-</p>
-        <div class="hs-btns">
-          <a href="register.html" class="hs-btn-primary">EXPLORE</a>
-          <a href="login.html"     class="hs-btn-ghost">SIGN IN</a>
-        </div>
+<!-- ═══ WITHDRAW MODAL ═══ -->
+<div class="d-modal-overlay" id="withdraw-modal" style="display:none;" onclick="closeOnOverlay(event,'withdraw-modal')">
+  <div class="d-modal-sheet">
+    <div class="d-modal-handle"></div>
+    <div class="d-modal-title">
+      <div class="d-modal-title-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DDA15E" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
       </div>
+      Request Withdrawal
     </div>
 
-    <!-- Slide 2 . Train / rail freight (like your screenshot) -->
-    <div class="hs-slide" style="--bg:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&q=85')">
-      <div class="hs-overlay"></div>
-      <div class="hs-content">
-        <span class="hs-eyebrow">Premium investment</span>
-        <h1 class="hs-title">DIGITAL<br><em>TRADE</em></h1>
-        <p class="hs-sub">Apexvault Capital offers a range of strategic investment opportunities that maximize returns</p>
-        <div class="hs-btns">
-          <a href="register.html" class="hs-btn-primary">REGISTER</a>
-          <a href="login.html" class="hs-btn-ghost">SIGN IN</a>
-        </div>
-      </div>
-    </div>
+    <div id="modal-withdraw-note" style="font-size:12px;color:#9a9278;background:#F0EBD4;border-radius:10px;padding:10px 13px;margin-bottom:14px;line-height:1.5;"></div>
 
-    <!-- Slide 3 . Air / warehouse logistics -->
-    <div class="hs-slide" style="--bg:url('https://images.unsplash.com/photo-1605792657660-596af9009e82?w=1600&q=85')">
-      <div class="hs-overlay"></div>
-      <div class="hs-content">
-        <span class="hs-eyebrow">GLOBAL INDICATORS</span>
-        <h1 class="hs-title">BUILT FOR<br><em>SPEED</em></h1>
-        <p class="hs-sub">Invest In Premium Confidence</p>
-        <div class="hs-btns">
-          <a href="register.html"   class="hs-btn-primary">EXPLORE</a>
-          <a href="login.html" class="hs-btn-ghost">SIGN IN</a>
-        </div>
-      </div>
-    </div>
+    <label class="d-form-label">Amount (USD)</label>
+    <input class="d-form-input" type="number" id="wd-amount" placeholder="Minimum $10"/>
 
-  </div><!-- /hs-track -->
+    <label class="d-form-label">Network</label>
+    <select class="d-form-input" id="wd-network">
+      <option value="">Loading…</option>
+    </select>
 
-  <!-- ── Progress bar (top edge) ── -->
-  <div class="hs-progressremover"><div class="hs-progress-fillremover"></div></div>
+    <label class="d-form-label">Your Wallet Address</label>
+    <input class="d-form-input" type="text" id="wd-wallet" placeholder="Paste your wallet address"/>
 
-  <!-- ── Dot navigation ── -->
-  <div class="hs-dots">
-    <button class="hs-dot active" data-idx="0" aria-label="Slide 1"></button>
-    <button class="hs-dot"        data-idx="1" aria-label="Slide 2"></button>
-    <button class="hs-dot"        data-idx="2" aria-label="Slide 3"></button>
+    <p id="wd-fee-note" style="font-size:12px;color:#9a9278;margin-bottom:14px;"></p>
+    <button class="d-modal-submit" id="wd-submit-btn" onclick="submitWithdrawal()">Request Withdrawal</button>
+    <p class="d-modal-note">Processed within 24 hours after . approval.</p>
   </div>
+</div>
+ <!-- Toast Notification -->
+<section id="toast-section">
 
-  <!-- ── Arrow navigation ── --
-  <button class="hs-arrow hs-prev" aria-label="Previous slide">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-  </button>
-  <button class="hs-arrow hs-next" aria-label="Next slide">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-  </button>
-
-  <!-- ── Scroll-down indicator ── -->
-  <a href="#track-section" class="hs-scroll-hint" aria-label="Scroll down">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-  </a>
-
-</section>
-<!-- /HERO SLIDER -->
-
-<!-- ══ FEATURES (bento grid, light bg) ═══════ -->
-<section class="section sec-features" id="features">
-  <div class="sec-inner">
-    <div class="sec-eyebrow rv">Why ApexVault Capital</div>
-    <h2 class="sec-title rv d1">Built on Real<br/>Market Activity</h2>
-    <p class="sec-sub rv d2">Every return is generated from verifiable on-chain and exchange activity not synthetic products or opaque pools.</p>
-
-    <div class="feat-grid rv d2">
-      <!-- Wide bento card -->
-      <div class="feat-card feat-card-wide">
-        <div class="feat-inner">
-          <div class="feat-wide-text">
-            <div class="feat-num">01</div>
-            <div class="feat-icon-wrap green">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            </div>
-            <div class="feat-name">Asset-Backed Verification</div>
-            <div class="feat-desc">Every investment on ApexVault is tied to verified, liquid crypto asset positions. Multi-layer verification ensures your capital is always backed by real-world market value no synthetic exposure, no guesswork.</div>
-            
-          </div>
-          <div class="feat-wide-stats">
-            <div class="feat-stat-box">
-              <div class="feat-stat-val">$2.4M</div>
-              <div class="feat-stat-lbl">Impact Capital</div>
-            </div>
-            <div class="feat-stat-box">
-              <div class="feat-stat-val">1,200+</div>
-              <div class="feat-stat-lbl">Investors</div>
-            </div>
-            <div class="feat-stat-box">
-              <div class="feat-stat-val">99.9%</div>
-              <div class="feat-stat-lbl">Uptime</div>
-            </div>
-            <div class="feat-stat-box">
-              <div class="feat-stat-val">3.5%</div>
-              <div class="feat-stat-lbl">Max Daily ROI</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="feat-card">
-        <div class="feat-num">02</div>
-        <div class="feat-icon-wrap amber">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        </div>
-        <div class="feat-name">Daily Profit Sharing</div>
-        <div class="feat-desc">Earn returns from real arbitrage spreads, market-making fees, and yield positions — credited directly to your account every 24 hours.</div>
-        <a href="#" class="feat-link">Explore plans <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="feat-card">
-        <div class="feat-num">03</div>
-        <div class="feat-icon-wrap blue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="feat-name">Real-Time Market Data</div>
-        <div class="feat-desc">Live feeds from global exchanges update every second. Access your portfolio dashboard and live prices from anywhere, on any device.</div>
-        <a href="#market" class="feat-link">View markets <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ HOW IT WORKS ═══════════════════════════ -->
-<section class="section sec-how" id="how">
-  <div class="sec-inner">
-    <div class="how-header">
-      <div class="sec-eyebrow rv">The Journey</div>
-      <h2 class="sec-title rv d1">Simple. Transparent.<br/>Impactful.</h2>
-      <p class="sec-sub rv d2" style="margin-bottom:0">From signup to your first daily return in under 10 minutes.</p>
-    </div>
-    <div class="steps-grid rv d2">
-      <div class="step">
-        <div class="step-num-circle">1</div>
-        <div class="step-title">Create Account</div>
-        <div class="step-desc">Sign up with your email. KYC takes under 2 minutes. Your account is secured with 2FA from day one.</div>
-      </div>
-      <div class="step">
-        <div class="step-num-circle">2</div>
-        <div class="step-title">Fund Your Account</div>
-        <div class="step-desc">Deposit USDT, BTC, or ETH directly. Funds are allocated immediately upon confirmation.</div>
-      </div>
-      <div class="step">
-        <div class="step-num-circle">3</div>
-        <div class="step-title">Choose a Plan</div>
-        <div class="step-desc">Select Starter, Growth, or Arbitrage Pro. Each plan routes capital to different market strategies.</div>
-      </div>
-      <div class="step">
-        <div class="step-num-circle">4</div>
-        <div class="step-title">Earn Daily Returns</div>
-        <div class="step-desc">Returns credited every 24h. Withdraw anytime or compound to accelerate your portfolio growth.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════
-     STATS COUNT-UP
-═══════════════════════════════════════ -->
-<section class="stats-section">
-  <div class="stats-grid">
-
-    <!-- Row 1: side by side -->
-    <div class="s-item">
-      <span class="s-num" data-target="6" data-suffix="K+">0</span>
-      <span class="s-label">New Partners Every Year</span>
-    </div>
-    <div class="s-item">
-      <span class="s-num" data-target="25" data-suffix="+">0</span>
-      <span class="s-label">Years of Experience</span>
-    </div>
-
-    <!-- Row 2: full-width center -->
-    <div class="s-item full">
-      <span class="s-num" data-target="9" data-suffix="K+">0</span>
-      <span class="s-label">Well Trained bots Worldwide</span>
-    </div>
-
-    <!-- Row 3: side by side -->
-    <div class="s-item">
-      <span class="s-num" data-target="100" data-suffix="K+">0</span>
-      <span class="s-label">Charts delivered</span>
-    </div>
-    <div class="s-item">
-      <span class="s-num" data-target="5" data-suffix="M+">0</span>
-      <span class="s-label">Satisfied clients</span>
-    </div>
-
-    <!-- Row 4: full-width center -->
-    <div class="s-item full">
-      <span class="s-num" data-target="2" data-suffix="M+">0</span>
-      <span class="s-label">Returning feedbacks</span>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══ MARKET OVERVIEW ═════════════════════════ -->
-<section class="section sec-market" id="market">
-  <div class="sec-inner">
-    <div class="sec-eyebrow rv">Live Data</div>
-    <h2 class="sec-title rv d1">Market Overview</h2>
-    <div class="mkt-tabs rv d2">
-      <button class="mkt-tab active" onclick="loadTV('BINANCE:BTCUSDT',this)">BTC/USDT</button>
-      <button class="mkt-tab" onclick="loadTV('BINANCE:ETHUSDT',this)">ETH/USDT</button>
-      <button class="mkt-tab" onclick="loadTV('BINANCE:BNBUSDT',this)">BNB/USDT</button>
-      <button class="mkt-tab" onclick="loadTV('BINANCE:SOLUSDT',this)">SOL/USDT</button>
-    </div>
-    <div class="tv-wrap rv" id="tvWrap"></div>
-  </div>
-</section>
-
-<!-- ══ PARTNERS ════════════════════════════════ -->
-<section class="sec-partners" id="partners">
-  <div class="partners-label">Trading on the world's leading platforms</div>
-  <div class="partners-track-wrap">
-    <div class="partners-track" id="partnersTrack"></div>
-  </div>
-</section>
-
-<!-- ══ CTA SECTION ════════════════════════════ -->
-<section class="sec-cta">
-  <div class="cta-glow"></div>
-  <div class="cta-box rv">
-    <div class="cta-box-inner">
-      <h2 class="cta-title">Ready to grow your<br/>wealth with <span class="accent">ApexVault?</span></h2>
-      <p class="cta-sub">Join over 1,200 investors already earning daily returns from real crypto market activity. Open your account today and start with as little as $100.</p>
-      <div class="cta-actions">
-        <a href="register.html" class="btn-primary">
-          Open Free Account
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="invest.html" class="btn-outline">View Investment Plans</a>
-      </div>
-      <p class="cta-note">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        SSL encrypted &middot; 2FA protected &middot; Withdraw anytime
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FOOTER ══════════════════════════════════ -->
-<footer>
-  <div class="footer-body">
-    <div>
-      <div class="f-logo">
-      <a href="#" class="nav-logo">
-  <!-- Replace this SVG with your actual logo image:
-       <img src="./assets/logo.png" alt="ApexVault Capital" style="height:28px;width:auto;"/>
-  -->
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M14 2L3 7v8c0 5.55 4.74 10.74 11 12 6.26-1.26 11-6.45 11-12V7L14 2z" fill="rgba(200,134,74,.15)" stroke="#c8864a" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M9 14.5l3.5 3.5L19 11" stroke="#c8864a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  APEX<em>VAULT</em>
-</a></div>
-
-      <p class="f-desc">An asset-backed investment platform powered by real-time crypto market data and profit-sharing from live economic activity.</p>
-     
-    </div>
-    <div>
-      <div class="f-col-title">Company</div>
-      <ul class="f-links">
-        <li><a href="#">About</a></li>
-        
-      </ul>
-    </div>
-    <div>
-      <div class="f-col-title">Platform</div>
-      <ul class="f-links">
-        <li><a href="login.html">Sign In</a></li>
-        <li><a href="register.html">Create Account</a></li>
-        <li><a href="invest.html">Investment Plans</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-      </ul>
-    </div>
-    <div>
+  <div id="toast" class="toast hidden">
+    <img id="flag" class="flag" src="" alt="country flag">
     
-  </div>
-  <div class="footer-bar">
-    <span>© 2026 ApexVault Capital. All rights reserved.</span>
-    <span>Powered by real market data.</span>
-  </div>
-  <div class="footer-mt5">
-    <div class="mt5-track" id="mt5Track"></div>
-  </div>
-</footer>
-
-<!-- 🌐 PREMIUM LANGUAGE SWITCHER -->
-<div class="lang-widget">
-  <div class="lang-current" id="langCurrent">
-    <img src="https://flagcdn.com/w20/gb.png">
-    <span>English</span>
-    <span class="lang-caret">▼</span>
-  </div>
-
-  <div class="lang-dropdown" id="langDropdown">
-    <div class="lang-item" data-lang="en"><img src="https://flagcdn.com/w20/gb.png"> English</div>
-    <div class="lang-item" data-lang="af"><img src="https://flagcdn.com/w20/za.png"> Afrikaans</div>
-    <div class="lang-item" data-lang="sq"><img src="https://flagcdn.com/w20/al.png"> Albanian</div>
-    <div class="lang-item" data-lang="am"><img src="https://flagcdn.com/w20/et.png"> Amharic</div>
-    <div class="lang-item" data-lang="ar"><img src="https://flagcdn.com/w20/sa.png"> Arabic</div>
-    <div class="lang-item" data-lang="hy"><img src="https://flagcdn.com/w20/am.png"> Armenian</div>
-    <div class="lang-item" data-lang="az"><img src="https://flagcdn.com/w20/az.png"> Azerbaijani</div>
-    <div class="lang-item" data-lang="eu"><img src="https://flagcdn.com/w20/es.png"> Basque</div>
-    <div class="lang-item" data-lang="be"><img src="https://flagcdn.com/w20/by.png"> Belarusian</div>
-    <div class="lang-item" data-lang="bn"><img src="https://flagcdn.com/w20/bd.png"> Bengali</div>
-    <div class="lang-item" data-lang="bs"><img src="https://flagcdn.com/w20/ba.png"> Bosnian</div>
-    <div class="lang-item" data-lang="bg"><img src="https://flagcdn.com/w20/bg.png"> Bulgarian</div>
-    <div class="lang-item" data-lang="ca"><img src="https://flagcdn.com/w20/es.png"> Catalan</div>
-    <div class="lang-item" data-lang="ceb"><img src="https://flagcdn.com/w20/ph.png"> Cebuano</div>
-    <div class="lang-item" data-lang="zh-CN"><img src="https://flagcdn.com/w20/cn.png"> Chinese (Simplified)</div>
-    <div class="lang-item" data-lang="zh-TW"><img src="https://flagcdn.com/w20/tw.png"> Chinese (Traditional)</div>
-    <div class="lang-item" data-lang="co"><img src="https://flagcdn.com/w20/fr.png"> Corsican</div>
-    <div class="lang-item" data-lang="hr"><img src="https://flagcdn.com/w20/hr.png"> Croatian</div>
-    <div class="lang-item" data-lang="cs"><img src="https://flagcdn.com/w20/cz.png"> Czech</div>
-    <div class="lang-item" data-lang="da"><img src="https://flagcdn.com/w20/dk.png"> Danish</div>
-    <div class="lang-item" data-lang="nl"><img src="https://flagcdn.com/w20/nl.png"> Dutch</div>
-    <div class="lang-item" data-lang="eo"><img src="https://flagcdn.com/w20/eu.png"> Esperanto</div>
-    <div class="lang-item" data-lang="et"><img src="https://flagcdn.com/w20/ee.png"> Estonian</div>
-    <div class="lang-item" data-lang="fi"><img src="https://flagcdn.com/w20/fi.png"> Finnish</div>
-    <div class="lang-item" data-lang="fr"><img src="https://flagcdn.com/w20/fr.png"> French</div>
-    <div class="lang-item" data-lang="fy"><img src="https://flagcdn.com/w20/nl.png"> Frisian</div>
-    <div class="lang-item" data-lang="gl"><img src="https://flagcdn.com/w20/es.png"> Galician</div>
-    <div class="lang-item" data-lang="ka"><img src="https://flagcdn.com/w20/ge.png"> Georgian</div>
-    <div class="lang-item" data-lang="de"><img src="https://flagcdn.com/w20/de.png"> German</div>
-    <div class="lang-item" data-lang="el"><img src="https://flagcdn.com/w20/gr.png"> Greek</div>
-    <div class="lang-item" data-lang="gu"><img src="https://flagcdn.com/w20/in.png"> Gujarati</div>
-    <div class="lang-item" data-lang="ht"><img src="https://flagcdn.com/w20/ht.png"> Haitian Creole</div>
-    <div class="lang-item" data-lang="ha"><img src="https://flagcdn.com/w20/ng.png"> Hausa</div>
-    <div class="lang-item" data-lang="haw"><img src="https://flagcdn.com/w20/us.png"> Hawaiian</div>
-    <div class="lang-item" data-lang="he"><img src="https://flagcdn.com/w20/il.png"> Hebrew</div>
-    <div class="lang-item" data-lang="hi"><img src="https://flagcdn.com/w20/in.png"> Hindi</div>
-    <div class="lang-item" data-lang="hmn"><img src="https://flagcdn.com/w20/cn.png"> Hmong</div>
-    <div class="lang-item" data-lang="hu"><img src="https://flagcdn.com/w20/hu.png"> Hungarian</div>
-    <div class="lang-item" data-lang="is"><img src="https://flagcdn.com/w20/is.png"> Icelandic</div>
-    <div class="lang-item" data-lang="ig"><img src="https://flagcdn.com/w20/ng.png"> Igbo</div>
-    <div class="lang-item" data-lang="id"><img src="https://flagcdn.com/w20/id.png"> Indonesian</div>
-    <div class="lang-item" data-lang="ga"><img src="https://flagcdn.com/w20/ie.png"> Irish</div>
-    <div class="lang-item" data-lang="it"><img src="https://flagcdn.com/w20/it.png"> Italian</div>
-    <div class="lang-item" data-lang="ja"><img src="https://flagcdn.com/w20/jp.png"> Japanese</div>
-    <div class="lang-item" data-lang="jv"><img src="https://flagcdn.com/w20/id.png"> Javanese</div>
-    <div class="lang-item" data-lang="kn"><img src="https://flagcdn.com/w20/in.png"> Kannada</div>
-    <div class="lang-item" data-lang="kk"><img src="https://flagcdn.com/w20/kz.png"> Kazakh</div>
-    <div class="lang-item" data-lang="km"><img src="https://flagcdn.com/w20/kh.png"> Khmer</div>
-    <div class="lang-item" data-lang="rw"><img src="https://flagcdn.com/w20/rw.png"> Kinyarwanda</div>
-    <div class="lang-item" data-lang="ko"><img src="https://flagcdn.com/w20/kr.png"> Korean</div>
-    <div class="lang-item" data-lang="ku"><img src="https://flagcdn.com/w20/iq.png"> Kurdish</div>
-    <div class="lang-item" data-lang="ky"><img src="https://flagcdn.com/w20/kg.png"> Kyrgyz</div>
-    <div class="lang-item" data-lang="lo"><img src="https://flagcdn.com/w20/la.png"> Lao</div>
-    <div class="lang-item" data-lang="la"><img src="https://flagcdn.com/w20/va.png"> Latin</div>
-    <div class="lang-item" data-lang="lv"><img src="https://flagcdn.com/w20/lv.png"> Latvian</div>
-    <div class="lang-item" data-lang="lt"><img src="https://flagcdn.com/w20/lt.png"> Lithuanian</div>
-    <div class="lang-item" data-lang="lb"><img src="https://flagcdn.com/w20/lu.png"> Luxembourgish</div>
-    <div class="lang-item" data-lang="mk"><img src="https://flagcdn.com/w20/mk.png"> Macedonian</div>
-    <div class="lang-item" data-lang="mg"><img src="https://flagcdn.com/w20/mg.png"> Malagasy</div>
-    <div class="lang-item" data-lang="ms"><img src="https://flagcdn.com/w20/my.png"> Malay</div>
-    <div class="lang-item" data-lang="ml"><img src="https://flagcdn.com/w20/in.png"> Malayalam</div>
-    <div class="lang-item" data-lang="mt"><img src="https://flagcdn.com/w20/mt.png"> Maltese</div>
-    <div class="lang-item" data-lang="mi"><img src="https://flagcdn.com/w20/nz.png"> Maori</div>
-    <div class="lang-item" data-lang="mr"><img src="https://flagcdn.com/w20/in.png"> Marathi</div>
-    <div class="lang-item" data-lang="mn"><img src="https://flagcdn.com/w20/mn.png"> Mongolian</div>
-    <div class="lang-item" data-lang="my"><img src="https://flagcdn.com/w20/mm.png"> Myanmar (Burmese)</div>
-    <div class="lang-item" data-lang="ne"><img src="https://flagcdn.com/w20/np.png"> Nepali</div>
-    <div class="lang-item" data-lang="no"><img src="https://flagcdn.com/w20/no.png"> Norwegian</div>
-    <div class="lang-item" data-lang="ny"><img src="https://flagcdn.com/w20/mw.png"> Nyanja (Chichewa)</div>
-    <div class="lang-item" data-lang="or"><img src="https://flagcdn.com/w20/in.png"> Odia (Oriya)</div>
-    <div class="lang-item" data-lang="ps"><img src="https://flagcdn.com/w20/af.png"> Pashto</div>
-    <div class="lang-item" data-lang="fa"><img src="https://flagcdn.com/w20/ir.png"> Persian</div>
-    <div class="lang-item" data-lang="pl"><img src="https://flagcdn.com/w20/pl.png"> Polish</div>
-    <div class="lang-item" data-lang="pt"><img src="https://flagcdn.com/w20/pt.png"> Portuguese</div>
-    <div class="lang-item" data-lang="pa"><img src="https://flagcdn.com/w20/in.png"> Punjabi</div>
-    <div class="lang-item" data-lang="ro"><img src="https://flagcdn.com/w20/ro.png"> Romanian</div>
-    <div class="lang-item" data-lang="ru"><img src="https://flagcdn.com/w20/ru.png"> Russian</div>
-    <div class="lang-item" data-lang="sm"><img src="https://flagcdn.com/w20/ws.png"> Samoan</div>
-    <div class="lang-item" data-lang="gd"><img src="https://flagcdn.com/w20/gb-sct.png"> Scots Gaelic</div>
-    <div class="lang-item" data-lang="sr"><img src="https://flagcdn.com/w20/rs.png"> Serbian</div>
-    <div class="lang-item" data-lang="st"><img src="https://flagcdn.com/w20/ls.png"> Sesotho</div>
-    <div class="lang-item" data-lang="sn"><img src="https://flagcdn.com/w20/zw.png"> Shona</div>
-    <div class="lang-item" data-lang="sd"><img src="https://flagcdn.com/w20/pk.png"> Sindhi</div>
-    <div class="lang-item" data-lang="si"><img src="https://flagcdn.com/w20/lk.png"> Sinhala</div>
-    <div class="lang-item" data-lang="sk"><img src="https://flagcdn.com/w20/sk.png"> Slovak</div>
-    <div class="lang-item" data-lang="sl"><img src="https://flagcdn.com/w20/si.png"> Slovenian</div>
-    <div class="lang-item" data-lang="so"><img src="https://flagcdn.com/w20/so.png"> Somali</div>
-    <div class="lang-item" data-lang="es"><img src="https://flagcdn.com/w20/es.png"> Spanish</div>
-    <div class="lang-item" data-lang="su"><img src="https://flagcdn.com/w20/id.png"> Sundanese</div>
-    <div class="lang-item" data-lang="sw"><img src="https://flagcdn.com/w20/ke.png"> Swahili</div>
-    <div class="lang-item" data-lang="sv"><img src="https://flagcdn.com/w20/se.png"> Swedish</div>
-    <div class="lang-item" data-lang="tl"><img src="https://flagcdn.com/w20/ph.png"> Tagalog (Filipino)</div>
-    <div class="lang-item" data-lang="tg"><img src="https://flagcdn.com/w20/tj.png"> Tajik</div>
-    <div class="lang-item" data-lang="ta"><img src="https://flagcdn.com/w20/in.png"> Tamil</div>
-    <div class="lang-item" data-lang="tt"><img src="https://flagcdn.com/w20/ru.png"> Tatar</div>
-    <div class="lang-item" data-lang="te"><img src="https://flagcdn.com/w20/in.png"> Telugu</div>
-    <div class="lang-item" data-lang="th"><img src="https://flagcdn.com/w20/th.png"> Thai</div>
-    <div class="lang-item" data-lang="tr"><img src="https://flagcdn.com/w20/tr.png"> Turkish</div>
-    <div class="lang-item" data-lang="tk"><img src="https://flagcdn.com/w20/tm.png"> Turkmen</div>
-    <div class="lang-item" data-lang="uk"><img src="https://flagcdn.com/w20/ua.png"> Ukrainian</div>
-    <div class="lang-item" data-lang="ur"><img src="https://flagcdn.com/w20/pk.png"> Urdu</div>
-    <div class="lang-item" data-lang="ug"><img src="https://flagcdn.com/w20/cn.png"> Uyghur</div>
-    <div class="lang-item" data-lang="uz"><img src="https://flagcdn.com/w20/uz.png"> Uzbek</div>
-    <div class="lang-item" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png"> Vietnamese</div>
-    <div class="lang-item" data-lang="cy"><img src="https://flagcdn.com/w20/gb-wls.png"> Welsh</div>
-    <div class="lang-item" data-lang="xh"><img src="https://flagcdn.com/w20/za.png"> Xhosa</div>
-    <div class="lang-item" data-lang="yi"><img src="https://flagcdn.com/w20/il.png"> Yiddish</div>
-    <div class="lang-item" data-lang="yo"><img src="https://flagcdn.com/w20/ng.png"> Yoruba</div>
-    <div class="lang-item" data-lang="zu"><img src="https://flagcdn.com/w20/za.png"> Zulu</div>
-  </div>
-</div>
-
-<!-- Hidden Google Translate -->
-<div id="google_translate_element"></div>
- 
-
-<script>
-/* ══════════════════════════════════════
-   APEXVAULT CAPITAL — JS
-══════════════════════════════════════ */
-
-/* Hamburger drawer */
-(function(){
-  const btn=document.getElementById('hamburger');
-  const closeBtn=document.getElementById('drawerClose');
-  const drawer=document.getElementById('navDrawer');
-  if(!btn||!drawer) return;
-  function open(){ drawer.classList.add('open'); btn.classList.add('open'); document.body.style.overflow='hidden'; }
-  window.closeDrawer=function(){ drawer.classList.remove('open'); btn.classList.remove('open'); document.body.style.overflow=''; };
-  btn.addEventListener('click',open);
-  if(closeBtn) closeBtn.addEventListener('click',window.closeDrawer);
-})();
-
-/* Preloader handled by early inline script above */
-
-/* Navbar scroll */
-(function(){
-  const nav=document.getElementById('nav');
-  function check(){ nav.classList.toggle('scrolled',window.scrollY>30); }
-  window.addEventListener('scroll',check,{passive:true}); check();
-})();
-
-/* Scroll reveal */
-(function(){
-  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08});
-  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-})();
-
- /* ══ HERO SLIDER ══ */
-  (function () {
-    var slides   = document.querySelectorAll('.hs-slide');
-    var dots     = document.querySelectorAll('.hs-dot');
-    var fill     = document.querySelector('.hs-progress-fill');
-    var total    = slides.length;
-    var current  = 0;
-    var DURATION = 5000;
-    var autoTimer = null;
-    var progRAF   = null;
-    var progStart = null;
-
-    function activate(idx) {
-      slides[current].classList.remove('active');
-      dots[current].classList.remove('active');
-      current = ((idx % total) + total) % total;
-      slides[current].classList.add('active');
-      dots[current].classList.add('active');
-      startProgress();
-    }
-
-    function startProgress() {
-      if (progRAF) cancelAnimationFrame(progRAF);
-      clearInterval(autoTimer);
-      if (fill) fill.style.width = '0%';
-      progStart = performance.now();
-      (function tick(now) {
-        var pct = Math.min((now - progStart) / DURATION * 100, 100);
-        if (fill) fill.style.width = pct + '%';
-        if (pct < 100) progRAF = requestAnimationFrame(tick);
-      })(progStart);
-      autoTimer = setInterval(function () { activate(current + 1); }, DURATION);
-    }
-
-    dots.forEach(function (dot) {
-      dot.addEventListener('click', function () { activate(+this.dataset.idx); });
-    });
-
-    var prevBtn = document.querySelector('.hs-prev');
-    var nextBtn = document.querySelector('.hs-next');
-    if (prevBtn) prevBtn.addEventListener('click', function () { activate(current - 1); });
-    if (nextBtn) nextBtn.addEventListener('click', function () { activate(current + 1); });
-
-    var sliderEl = document.querySelector('.hero-slider');
-    var tx = 0;
-    if (sliderEl) {
-      sliderEl.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
-      sliderEl.addEventListener('touchend',   function (e) {
-        var dx = e.changedTouches[0].clientX - tx;
-        if (Math.abs(dx) > 44) activate(dx < 0 ? current + 1 : current - 1);
-      }, { passive: true });
-      sliderEl.addEventListener('mouseenter', function () {
-        clearInterval(autoTimer); if (progRAF) cancelAnimationFrame(progRAF);
-      });
-      sliderEl.addEventListener('mouseleave', startProgress);
-    }
-
-    startProgress();
-  })();
-
-  /* PAGE TRANSITION BAR */
-  (function () {
-    var bar = document.getElementById('page-loader');
-    var progress = 0;
-    var timer = null;
-
-    function startLoader() {
-      progress = 0;
-      bar.style.width = '0%';
-      bar.classList.remove('done');
-      bar.classList.add('loading');
-      timer = setInterval(function () {
-        if (progress < 85) {
-          progress += (85 - progress) * 0.08;
-          bar.style.width = progress + '%';
-        }
-      }, 50);
-    }
-    function finishLoader() {
-      clearInterval(timer);
-      bar.style.width = '100%';
-      bar.classList.remove('loading');
-      bar.classList.add('done');
-      setTimeout(function () {
-        bar.classList.remove('done');
-        bar.style.width = '0%';
-      }, 700);
-    }
-
-    document.addEventListener('click', function (e) {
-      var el = e.target.closest('a');
-      if (!el) return;
-      var href = el.getAttribute('href');
-      if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('//')) return;
-      startLoader();
-    });
-    window.addEventListener('pageshow', finishLoader);
-  })();
-
-
-
-/* ══ Coin data ══ */
-const COINS=[
-  {id:'bitcoin',     sym:'BTC',  color:'#F7931A'},
-  {id:'ethereum',    sym:'ETH',  color:'#627EEA'},
-  {id:'binancecoin', sym:'BNB',  color:'#F3BA2F'},
-  {id:'solana',      sym:'SOL',  color:'#9945FF'},
-  {id:'ripple',      sym:'XRP',  color:'#346AA9'},
-  {id:'cardano',     sym:'ADA',  color:'#0033AD'},
-  {id:'dogecoin',    sym:'DOGE', color:'#C2A633'},
-  {id:'tron',        sym:'TRX',  color:'#EB0029'},
-  {id:'avalanche-2', sym:'AVAX', color:'#E84142'},
-  {id:'chainlink',   sym:'LINK', color:'#2A5ADA'},
-];
-const FB_PRICES=[67420,3521,584,179,0.58,0.45,0.164,0.119,38.7,17.8];
-const FB_CHANGES=[2.34,1.87,-0.54,4.12,-1.23,0.78,3.21,0.45,-2.1,1.56];
-let priceCache={};
-
-/* Real CDN coin icons (CoinIcons) */
-const COIN_ICON_BASE='https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/32/color/';
-function coinIconUrl(sym){ return COIN_ICON_BASE+sym.toLowerCase()+'.png'; }
-
-function fmtPrice(p){
-  return p<1?p.toFixed(5):p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-
-function buildTicker(){
-  const el=document.getElementById('tickerTrack');
-  if(!el||!Object.keys(priceCache).length) return;
-  const html=COINS.map(c=>{
-    const d=priceCache[c.id]; if(!d) return '';
-    const up=d.change>=0;
-    return `<div class="ticker-item">
-      <img class="tc-icon" src="${coinIconUrl(c.sym)}" alt="${c.sym}"
-           onerror="this.style.display='none'"/>
-      <span class="tc-sym">${c.sym}</span>
-      <span class="tc-price">$${fmtPrice(d.price)}</span>
-      <span class="${up?'tc-up':'tc-dn'}">${up?'▲':'▼'}${Math.abs(d.change).toFixed(2)}%</span>
-    </div>`;
-  }).join('');
-  el.innerHTML=html+html;
-}
-
-/* MT5 footer ticker */
-const MT5=[
-  {pair:'BTC/USD',bid:'67,420.50',ask:'67,425.80',spd:'5.3',chg:'+2.34'},
-  {pair:'ETH/USD',bid:'3,521.18', ask:'3,522.55', spd:'1.4',chg:'+1.87'},
-  {pair:'BNB/USD',bid:'584.32',   ask:'584.92',   spd:'0.6',chg:'-0.54'},
-  {pair:'SOL/USD',bid:'178.94',   ask:'179.15',   spd:'0.2',chg:'+4.12'},
-  {pair:'XRP/USD',bid:'0.5823',   ask:'0.5831',   spd:'0.0',chg:'-1.23'},
-  {pair:'ADA/USD',bid:'0.4521',   ask:'0.4529',   spd:'0.0',chg:'+0.78'},
-  {pair:'DOGE/USD',bid:'0.1643',  ask:'0.1647',   spd:'0.0',chg:'+3.21'},
-  {pair:'TRX/USD',bid:'0.1187',   ask:'0.1190',   spd:'0.0',chg:'+0.45'},
-  {pair:'AVAX/USD',bid:'38.72',   ask:'38.83',    spd:'0.1',chg:'-2.10'},
-  {pair:'LINK/USD',bid:'17.84',   ask:'17.92',    spd:'0.1',chg:'+1.56'},
-];
-function buildMT5(){
-  const el=document.getElementById('mt5Track'); if(!el) return;
-  const html=MT5.map(p=>{
-    const up=p.chg.startsWith('+');
-    return `<div class="mt5-item">
-      <img src="${coinIconUrl(p.pair.split('/')[0])}" width="14" height="14" style="border-radius:50%;flex-shrink:0" alt="" onerror="this.style.display='none'"/>
-      <span class="mt5-pair">${p.pair}</span><div class="mt5-sep"></div>
-      <span class="mt5-bid">${p.bid}</span><span class="mt5-ask">${p.ask}</span>
-      <div class="mt5-sep"></div><span class="mt5-spd">spd ${p.spd}</span>
-      <span class="${up?'mt5-up':'mt5-dn'}">${p.chg}%</span>
-    </div>`;
-  }).join('');
-  el.innerHTML=html+html;
-}
-
-async function fetchPrices(){
-  try{
-    const ids=COINS.map(c=>c.id).join(',');
-    const res=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,{headers:{'Accept':'application/json'}});
-    if(!res.ok) throw new Error();
-    const data=await res.json();
-    COINS.forEach(c=>{ if(data[c.id]) priceCache[c.id]={price:data[c.id].usd,change:data[c.id].usd_24h_change||0}; });
-    ['bitcoin','ethereum'].forEach((id,i)=>{
-      if(priceCache[id]){
-        MT5[i].bid=priceCache[id].price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-        MT5[i].chg=(priceCache[id].change>=0?'+':'')+priceCache[id].change.toFixed(2);
-      }
-    });
-  }catch{
-    COINS.forEach((c,i)=>{ priceCache[c.id]={price:FB_PRICES[i]||1,change:FB_CHANGES[i]||0}; });
-  }
-  buildTicker(); buildMT5();
-}
-fetchPrices();
-setInterval(fetchPrices,60000);
-
-/* ══ Partners — real platform logos (b&w via filter) ══ */
-/* ══ Partners — CEX + DEX (stable logos + JS invert) ══ */
-(function(){
-  const PARTNERS = [
-    // CEX (reduced)
-    {name:'Binance', img:'https://cryptologos.cc/logos/binance-coin-bnb-logo.png'},
-    {name:'Coinbase', img:'https://cryptologos.cc/logos/usd-coin-usdc-logo.png'},
-    {name:'Kraken', img:'https://cryptologos.cc/logos/kraken-krk-logo.png'},
-    {name:'OKX', img:'https://cryptologos.cc/logos/okb-okb-logo.png'},
-
-    // DEX (added)
-    {name:'Uniswap', img:'https://cryptologos.cc/logos/uniswap-uni-logo.png'},
-    {name:'PancakeSwap', img:'https://cryptologos.cc/logos/pancakeswap-cake-logo.png'},
-    {name:'SushiSwap', img:'https://cryptologos.cc/logos/sushiswap-sushi-logo.png'},
-    {name:'dYdX', img:'https://cryptologos.cc/logos/dydx-dydx-logo.png'},
-    {name:'Curve', img:'https://cryptologos.cc/logos/curve-dao-token-crv-logo.png'}
-  ];
-
-  const el = document.getElementById('partnersTrack');
-  if (!el) return;
-
-  const html = PARTNERS.map(p => `
-    <div class="p-item">
-      <div class="p-logo-wrap">
-        <img class="p-logo-img"
-          src="${p.img}"
-          alt="${p.name}"
-          style="filter: brightness(0) invert(1); opacity:0.9;"
-          onerror="this.style.display='none'">
-        <span class="p-name">${p.name}</span>
-      </div>
+    <div class="toast-text">
+      <p id="toast-message"></p>
     </div>
-  `).join('');
+  </div>
 
-  el.innerHTML = html + html;
-})();
-/* ══ TradingView chart ══ */
-let tvLoaded=false;
-function loadTV(symbol,tabEl){
-  document.querySelectorAll('.mkt-tab').forEach(t=>t.classList.remove('active'));
-  if(tabEl) tabEl.classList.add('active');
-  const wrap=document.getElementById('tvWrap');
-  wrap.innerHTML='<div id="tv-container" style="height:480px;width:100%;"></div>';
-  function render(){
-    new TradingView.widget({
-      autosize:true, symbol:symbol, interval:'60',
-      timezone:'Etc/UTC', theme:'dark', style:'1', locale:'en',
-      toolbar_bg:'#090d07', backgroundColor:'#090d07',
-      gridColor:'rgba(255,255,255,0.04)',
-      enable_publishing:false, allow_symbol_change:true,
-      container_id:'tv-container', height:480, width:'100%',
-      hide_side_toolbar:false, studies:['RSI@tv-studioslibrary'],
-      withdateranges:true, save_image:false,
-    });
-  }
-  if(tvLoaded){ render(); }
-  else{
-    const s=document.createElement('script');
-    s.src='https://s3.tradingview.com/tv.js';
-    s.onload=()=>{ tvLoaded=true; render(); };
-    document.head.appendChild(s);
-  }
-}
-const mktEl=document.getElementById('market');
-if(mktEl){
-  const o=new IntersectionObserver(entries=>{
-    if(entries[0].isIntersecting){ loadTV('BINANCE:BTCUSDT',document.querySelector('.mkt-tab')); o.disconnect(); }
-  },{threshold:0.12});
-  o.observe(mktEl);
-}
+  <!-- Sound -->
+  <audio id="toast-sound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+  </audio>
 
-/* ══ COUNT-UP ══════════════════════════════════════
-   Counts from 0 → target with easeOutQuart curve.
-   Triggers when .stats-section enters the viewport.
-══════════════════════════════════════════════════ */
-(function () {
-  var nums    = document.querySelectorAll('.s-num');
-  var section = document.querySelector('.stats-section');
-  var fired   = false;
+</section>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/roi-engine.js"></script>
+<script>
+/* ══ GLOBALS ══════════════════════════════ */
+let currentUser = null, userProfile = null;
+let settings = {}, withdrawMin = 10, withdrawFee = 1;
+let allClaims = [];
+let chartPeriod = 7;
 
-  function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+const PLACEHOLDERS = [
+  'TXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  '0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  'bc1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+];
+const ADDR_KEYS = {
+  deposit_usdt_trc20:'USDT · TRC20',
+  deposit_usdt_bep20:'USDT · BEP20',
+  deposit_btc:'Bitcoin · BTC',
+  deposit_eth:'Ethereum · ETH'
+};
 
-  function runCounters() {
-    if (fired) return;
-    fired = true;
-    nums.forEach(function (el) {
-      var target  = +el.dataset.target;
-      var suffix  = el.dataset.suffix || '';
-      var dur     = 2400;
-      var t0      = performance.now();
-      (function tick(now) {
-        var p = Math.min((now - t0) / dur, 1);
-        var v = target * easeOut(p);
-        /* Format: always show integer unless < 1 */
-        el.textContent = (target < 10 ? Math.round(v * 10) / 10 : Math.round(v)) + suffix;
-        if (p < 1) requestAnimationFrame(tick);
-        else el.textContent = target + suffix;
-      })(t0);
-    });
-  }
+/* ══ INIT ══════════════════════════════════ */
+(async () => {
+  currentUser = await requireAuth();
+  if (!currentUser) return;
+  userProfile = await getProfile(currentUser.id);
 
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { runCounters(); io.disconnect(); }
-    }, { threshold: 0.3 });
-    io.observe(section);
+  // Greeting based on time
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+  document.getElementById('time-label').textContent = greet;
+
+  // Profile
+  const name = userProfile.full_name || 'Investor';
+  document.getElementById('user-name').textContent   = name.split(' ')[0];
+  document.getElementById('user-avatar').textContent = name[0].toUpperCase();
+
+  // Balance & stats
+  document.getElementById('balance-amount').childNodes[0].textContent = formatMoney(userProfile.balance) + ' ';
+  document.getElementById('total-deposited').textContent = formatMoney(userProfile.total_deposited);
+  document.getElementById('total-withdrawn').textContent = formatMoney(userProfile.total_withdrawn);
+  document.getElementById('ref-earnings').textContent    = formatMoney(userProfile.referral_earnings);
+
+  const daily = await ROIEngine.calcDailyProfit(currentUser.id);
+  document.getElementById('daily-profit').textContent       = formatMoney(daily);
+  document.getElementById('daily-profit-label').textContent = formatMoney(daily);
+
+  // Load profit claims for chart
+  const { data: claims } = await sb.from('profit_claims')
+    .select('amount, claimed_at')
+    .eq('user_id', currentUser.id)
+    .order('claimed_at', { ascending: true })
+    .limit(60);
+  allClaims = claims || [];
+  drawChart(7);
+
+  // Investments
+  const { data: investments } = await sb.from('investments')
+    .select('*, plans(name)')
+    .eq('user_id', currentUser.id).eq('status','active')
+    .order('started_at', { ascending: false });
+
+  const listEl = document.getElementById('investments-list');
+  if (!investments?.length) {
+    listEl.innerHTML = `
+      <div style="background:#FEFAE0;border-radius:16px;padding:28px 18px;text-align:center;box-shadow:0 1px 8px rgba(40,54,24,.06);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c4bfa8" stroke-width="1.5" style="margin:0 auto 12px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <p style="font-size:14px;font-weight:600;color:#283618;margin-bottom:6px;">No active investments</p>
+        <p style="font-size:12px;color:#9a9278;margin-bottom:16px;">Start your first investment to earn daily returns.</p>
+        <a href="invest.html" style="display:inline-block;padding:11px 24px;background:#606C38;color:#FEFAE0;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">Browse Plans</a>
+      </div>`;
   } else {
-    runCounters();
+    const ICON_SVGS = [
+      `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#606C38" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+      `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7a5800" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+      `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3a5020" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
+      `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c4da0" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    ];
+    const ICON_BG = ['#EDE8D0','#F7E8D0','#D4E0C8','#E8D4F0'];
+    listEl.innerHTML = investments.map((inv, i) => {
+      const started = new Date(inv.started_at);
+      const expires = new Date(inv.expires_at);
+      const now     = new Date();
+      const total   = expires - started;
+      const elapsed = now - started;
+      const pct     = Math.min(100, Math.max(0, Math.round(elapsed / total * 100)));
+      return `
+        <div class="inv-card">
+          <div class="inv-card-icon" style="background:${ICON_BG[i%ICON_BG.length]};">
+            ${ICON_SVGS[i%ICON_SVGS.length]}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div class="inv-card-name">${inv.plans?.name || 'Investment'}</div>
+            <div class="inv-card-date">Since ${started.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+            <div class="inv-card-progress">
+              <div class="inv-card-progress-fill" style="width:${pct}%;"></div>
+            </div>
+          </div>
+          <div class="inv-card-right">
+            <div class="inv-card-amount">${formatMoney(inv.amount)}</div>
+            <div class="inv-card-roi">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+              +${inv.daily_roi_percent}%/d
+            </div>
+          </div>
+        </div>`;
+    }).join('');
   }
+
+  // Load settings for modals
+  settings = await getAllSettings();
+  loadModalSettings();
 })();
+
+/* ══ CHART ══════════════════════════════════ */
+function setChartPeriod(days, btn) {
+  chartPeriod = days;
+  document.querySelectorAll('.chart-period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const labels = {7:'Last 7 days', 14:'Last 14 days', 30:'Last 30 days'};
+  document.getElementById('chart-change-label').textContent = labels[days] || '';
+  drawChart(days);
+}
+
+function drawChart(days) {
+  const svg = document.getElementById('chartSvg');
+  const xEl  = document.getElementById('chartXLabels');
+  const W = 340, H = 130, padL = 0, padR = 0, padT = 10, padB = 10;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Build daily buckets
+  const now = new Date();
+  const buckets = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    d.setHours(0,0,0,0);
+    buckets.push({ date: d, total: 0 });
+  }
+
+  allClaims.forEach(c => {
+    const cd = new Date(c.claimed_at);
+    cd.setHours(0,0,0,0);
+    const b = buckets.find(bk => bk.date.getTime() === cd.getTime());
+    if (b) b.total += parseFloat(c.amount);
+  });
+
+  // Running cumulative profit per day (or zero if no claims)
+  const vals = buckets.map(b => b.total);
+  const maxV = Math.max(...vals, 1);
+  const minV = 0;
+
+  // Generate smooth SVG path
+  const pts = vals.map((v, i) => {
+    const x = padL + (i / (vals.length - 1 || 1)) * plotW;
+    const y = padT + plotH - ((v - minV) / (maxV - minV)) * plotH;
+    return [x, y];
+  });
+
+  // Catmull-Rom spline → cubic bezier
+  function catmullToBezier(pts) {
+    if (pts.length < 2) return '';
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(i-1,0)];
+      const p1 = pts[i];
+      const p2 = pts[i+1];
+      const p3 = pts[Math.min(i+2, pts.length-1)];
+      const cp1x = p1[0] + (p2[0]-p0[0])/6;
+      const cp1y = p1[1] + (p2[1]-p0[1])/6;
+      const cp2x = p2[0] - (p3[0]-p1[0])/6;
+      const cp2y = p2[1] - (p3[1]-p1[1])/6;
+      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2[0]} ${p2[1]}`;
+    }
+    return d;
+  }
+
+  const linePath = catmullToBezier(pts);
+  const areaPath = linePath + ` L ${pts[pts.length-1][0]} ${H} L ${pts[0][0]} ${H} Z`;
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#606C38" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#606C38" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${areaPath}" fill="url(#chartGrad)"/>
+    <path d="${linePath}" fill="none" stroke="#606C38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((p,i) => `
+      <circle class="chart-dot" cx="${p[0]}" cy="${p[1]}" r="4" fill="#FEFAE0" stroke="#606C38" stroke-width="2"
+        data-val="${vals[i].toFixed(2)}"
+        data-date="${buckets[i].date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}"
+        style="cursor:pointer;" />
+    `).join('')}
+  `;
+
+  // X labels — show every nth
+  const step = days <= 7 ? 1 : days <= 14 ? 2 : 5;
+  xEl.innerHTML = buckets.map((b,i) => {
+    if (i % step !== 0 && i !== buckets.length-1) return '<span></span>';
+    return `<span style="font-size:10px;color:#c4bfa8;font-weight:500;">${b.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`;
+  }).join('');
+
+  // Tooltip on dot hover
+  const tooltip = document.getElementById('chartTooltip');
+  const chartArea = document.getElementById('chartArea');
+  svg.querySelectorAll('.chart-dot').forEach(dot => {
+    dot.addEventListener('mouseenter', e => {
+      const rect = chartArea.getBoundingClientRect();
+      const cx = parseFloat(dot.getAttribute('cx'));
+      const cy = parseFloat(dot.getAttribute('cy'));
+      const svgW = svg.getBoundingClientRect().width;
+      const svgH = svg.getBoundingClientRect().height;
+      const scaleX = svgW / W;
+      const scaleY = svgH / H;
+      tooltip.style.display  = 'block';
+      tooltip.style.left     = (cx * scaleX) + 'px';
+      tooltip.style.top      = (cy * scaleY) + 'px';
+      tooltip.textContent    = `${dot.dataset.date}: $${dot.dataset.val}`;
+      dot.setAttribute('r','6');
+    });
+    dot.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+      dot.setAttribute('r','4');
+    });
+  });
+}
+
+/* ══ MODALS ═══════════════════════════════ */
+function loadModalSettings() {
+  // Deposit addresses
+  const addrHtml = Object.entries(ADDR_KEYS).map(([key, label]) => {
+    const addr = settings[key]?.value || '';
+    if (!addr || PLACEHOLDERS.includes(addr)) return '';
+    return `
+      <div class="modal-addr-box">
+        <div>
+          <div class="modal-addr-net">${label}</div>
+          <div class="modal-addr-val" title="${addr}">${addr}</div>
+        </div>
+        <button class="modal-copy-btn" onclick="navigator.clipboard.writeText('${addr}').then(()=>Toast.show('Copied!','success'))">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+      </div>`;
+  }).join('');
+  document.getElementById('modal-deposit-addresses').innerHTML =
+    addrHtml || '<p style="font-size:12px;color:#9a9278;margin-bottom:12px;">Contact support for deposit addresses.</p>';
+
+  const depNote = settings['deposit_note']?.value || '';
+  const depNoteEl = document.getElementById('modal-deposit-note');
+  if (depNote) { depNoteEl.textContent = depNote; } else { depNoteEl.style.display = 'none'; }
+
+  // Withdrawal
+  withdrawMin = parseFloat(settings['withdrawal_min']?.value || 10);
+  withdrawFee = parseFloat(settings['withdrawal_fee']?.value || 1);
+  const nets  = (settings['withdrawal_networks']?.value || 'USDT-TRC20').split(',').map(n=>n.trim()).filter(Boolean);
+  document.getElementById('wd-network').innerHTML = nets.map(n=>`<option value="${n}">${n}</option>`).join('');
+
+  const wdNote = settings['withdrawal_note']?.value || '';
+  const wdNoteEl = document.getElementById('modal-withdraw-note');
+  if (wdNote) { wdNoteEl.textContent = wdNote; } else { wdNoteEl.style.display = 'none'; }
+  document.getElementById('wd-fee-note').textContent = `Fee: $${withdrawFee.toFixed(2)} · Min: $${withdrawMin.toFixed(2)}`;
+}
+
+function openDepositModal()  { document.getElementById('deposit-modal').style.display  = 'flex'; }
+function openWithdrawModal() { document.getElementById('withdraw-modal').style.display = 'flex'; }
+function closeOnOverlay(e, id) {
+  if (e.target === document.getElementById(id)) document.getElementById(id).style.display = 'none';
+}
+
+async function submitDeposit() {
+  const amount = parseFloat(document.getElementById('dep-amount').value);
+  const txHash = document.getElementById('dep-tx').value.trim();
+  const depMin = parseFloat(settings['deposit_min']?.value || 10);
+  if (!amount || amount < depMin) { Toast.show(`Minimum deposit is $${depMin}.`,'warning'); return; }
+  if (!txHash)                    { Toast.show('Please paste your transaction hash.','warning'); return; }
+  const btn = document.getElementById('dep-submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  const { error } = await sb.from('deposits').insert({
+    user_id: currentUser.id, amount, tx_hash: txHash, status: 'pending'
+  });
+  if (error) { Toast.show(error.message,'error'); btn.disabled=false; btn.textContent='Submit Deposit'; return; }
+  Toast.show('Deposit submitted! . will confirm within 24h.','success');
+  document.getElementById('deposit-modal').style.display = 'none';
+  document.getElementById('dep-amount').value = '';
+  document.getElementById('dep-tx').value     = '';
+  btn.disabled=false; btn.textContent='Submit Deposit';
+}
+
+async function submitWithdrawal() {
+  const amount  = parseFloat(document.getElementById('wd-amount').value);
+  const wallet  = document.getElementById('wd-wallet').value.trim();
+  const network = document.getElementById('wd-network').value;
+  if (!amount || amount < withdrawMin) { Toast.show(`Minimum is $${withdrawMin}.`,'warning'); return; }
+  if (!wallet)                          { Toast.show('Enter your wallet address.','warning'); return; }
+  if ((amount + withdrawFee) > (userProfile?.balance||0)) {
+    Toast.show(`Insufficient balance (incl. $${withdrawFee} fee).`,'error'); return;
+  }
+  const btn = document.getElementById('wd-submit-btn');
+  btn.disabled = true; btn.textContent = 'Requesting…';
+  const { error } = await sb.from('withdrawals').insert({
+    user_id: currentUser.id, amount, wallet_address: wallet, network, status: 'pending'
+  });
+  if (error) { Toast.show(error.message,'error'); btn.disabled=false; btn.textContent='Request Withdrawal'; return; }
+  await sb.from('profiles').update({ balance: userProfile.balance - amount - withdrawFee }).eq('id', currentUser.id);
+  Toast.show('Withdrawal requested!','success');
+  document.getElementById('withdraw-modal').style.display = 'none';
+  btn.disabled=false; btn.textContent='Request Withdrawal';
+  setTimeout(() => window.location.reload(), 1200);
+}
 </script>
 
 <script>
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement(
-        { pageLanguage: 'en', autoDisplay: false },
-        'google_translate_element'
-    );
+const countries = [
+  { name: "USA", flag: "https://flagcdn.com/us.svg" },
+  { name: "UK", flag: "https://flagcdn.com/gb.svg" },
+  { name: "Canada", flag: "https://flagcdn.com/ca.svg" },
+  { name: "Germany", flag: "https://flagcdn.com/de.svg" },
+  { name: "Australia", flag: "https://flagcdn.com/au.svg" },
+  { name: "Nigeria", flag: "https://flagcdn.com/ng.svg" },
+  { name: "UAE", flag: "https://flagcdn.com/ae.svg" }
+];
+
+/* NEW: action types */
+const actions = [
+  "invested in vault",
+  "deposited",
+  "withdrew"
+];
+
+const toast = document.getElementById("toast");
+const message = document.getElementById("toast-message");
+const flag = document.getElementById("flag");
+const sound = document.getElementById("toast-sound");
+
+/* -------- SOUND FIX -------- */
+let soundUnlocked = false;
+
+function unlockSound() {
+  if (soundUnlocked) return;
+  sound.volume = 0;
+  sound.play().then(() => {
+    sound.pause();
+    sound.currentTime = 0;
+    soundUnlocked = true;
+  }).catch(() => {});
 }
 
-// Suppress Google Translate banner without triggering mutation loops
-function suppressGoogleBanner() {
-    const banner = document.querySelector('.goog-te-banner-frame');
-    if (banner) {
-        banner.style.display = 'none';
-        banner.style.height = '0';
-    }
-    if (document.body.style.top && document.body.style.top !== '0px') {
-        document.body.style.top = '0px';
-    }
-    if (document.body.style.marginTop && document.body.style.marginTop !== '0px') {
-        document.body.style.marginTop = '0px';
-    }
+["click", "scroll", "keydown", "touchstart"].forEach(evt => {
+  document.addEventListener(evt, unlockSound, { once: true });
+});
+
+function playSound() {
+  if (!soundUnlocked) return;
+
+  sound.currentTime = 0;
+  sound.volume = 0.25;
+  sound.play().catch(() => {});
 }
 
-setInterval(suppressGoogleBanner, 800);
-window.addEventListener('load', suppressGoogleBanner);
+/* -------- RANDOM DATA -------- */
+function getRandomEmail() {
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const first = letters[Math.floor(Math.random() * letters.length)];
+  return `${first}***@gmail.com`;
+}
 
-// Load Google Translate script
-const gtScript = document.createElement("script");
-gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-document.body.appendChild(gtScript);
+function getRandomAmount() {
+  return (Math.floor(Math.random() * (10000 - 200 + 1)) + 200)
+    .toLocaleString();
+}
 
-// ---- Dropdown logic ----
-const langWidget   = document.querySelector(".lang-widget");
-const langCurrent  = document.getElementById("langCurrent");
-const langDropdown = document.getElementById("langDropdown");
+function getRandomAction() {
+  return actions[Math.floor(Math.random() * actions.length)];
+}
 
-// Hide widget on load, reveal after 10s
-langWidget.style.opacity = "0";
-langWidget.style.pointerEvents = "none";
-langWidget.style.transition = "opacity 0.5s ease";
-setTimeout(() => {
-    langWidget.style.opacity = "1";
-    langWidget.style.pointerEvents = "auto";
-}, 10000);
+/* -------- TIME -------- */
+let timeInterval;
 
-function applyLanguage(lang, flag, label, save) {
-    // Update button display
-    langCurrent.innerHTML = `<img src="${flag}"><span>${label}</span><span class="lang-caret">▼</span>`;
+function startLiveTime(element, startTime) {
+  clearInterval(timeInterval);
 
-    // Save to localStorage
-    if (save) {
-        localStorage.setItem('preferred_lang', JSON.stringify({ lang, flag, label }));
-    }
+  function update() {
+    const seconds = Math.floor((Date.now() - startTime) / 1000);
+    element.textContent = seconds < 5 ? "just now" : seconds + "s ago";
+  }
 
-    // Trigger Google Translate
-    const tryTranslate = setInterval(() => {
-        const select = document.querySelector(".goog-te-combo");
-        if (select) {
-            select.value = lang;
-            select.dispatchEvent(new Event("change"));
-            clearInterval(tryTranslate);
-            setTimeout(suppressGoogleBanner, 600);
-        }
+  update();
+  timeInterval = setInterval(update, 1000);
+}
+
+/* -------- TOAST -------- */
+function showToast() {
+  const country = countries[Math.floor(Math.random() * countries.length)];
+  const email = getRandomEmail();
+  const amount = getRandomAmount();
+  const action = getRandomAction();
+
+  flag.src = country.flag;
+  flag.onerror = () => flag.style.display = "none";
+  flag.style.display = "block";
+
+  const now = Date.now();
+
+  message.innerHTML = `
+    ${email} from ${country.name} 
+    <strong>${action}</strong> 
+    <span>$${amount}</span>
+    <small class="toast-time">just now</small>
+  `;
+
+  const timeEl = message.querySelector(".toast-time");
+
+  toast.classList.remove("hidden");
+
+  setTimeout(() => {
+    toast.classList.add("show");
+    playSound();
+    startLiveTime(timeEl, now);
+  }, 100);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      toast.classList.add("hidden");
+      clearInterval(timeInterval);
     }, 300);
+  }, 5000);
 }
 
-// Restore saved language on page load
-window.addEventListener('load', () => {
-    const saved = localStorage.getItem('preferred_lang');
-    if (saved) {
-        try {
-            const { lang, flag, label } = JSON.parse(saved);
-            if (lang && lang !== 'en') {
-                applyLanguage(lang, flag, label, false);
-            }
-        } catch(e) {}
-    }
-});
+/* -------- LOOP -------- */
+function startToasts() {
+  function loop() {
+    showToast();
+    const delay = Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
+    setTimeout(loop, delay);
+  }
+  loop();
+}
 
-langCurrent.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isOpen = langDropdown.classList.contains("open");
-    langDropdown.classList.toggle("open", !isOpen);
-    langWidget.classList.toggle("open", !isOpen);
-});
-
-document.querySelectorAll(".lang-item").forEach(item => {
-    item.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const lang  = item.getAttribute("data-lang");
-        const flag  = item.querySelector("img").src;
-        const label = item.innerText.trim();
-
-        applyLanguage(lang, flag, label, true);
-
-        langDropdown.classList.remove("open");
-        langWidget.classList.remove("open");
-    });
-});
-
-// Close when clicking outside
-document.addEventListener("click", () => {
-    langDropdown.classList.remove("open");
-    langWidget.classList.remove("open");
-});
+startToasts();
 </script>
 </body>
 </html>

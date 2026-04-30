@@ -235,6 +235,30 @@
   </main>
 </div><!-- /admin-layout -->
 
+<!-- ═══ MOBILE BOTTOM NAV (visible on mobile only) ═══ -->
+<nav class="admin-mobile-nav" id="adminMobileNav">
+  <div class="admin-mobile-nav-item active" data-tab="overview" onclick="switchTab('overview',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Home
+  </div>
+  <div class="admin-mobile-nav-item" data-tab="users" onclick="switchTab('users',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+    Users
+  </div>
+  <div class="admin-mobile-nav-item" data-tab="deposits" onclick="switchTab('deposits',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Deposits
+  </div>
+  <div class="admin-mobile-nav-item" data-tab="withdrawals" onclick="switchTab('withdrawals',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+    Withdraw
+  </div>
+  <div class="admin-mobile-nav-item" data-tab="plans" onclick="switchTab('plans',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    More
+  </div>
+</nav>
+
 <!-- Edit User Modal -->
 <div class="modal-overlay" id="edit-user-modal" style="display:none;">
   <div class="modal">
@@ -335,11 +359,14 @@ const TAB_LABELS = {
 })();
 
 /* ── TAB SWITCHER ─────────────────── */
-async function switchTab(tab) {
+async function switchTab(tab, callerEl) {
   document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
   document.getElementById('tab-' + tab).style.display = 'block';
-  document.querySelectorAll('.admin-nav-item[data-tab]').forEach(el =>
+
+  // Sync sidebar + mobile nav active states
+  document.querySelectorAll('.admin-nav-item[data-tab], .admin-mobile-nav-item[data-tab]').forEach(el =>
     el.classList.toggle('active', el.dataset.tab === tab));
+
   document.getElementById('page-title').textContent = TAB_LABELS[tab] || tab;
   const loaders = {
     users: loadUsers, withdrawals: loadWithdrawals,
@@ -456,18 +483,39 @@ async function loadWithdrawals() {
         </div>`:'—'}</td>
     </tr>`).join('') || '<tr><td colspan="7" class="text-muted">No withdrawals.</td></tr>';
 }
+
 async function processWithdrawal(id, userId, amount, status) {
+  const amt = parseFloat(amount);
+
   if (status === 'declined') {
-    // refund balance
-    const { data: prof } = await sb.from('profiles').select('balance').eq('id',userId).single();
-    await sb.from('profiles').update({ balance: parseFloat(prof.balance)+parseFloat(amount) }).eq('id',userId);
+    // Refund the held balance back to user
+    const { data: prof, error: profErr } = await sb.from('profiles')
+      .select('balance').eq('id', userId).single();
+    if (profErr || !prof) { Toast.show('Could not fetch user profile.','error'); return; }
+    const { error } = await sb.from('profiles')
+      .update({ balance: parseFloat(prof.balance) + amt })
+      .eq('id', userId);
+    if (error) { Toast.show('Balance refund failed: ' + error.message,'error'); return; }
+
   } else if (status === 'approved') {
-    const { data: prof } = await sb.from('profiles').select('total_withdrawn').eq('id',userId).single();
-    await sb.from('profiles').update({ total_withdrawn: parseFloat(prof.total_withdrawn||0)+parseFloat(amount) }).eq('id',userId);
+    // Increment total_withdrawn using COALESCE to handle null
+    const { data: prof, error: profErr } = await sb.from('profiles')
+      .select('total_withdrawn').eq('id', userId).single();
+    if (profErr || !prof) { Toast.show('Could not fetch user profile.','error'); return; }
+    const { error } = await sb.from('profiles')
+      .update({ total_withdrawn: parseFloat(prof.total_withdrawn || 0) + amt })
+      .eq('id', userId);
+    if (error) { Toast.show('total_withdrawn update failed: ' + error.message,'error'); return; }
   }
-  await sb.from('withdrawals').update({ status, processed_at: new Date().toISOString() }).eq('id',id);
-  Toast.show(`Withdrawal ${status}.`, status==='approved'?'success':'info');
-  await loadWithdrawals(); await loadOverview();
+
+  const { error: wErr } = await sb.from('withdrawals')
+    .update({ status, processed_at: new Date().toISOString() })
+    .eq('id', id);
+  if (wErr) { Toast.show('Status update failed: ' + wErr.message,'error'); return; }
+
+  Toast.show(`Withdrawal ${status}.`, status === 'approved' ? 'success' : 'info');
+  await loadWithdrawals();
+  await loadOverview();
 }
 
 /* ── DEPOSITS ─────────────────────── */
@@ -489,18 +537,50 @@ async function loadDeposits() {
         </div>`:'—'}</td>
     </tr>`).join('') || '<tr><td colspan="6" class="text-muted">No deposits.</td></tr>';
 }
+
 async function confirmDeposit(depId, userId, amount) {
-  const { data: prof } = await sb.from('profiles').select('balance,total_deposited').eq('id',userId).single();
-  await sb.from('profiles').update({
-    balance: parseFloat(prof.balance)+parseFloat(amount),
-    total_deposited: parseFloat(prof.total_deposited)+parseFloat(amount)
-  }).eq('id',userId);
-  await sb.from('deposits').update({ status:'confirmed' }).eq('id',depId);
-  Toast.show('Deposit confirmed and balance credited.','success');
-  await loadDeposits(); await loadOverview();
+  const amt = parseFloat(amount);
+
+  // Fetch current profile
+  const { data: prof, error: profErr } = await sb.from('profiles')
+    .select('balance, total_deposited, referred_by, referral_earnings')
+    .eq('id', userId).single();
+
+  if (profErr || !prof) { Toast.show('Could not fetch user profile: ' + (profErr?.message||'unknown'),'error'); return; }
+
+  // Credit balance + total_deposited
+  const { error: creditErr } = await sb.from('profiles').update({
+    balance:         parseFloat(prof.balance        || 0) + amt,
+    total_deposited: parseFloat(prof.total_deposited|| 0) + amt
+  }).eq('id', userId);
+  if (creditErr) { Toast.show('Balance credit failed: ' + creditErr.message,'error'); return; }
+
+  // Credit 5% referral earnings to referrer if exists
+  if (prof.referred_by) {
+    const refBonus = amt * 0.05;
+    const { data: referrer } = await sb.from('profiles')
+      .select('balance, referral_earnings').eq('id', prof.referred_by).single();
+    if (referrer) {
+      await sb.from('profiles').update({
+        balance:           parseFloat(referrer.balance           || 0) + refBonus,
+        referral_earnings: parseFloat(referrer.referral_earnings || 0) + refBonus
+      }).eq('id', prof.referred_by);
+    }
+  }
+
+  // Mark deposit confirmed
+  const { error: depErr } = await sb.from('deposits')
+    .update({ status: 'confirmed' }).eq('id', depId);
+  if (depErr) { Toast.show('Deposit status update failed: ' + depErr.message,'error'); return; }
+
+  Toast.show('Deposit confirmed — balance credited' + (prof.referred_by ? ' + referral bonus paid.' : '.'),'success');
+  await loadDeposits();
+  await loadOverview();
 }
+
 async function rejectDeposit(depId) {
-  await sb.from('deposits').update({ status:'failed' }).eq('id',depId);
+  const { error } = await sb.from('deposits').update({ status:'failed' }).eq('id',depId);
+  if (error) { Toast.show(error.message,'error'); return; }
   Toast.show('Deposit rejected.','info');
   await loadDeposits();
 }

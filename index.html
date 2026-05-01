@@ -1427,6 +1427,156 @@ body.translated-rtl {
   }
   .ss-card { opacity: 1; transform: none; }
 }
+
+.investment-section {
+  background-color: #2A2F25; /* Pine Tree */
+  padding: 60px 20px;
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-title {
+  color: #FFF8DC; /* Cornsilk */
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: #FFF8DC; /* Cornsilk */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Control SVG size and color here */
+.icon-box svg {
+  width: 48px;
+  height: 48px;
+  stroke: #2A2F25;
+  margin-bottom: 15px;
+}
+
+.card h3 {
+  margin: 0 0 15px 0;
+  color: #2A2F25;
+}
+
+.card p {
+  color: #444;
+  line-height: 1.6;
+}
+
+.cta-container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.cta-button {
+  background-color: #8B4513; /* Warm Brown */
+  color: #FFF8DC;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+
+:root {
+  --pine: #0B3D2E;
+  --cornsilk: #FFF8DC;
+  --black: #0a0a0a;
+}
+
+.faq-section {
+  width: 100%;
+  padding: 100px 20px;
+  background: var(--cornsilk);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.faq-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Header */
+.faq-header h2 {
+  font-size: 2.4rem;
+  color: var(--black);
+  margin-bottom: 8px;
+}
+
+.faq-header p {
+  color: #555;
+}
+
+/* Item */
+.faq-item {
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 20px 0;
+}
+
+/* Question */
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--black);
+}
+
+.faq-question:hover {
+  color: var(--pine);
+}
+
+/* Icon */
+.icon {
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .icon {
+  transform: rotate(45deg);
+}
+
+/* Answer */
+.faq-answer {
+  font-size: 0.95rem;
+  color: #333;
+  margin-top: 10px;
+  line-height: 1.6;
+  min-height: 0;
+}
+
+/* Cursor effect */
+.typing::after {
+  content: "|";
+  margin-left: 3px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
 </style>
 </head>
 <body>
@@ -1829,6 +1979,54 @@ body.translated-rtl {
 
 </section>
 
+
+<section class="investment-section">
+  <div class="container">
+    <h2 class="section-title">Start Growing Your Crypto Investment Today!</h2>
+   
+    <div class="cards-grid">
+      <div class="card">
+        <div class="icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <h3>Deposit Funds</h3>
+        <p>Create an account with us and fund it by transferring money, providing you with the initial capital to start your investment journey.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+            <polyline points="16 7 22 7 22 13"></polyline>
+          </svg>
+        </div>
+        <h3>Start Investing</h3>
+        <p>Select an investment plan that suits your financial goals, and preferences, and invest your funds accordingly to take advantage of potential returns.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </div>
+        <h3>Withdraw Funds</h3>
+        <p>Sit back, monitor your investments, and let your funds grow. Easily withdraw your earnings to enjoy the rewards of your investment efforts.</p>
+      </div>
+    </div>
+
+    <div class="cta-container">
+   <a href="login.html">  <button class="cta-button">Start earning →</button></a>
+    </div>
+  </div>
+</section>
+
+
 <!-- ══ CTA SECTION ════════════════════════════ -->
 <section class="sec-cta">
   <div class="cta-glow"></div>
@@ -1850,6 +2048,66 @@ body.translated-rtl {
     </div>
   </div>
 </section>
+
+
+<!--faqs-->
+<section class="faq-section">
+
+  <div class="faq-container">
+    <div class="faq-header">
+      <h2>Apex Vaults FAQs</h2>
+      <p>.</p>
+    </div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-question">
+          What is Apex Vaults?
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer" data-text="Apex Vaults is a multi-asset investment platform that allows users to invest in real estate, cryptocurrency, and oil & gas sectors through a unified, secure ecosystem."></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          How does real estate investment work?
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer" data-text="Your funds are pooled into professionally managed properties that generate income through rent and long-term appreciation, giving you passive returns."></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          Is crypto investment safe on Apex Vaults?
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer" data-text="We reduce crypto risk using diversified strategies, audited smart contracts, and institutional-grade asset management techniques."></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          What are oil and gas investments?
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer" data-text="These investments fund energy production projects, allowing you to earn returns from global oil and gas demand cycles."></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          How secure is my investment?
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer" data-text="Apex Vaults uses multi-layer encryption, asset-backed strategies, and strict compliance frameworks to ensure your funds are protected at all times."></div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+
+
 
 <!-- ══ FOOTER ══════════════════════════════════ -->
 <footer>
@@ -2491,7 +2749,7 @@ const countries = [
   { name: "Canada", flag: "https://flagcdn.com/ca.svg" },
   { name: "Germany", flag: "https://flagcdn.com/de.svg" },
   { name: "Australia", flag: "https://flagcdn.com/au.svg" },
-  { name: "Nigeria", flag: "https://flagcdn.com/ng.svg" },
+  { name: "UAE", flag: "https://flagcdn.com/ae.svg" },
   { name: "UAE", flag: "https://flagcdn.com/ae.svg" }
 ];
 
@@ -2639,6 +2897,64 @@ setTimeout(() => {
   const popup = document.getElementById('chatBubblePopup');
   if (popup) popup.classList.add('visible');
 }, 40000);
+
+
+// Accordion
+const items = document.querySelectorAll(".faq-item");
+
+let currentTyping = null;
+
+items.forEach(item => {
+  const question = item.querySelector(".faq-question");
+  const answer = item.querySelector(".faq-answer");
+
+  question.addEventListener("click", () => {
+
+    // Close all others
+    items.forEach(i => {
+      if (i !== item) {
+        i.classList.remove("active");
+        i.querySelector(".faq-answer").textContent = "";
+      }
+    });
+
+    // Toggle current
+    const isActive = item.classList.contains("active");
+
+    if (isActive) {
+      item.classList.remove("active");
+      answer.textContent = "";
+      return;
+    }
+
+    item.classList.add("active");
+
+    // Start typing
+    typeText(answer, answer.dataset.text);
+  });
+});
+
+
+function typeText(element, text) {
+  element.textContent = "";
+  element.classList.add("typing");
+
+  let i = 0;
+
+  if (currentTyping) clearInterval(currentTyping);
+
+  currentTyping = setInterval(() => {
+    element.textContent += text.charAt(i);
+    i++;
+
+    if (i >= text.length) {
+      clearInterval(currentTyping);
+      element.classList.remove("typing");
+    }
+  }, 18); // typing speed
+}
 </script>
+
+
 </body>
 </html>

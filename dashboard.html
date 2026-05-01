@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Dashboard — Apex Vault</title>
+<title>Dashboard — EarthROI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="css/main.css"/>
 <style>
-/* ══ DASHBOARD — Apex Vault palette ══════════════════════════
+/* ══ DASHBOARD — EarthROI palette ══════════════════════════
    Pine #283618 · Olive #606C38 · Cornsilk #FEFAE0 · Earth #DDA15E
 ══════════════════════════════════════════════════════════ */
 
@@ -406,87 +406,61 @@ select.d-form-input { cursor: pointer; }
   text-align: center; margin-top: 10px;
   line-height: 1.5;
 }
-</style>
-
-<style>
-:root {
-  --pine-tree: #3a5f5f;
-  --white: #ffffff;
-  --black: #000000;
+/* ── MARKET SECTION ──────────────── */
+.portfolio-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 10px;
 }
-
-/* Container at top */
-#toast-section {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 9999;
+.portfolio-card {
+  background: #FEFAE0; border-radius: 16px; padding: 16px;
+  box-shadow: 0 2px 12px rgba(40,54,24,.07);
+  cursor: pointer; transition: transform .18s, box-shadow .18s;
 }
-
-/* Toast */
-.toast {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  background: var(--white);
-  border: 2px solid var(--pine-tree);
-
-  padding: 12px 14px;
-  border-radius: 0; /* square */
-
-  min-width: 260px;
-  max-width: 320px;
-
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-
-  opacity: 0;
-  transform: translateY(-20px);
-
-  transition: 
-    opacity 0.3s ease,
-    transform 0.3s ease;
+.portfolio-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(40,54,24,.12); }
+.pc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.pc-logo {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #EDE8D0; display: flex; align-items: center;
+  justify-content: center; overflow: hidden; flex-shrink: 0;
 }
+.pc-logo img { width: 26px; height: 26px; object-fit: contain; }
+.pc-logo-fb { font-size: 12px; font-weight: 800; color: #606C38; }
+.pc-ticker { font-size: 13px; font-weight: 700; color: #283618; }
+.pc-name { font-size: 10px; color: #9a9278; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
+.pc-label { font-size: 9px; font-weight: 600; color: #b0a98c; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 3px; }
+.pc-price { font-size: 20px; font-weight: 700; color: #283618; letter-spacing: -.5px; font-family: 'DM Mono', monospace; }
+.pc-change { font-size: 11px; font-weight: 600; margin-top: 3px; }
+.pc-change.up { color: #27ae60; } .pc-change.down { color: #e74c3c; }
+.pc-spark { margin-top: 10px; height: 38px; }
 
-/* Show */
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
+.watchlist-card {
+  background: #FEFAE0; border-radius: 16px; padding: 4px 0;
+  box-shadow: 0 2px 12px rgba(40,54,24,.07); overflow: hidden;
 }
-
-/* Hidden */
-.hidden {
-  display: none;
+.wl-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px; border-bottom: 1px solid #F0EBD4;
+  cursor: pointer; transition: background .15s;
 }
-
-/* Flag */
-.flag {
-  width: 26px;
-  height: 18px;
-  object-fit: cover;
-  display: block;
-  border: 1px solid #ddd;
+.wl-item:last-child { border-bottom: none; }
+.wl-item:hover { background: #F5F0E0; }
+.wl-logo {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: #EDE8D0; display: flex; align-items: center;
+  justify-content: center; overflow: hidden; flex-shrink: 0;
 }
-
-/* Text */
-.toast-text p {
-  margin: 0;
-  font-size: 14px;
-  color: var(--black);
-  font-weight: 500;
-}
-
-/* Amount highlight */
-.toast-text span {
-  font-weight: 700;
-  color: var(--pine-tree);
-}
-/* Timestamp */
-.toast-time {
-  display: block;
-  font-size: 12px;
-  color: #555;
-  margin-top: 4px;
+.wl-logo img { width: 24px; height: 24px; object-fit: contain; }
+.wl-logo-fb { font-size: 11px; font-weight: 800; color: #606C38; }
+.wl-ticker { font-size: 13px; font-weight: 700; color: #283618; }
+.wl-name { font-size: 10px; color: #9a9278; margin-top: 1px; }
+.wl-spark { flex: 1; height: 30px; min-width: 55px; }
+.wl-right { text-align: right; flex-shrink: 0; }
+.wl-price { font-size: 14px; font-weight: 700; color: #283618; font-family: 'DM Mono', monospace; }
+.wl-change { font-size: 11px; font-weight: 600; margin-top: 2px; }
+.wl-change.up { color: #27ae60; } .wl-change.down { color: #e74c3c; }
+.mkt-skeleton {
+  background: linear-gradient(90deg,#F0EBD4 25%,#E8E2C8 50%,#F0EBD4 75%);
+  background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 16px;
 }
 </style>
 </head>
@@ -603,8 +577,29 @@ select.d-form-input { cursor: pointer; }
       <div class="d-section-title">Active Investments</div>
       <a href="invest.html" style="font-size:12px;font-weight:600;color:#606C38;text-decoration:none;">+ New</a>
     </div>
-    <div id="investments-list" style="display:flex;flex-direction:column;gap:10px;">
-      <!-- Loaded by JS -->
+    <div id="investments-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+
+  <!-- Market Portfolio -->
+  <div>
+    <div class="d-section-head">
+      <div class="d-section-title">Portfolio</div>
+      <span style="font-size:12px;font-weight:600;color:#606C38;">Live</span>
+    </div>
+    <div class="portfolio-grid" id="portfolio-grid">
+      <div class="mkt-skeleton" style="height:140px;"></div>
+      <div class="mkt-skeleton" style="height:140px;"></div>
+    </div>
+  </div>
+
+  <!-- Watchlist -->
+  <div>
+    <div class="d-section-head">
+      <div class="d-section-title">Watchlist</div>
+      <span style="font-size:12px;color:#9a9278;">Real-time</span>
+    </div>
+    <div class="watchlist-card" id="watchlist-card">
+      <div class="mkt-skeleton" style="height:200px;margin:4px;border-radius:12px;"></div>
     </div>
   </div>
 
@@ -657,7 +652,7 @@ select.d-form-input { cursor: pointer; }
     <input class="d-form-input" type="text" id="dep-tx" placeholder="Paste TX hash after sending"/>
 
     <button class="d-modal-submit" id="dep-submit-btn" onclick="submitDeposit()">Submit Deposit</button>
-    <p class="d-modal-note">Adm confirms within 24 hours after verifying your TX.</p>
+    <p class="d-modal-note">Admin confirms within 24 hours after verifying your TX.</p>
   </div>
 </div>
 
@@ -687,26 +682,10 @@ select.d-form-input { cursor: pointer; }
 
     <p id="wd-fee-note" style="font-size:12px;color:#9a9278;margin-bottom:14px;"></p>
     <button class="d-modal-submit" id="wd-submit-btn" onclick="submitWithdrawal()">Request Withdrawal</button>
-    <p class="d-modal-note">Processed within 24 hours after . approval.</p>
+    <p class="d-modal-note">Processed within 24 hours after admin approval.</p>
   </div>
 </div>
- <!-- Toast Notification -->
-<section id="toast-section">
 
-  <div id="toast" class="toast hidden">
-    <img id="flag" class="flag" src="" alt="country flag">
-    
-    <div class="toast-text">
-      <p id="toast-message"></p>
-    </div>
-  </div>
-
-  <!-- Sound -->
-  <audio id="toast-sound" preload="auto">
-    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
-  </audio>
-
-</section>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/supabase-config.js"></script>
@@ -994,7 +973,7 @@ async function submitDeposit() {
     user_id: currentUser.id, amount, tx_hash: txHash, status: 'pending'
   });
   if (error) { Toast.show(error.message,'error'); btn.disabled=false; btn.textContent='Submit Deposit'; return; }
-  Toast.show('Deposit submitted! . will confirm within 24h.','success');
+  Toast.show('Deposit submitted! Admin will confirm within 24h.','success');
   document.getElementById('deposit-modal').style.display = 'none';
   document.getElementById('dep-amount').value = '';
   document.getElementById('dep-tx').value     = '';
@@ -1022,138 +1001,207 @@ async function submitWithdrawal() {
   btn.disabled=false; btn.textContent='Request Withdrawal';
   setTimeout(() => window.location.reload(), 1200);
 }
-</script>
 
-<script>
-const countries = [
-  { name: "USA", flag: "https://flagcdn.com/us.svg" },
-  { name: "UK", flag: "https://flagcdn.com/gb.svg" },
-  { name: "Canada", flag: "https://flagcdn.com/ca.svg" },
-  { name: "Germany", flag: "https://flagcdn.com/de.svg" },
-  { name: "Australia", flag: "https://flagcdn.com/au.svg" },
-  { name: "Nigeria", flag: "https://flagcdn.com/ng.svg" },
-  { name: "UAE", flag: "https://flagcdn.com/ae.svg" }
+/* ══ MARKET DATA ═══════════════════════════
+   Uses Yahoo Finance via allorigins CORS proxy
+   Logos from Google Favicon / Clearbit API
+═══════════════════════════════════════════ */
+
+// Portfolio stocks (shown as big cards)
+const PORTFOLIO = [
+  { ticker:'AAPL',  name:'Apple Inc.',     domain:'apple.com'     },
+  { ticker:'MSFT',  name:'Microsoft Corp.',domain:'microsoft.com' },
 ];
 
-/* NEW: action types */
-const actions = [
-  "invested in vault",
-  "deposited",
-  "withdrew"
+// Watchlist stocks (shown as list rows)
+const WATCHLIST = [
+  { ticker:'GOOGL', name:'Alphabet Inc.',  domain:'google.com'     },
+  { ticker:'AMZN',  name:'Amazon.com',     domain:'amazon.com'     },
+  { ticker:'TSLA',  name:'Tesla Inc.',     domain:'tesla.com'      },
+  { ticker:'NVDA',  name:'NVIDIA Corp.',   domain:'nvidia.com'     },
+  { ticker:'META',  name:'Meta Platforms', domain:'meta.com'       },
+  { ticker:'BRK-B', name:'Berkshire Hath.', domain:'berkshirehathaway.com' },
 ];
 
-const toast = document.getElementById("toast");
-const message = document.getElementById("toast-message");
-const flag = document.getElementById("flag");
-const sound = document.getElementById("toast-sound");
+const ALL_TICKERS = [...PORTFOLIO, ...WATCHLIST];
 
-/* -------- SOUND FIX -------- */
-let soundUnlocked = false;
-
-function unlockSound() {
-  if (soundUnlocked) return;
-  sound.volume = 0;
-  sound.play().then(() => {
-    sound.pause();
-    sound.currentTime = 0;
-    soundUnlocked = true;
-  }).catch(() => {});
+// Logo URL using Google's favicon service (reliable, no auth needed)
+function logoUrl(domain) {
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 }
 
-["click", "scroll", "keydown", "touchstart"].forEach(evt => {
-  document.addEventListener(evt, unlockSound, { once: true });
-});
+// Draw a mini sparkline SVG from array of price values
+function drawSparkline(container, values, isUp, W = 100, H = 36) {
+  if (!values || values.length < 2) {
+    container.innerHTML = '';
+    return;
+  }
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const pts = values.map((v, i) => {
+    const x = (i / (values.length - 1)) * W;
+    const y = H - ((v - min) / range) * (H - 4) - 2;
+    return `${x},${y}`;
+  });
+  const color = isUp ? '#27ae60' : '#e74c3c';
+  const fillColor = isUp ? 'rgba(39,174,96,0.1)' : 'rgba(231,76,60,0.1)';
+  const polyline = pts.join(' ');
+  const lastPt = pts[pts.length - 1].split(',');
+  const firstPt = pts[0].split(',');
 
-function playSound() {
-  if (!soundUnlocked) return;
-
-  sound.currentTime = 0;
-  sound.volume = 0.25;
-  sound.play().catch(() => {});
+  container.innerHTML = `
+    <svg width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sg${container.id || Math.random().toString(36).slice(2)}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="${polyline} ${lastPt[0]},${H} ${firstPt[0]},${H}"
+        fill="${fillColor}" />
+      <polyline points="${polyline}"
+        fill="none" stroke="${color}" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
 }
 
-/* -------- RANDOM DATA -------- */
-function getRandomEmail() {
-  const letters = "abcdefghijklmnopqrstuvwxyz";
-  const first = letters[Math.floor(Math.random() * letters.length)];
-  return `${first}***@gmail.com`;
+// Fetch quote + 1-day sparkline data via Yahoo Finance (allorigins proxy)
+async function fetchQuote(ticker) {
+  try {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d`;
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) throw new Error('proxy error');
+    const outer = await res.json();
+    const data = JSON.parse(outer.contents);
+    const result = data?.chart?.result?.[0];
+    if (!result) throw new Error('no result');
+
+    const meta   = result.meta;
+    const closes = result.indicators?.quote?.[0]?.close?.filter(v => v != null) || [];
+    const price  = meta.regularMarketPrice ?? closes[closes.length - 1] ?? 0;
+    const prev   = meta.chartPreviousClose ?? meta.previousClose ?? price;
+    const change    = price - prev;
+    const changePct = prev ? (change / prev) * 100 : 0;
+
+    return { price, change, changePct, sparkline: closes };
+  } catch (_) {
+    return null; // silent fail — show fallback
+  }
 }
 
-function getRandomAmount() {
-  return (Math.floor(Math.random() * (10000 - 200 + 1)) + 200)
-    .toLocaleString();
+// Format price display
+function fmtPrice(p) {
+  if (p >= 1000) return '$' + p.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  return '$' + p.toFixed(2);
+}
+function fmtChange(pct) {
+  const sign = pct >= 0 ? '+' : '';
+  return `${sign}${pct.toFixed(2)}%`;
 }
 
-function getRandomAction() {
-  return actions[Math.floor(Math.random() * actions.length)];
+// Render portfolio cards
+function renderPortfolioCard(stock, quote, idx) {
+  const isUp = !quote || quote.changePct >= 0;
+  const price = quote ? fmtPrice(quote.price) : '—';
+  const chg   = quote ? fmtChange(quote.changePct) : '';
+  const sparkId = `spark-pc-${idx}`;
+
+  return `
+    <div class="portfolio-card">
+      <div class="pc-top">
+        <div class="pc-logo">
+          <img src="${logoUrl(stock.domain)}"
+               alt="${stock.ticker}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <span class="pc-logo-fb" style="display:none;">${stock.ticker.slice(0,2)}</span>
+        </div>
+        <div>
+          <div class="pc-ticker">${stock.ticker}</div>
+          <div class="pc-name">${stock.name}</div>
+        </div>
+      </div>
+      <div class="pc-label">Portfolio</div>
+      <div class="pc-price">${price}</div>
+      ${quote ? `<div class="pc-change ${isUp?'up':'down'}">${isUp?'▲':'▼'} ${fmtChange(quote.changePct)}</div>` : ''}
+      <div class="pc-spark" id="${sparkId}"></div>
+    </div>`;
 }
 
-/* -------- TIME -------- */
-let timeInterval;
+// Render watchlist row
+function renderWatchlistRow(stock, quote, idx) {
+  const isUp = !quote || quote.changePct >= 0;
+  const price = quote ? fmtPrice(quote.price) : '—';
+  const sparkId = `spark-wl-${idx}`;
 
-function startLiveTime(element, startTime) {
-  clearInterval(timeInterval);
+  return `
+    <div class="wl-item">
+      <div class="wl-logo">
+        <img src="${logoUrl(stock.domain)}"
+             alt="${stock.ticker}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <span class="wl-logo-fb" style="display:none;">${stock.ticker.slice(0,2)}</span>
+      </div>
+      <div>
+        <div class="wl-ticker">${stock.ticker}</div>
+        <div class="wl-name">${stock.name}</div>
+      </div>
+      <div class="wl-spark" id="${sparkId}"></div>
+      <div class="wl-right">
+        <div class="wl-price">${price}</div>
+        ${quote ? `<div class="wl-change ${isUp?'up':'down'}">${isUp?'▲':'▼'} ${fmtChange(quote.changePct)}</div>` : ''}
+      </div>
+    </div>`;
+}
 
-  function update() {
-    const seconds = Math.floor((Date.now() - startTime) / 1000);
-    element.textContent = seconds < 5 ? "just now" : seconds + "s ago";
+// Main market loader
+async function loadMarketData() {
+  // Render skeletons already in HTML
+  // Fetch all quotes concurrently
+  const quotes = await Promise.all(ALL_TICKERS.map(s => fetchQuote(s.ticker)));
+
+  // Render portfolio cards
+  const pgEl = document.getElementById('portfolio-grid');
+  if (pgEl) {
+    pgEl.innerHTML = PORTFOLIO.map((s, i) =>
+      renderPortfolioCard(s, quotes[i], i)
+    ).join('');
+
+    // Draw sparklines after DOM inserted
+    PORTFOLIO.forEach((s, i) => {
+      const q = quotes[i];
+      const el = document.getElementById(`spark-pc-${i}`);
+      if (el && q?.sparkline?.length) {
+        el.id = `spark-pc-${i}`;
+        drawSparkline(el, q.sparkline, q.changePct >= 0, 120, 38);
+      }
+    });
   }
 
-  update();
-  timeInterval = setInterval(update, 1000);
-}
+  // Render watchlist
+  const wlEl = document.getElementById('watchlist-card');
+  if (wlEl) {
+    wlEl.innerHTML = WATCHLIST.map((s, i) =>
+      renderWatchlistRow(s, quotes[PORTFOLIO.length + i], i)
+    ).join('');
 
-/* -------- TOAST -------- */
-function showToast() {
-  const country = countries[Math.floor(Math.random() * countries.length)];
-  const email = getRandomEmail();
-  const amount = getRandomAmount();
-  const action = getRandomAction();
-
-  flag.src = country.flag;
-  flag.onerror = () => flag.style.display = "none";
-  flag.style.display = "block";
-
-  const now = Date.now();
-
-  message.innerHTML = `
-    ${email} from ${country.name} 
-    <strong>${action}</strong> 
-    <span>$${amount}</span>
-    <small class="toast-time">just now</small>
-  `;
-
-  const timeEl = message.querySelector(".toast-time");
-
-  toast.classList.remove("hidden");
-
-  setTimeout(() => {
-    toast.classList.add("show");
-    playSound();
-    startLiveTime(timeEl, now);
-  }, 100);
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-
-    setTimeout(() => {
-      toast.classList.add("hidden");
-      clearInterval(timeInterval);
-    }, 300);
-  }, 5000);
-}
-
-/* -------- LOOP -------- */
-function startToasts() {
-  function loop() {
-    showToast();
-    const delay = Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
-    setTimeout(loop, delay);
+    WATCHLIST.forEach((s, i) => {
+      const q = quotes[PORTFOLIO.length + i];
+      const el = document.getElementById(`spark-wl-${i}`);
+      if (el && q?.sparkline?.length) {
+        drawSparkline(el, q.sparkline, q.changePct >= 0, 80, 30);
+      }
+    });
   }
-  loop();
+
+  // Refresh every 5 minutes
+  setTimeout(loadMarketData, 5 * 60 * 1000);
 }
 
-startToasts();
+// Kick off market data load (non-blocking — runs after auth init)
+setTimeout(loadMarketData, 500);
+
 </script>
 </body>
 </html>

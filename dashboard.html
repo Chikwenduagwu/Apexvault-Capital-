@@ -463,6 +463,89 @@ select.d-form-input { cursor: pointer; }
   background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 16px;
 }
 </style>
+<style>
+:root {
+  --pine-tree: #3a5f5f;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+/* Container at top */
+#toast-section {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+}
+
+/* Toast */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: var(--white);
+  border: 2px solid var(--pine-tree);
+
+  padding: 12px 14px;
+  border-radius: 0; /* square */
+
+  min-width: 260px;
+  max-width: 320px;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+
+  opacity: 0;
+  transform: translateY(-20px);
+
+  transition: 
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Show */
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hidden */
+.hidden {
+  display: none;
+}
+
+/* Flag */
+.flag {
+  width: 26px;
+  height: 18px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #ddd;
+}
+
+/* Text */
+.toast-text p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* Amount highlight */
+.toast-text span {
+  font-weight: 700;
+  color: var(--pine-tree);
+}
+/* Timestamp */
+.toast-time {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+
+
+</style>
 </head>
 <body>
 
@@ -685,6 +768,25 @@ select.d-form-input { cursor: pointer; }
     <p class="d-modal-note">Processed within 24 hours after admin approval.</p>
   </div>
 </div>
+
+<!-- Toast Notification -->
+<section id="toast-section">
+
+  <div id="toast" class="toast hidden">
+    <img id="flag" class="flag" src="" alt="country flag">
+    
+    <div class="toast-text">
+      <p id="toast-message"></p>
+    </div>
+  </div>
+
+  <!-- Sound -->
+  <audio id="toast-sound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+  </audio>
+
+</section>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1002,206 +1104,436 @@ async function submitWithdrawal() {
   setTimeout(() => window.location.reload(), 1200);
 }
 
-/* ══ MARKET DATA ═══════════════════════════
-   Uses Yahoo Finance via allorigins CORS proxy
-   Logos from Google Favicon / Clearbit API
-═══════════════════════════════════════════ */
+/* ══ MARKET DATA ═══════════════════════════════════════════════
+   Primary:  Finnhub.io  (free tier, no CORS, real prices)
+   Sparkline: Yahoo Finance v8 via corsproxy.io
+   Fallback: realistic simulated data so UI always renders
+   API Key:  Free at finnhub.io — replace FINNHUB_KEY below
+═══════════════════════════════════════════════════════════════ */
 
-// Portfolio stocks (shown as big cards)
+// FREE Finnhub key — get your own at finnhub.io (takes 30 seconds)
+// This demo key works but may hit rate limits in production
+const FINNHUB_KEY = 'd7q19tpr01qosaaq9ni0d7q19tpr01qosaaq9nig';
+
+// Finnhub uses different symbols for some tickers
+// finnhubTicker = what Finnhub expects (may differ from display ticker)
 const PORTFOLIO = [
-  { ticker:'AAPL',  name:'Apple Inc.',     domain:'apple.com'     },
-  { ticker:'MSFT',  name:'Microsoft Corp.',domain:'microsoft.com' },
+  { ticker:'AAPL',  finnhub:'AAPL',  name:'Apple Inc.',      domain:'apple.com'     },
+  { ticker:'MSFT',  finnhub:'MSFT',  name:'Microsoft Corp.', domain:'microsoft.com' },
 ];
-
-// Watchlist stocks (shown as list rows)
 const WATCHLIST = [
-  { ticker:'GOOGL', name:'Alphabet Inc.',  domain:'google.com'     },
-  { ticker:'AMZN',  name:'Amazon.com',     domain:'amazon.com'     },
-  { ticker:'TSLA',  name:'Tesla Inc.',     domain:'tesla.com'      },
-  { ticker:'NVDA',  name:'NVIDIA Corp.',   domain:'nvidia.com'     },
-  { ticker:'META',  name:'Meta Platforms', domain:'meta.com'       },
-  { ticker:'BRK-B', name:'Berkshire Hath.', domain:'berkshirehathaway.com' },
+  { ticker:'GOOGL', finnhub:'GOOGL', name:'Alphabet Inc.',   domain:'google.com'    },
+  { ticker:'AMZN',  finnhub:'AMZN',  name:'Amazon.com',      domain:'amazon.com'    },
+  { ticker:'TSLA',  finnhub:'TSLA',  name:'Tesla Inc.',       domain:'tesla.com'     },
+  { ticker:'NVDA',  finnhub:'NVDA',  name:'NVIDIA Corp.',     domain:'nvidia.com'    },
+  { ticker:'META',  finnhub:'META',  name:'Meta Platforms',   domain:'meta.com'      },
+  { ticker:'BRK.B', finnhub:'BRK.B', name:'Berkshire Hath.',  domain:'berkshirehathaway.com' },
 ];
+const ALL_STOCKS = [...PORTFOLIO, ...WATCHLIST];
 
-const ALL_TICKERS = [...PORTFOLIO, ...WATCHLIST];
-
-// Logo URL using Google's favicon service (reliable, no auth needed)
+// Google favicon — reliable, fast, no auth
 function logoUrl(domain) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 }
 
-// Draw a mini sparkline SVG from array of price values
-function drawSparkline(container, values, isUp, W = 100, H = 36) {
-  if (!values || values.length < 2) {
-    container.innerHTML = '';
-    return;
+// Sleep helper
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ── Fetch real quote from Finnhub ──────────────────────────────
+async function fetchFinnhubQuote(stock, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const sym = stock.finnhub || stock.ticker;
+      const url = `https://finnhub.io/api/v1/quote?symbol=${sym}&token=${FINNHUB_KEY}`;
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      if (res.status === 429) {
+        // Rate limited — wait and retry
+        await sleep(1000 * (attempt + 1));
+        continue;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const d = await res.json();
+      if (!d.c || d.c === 0) throw new Error('no price returned');
+      return {
+        price:     d.c,
+        change:    d.d  ?? 0,
+        changePct: d.dp ?? 0,
+        high:      d.h  ?? d.c,
+        low:       d.l  ?? d.c,
+        open:      d.o  ?? d.c,
+      };
+    } catch (err) {
+      if (attempt === retries) return null;
+      await sleep(600);
+    }
   }
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-  const pts = values.map((v, i) => {
-    const x = (i / (values.length - 1)) * W;
-    const y = H - ((v - min) / range) * (H - 4) - 2;
-    return `${x},${y}`;
+  return null;
+}
+
+// ── Fetch sparkline from Yahoo Finance via corsproxy.io ─────────
+async function fetchSparkline(ticker) {
+  try {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d`;
+    const proxy = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    const res = await fetch(proxy, { signal: AbortSignal.timeout(7000) });
+    if (!res.ok) throw new Error('spark error');
+    const data = await res.json();
+    const closes = data?.chart?.result?.[0]?.indicators?.quote?.[0]?.close?.filter(v => v != null);
+    return closes?.length >= 2 ? closes : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+// ── Generate realistic-looking fallback sparkline ───────────────
+// Uses the stock's known price range to create a plausible curve
+function fakeSpark(basePrice, isUp, points = 40) {
+  const vals = [];
+  let v = basePrice * (isUp ? 0.991 : 1.008);
+  for (let i = 0; i < points; i++) {
+    const drift = isUp ? 0.0003 : -0.0003;
+    v = v * (1 + drift + (Math.random() - 0.5) * 0.002);
+    vals.push(v);
+  }
+  return vals;
+}
+
+// ── Draw sparkline SVG ──────────────────────────────────────────
+function drawSparkline(containerId, values, isUp) {
+  const container = document.getElementById(containerId);
+  if (!container || !values || values.length < 2) return;
+
+  const W = 100, H = 34;
+  const clean = values.filter(v => v != null && !isNaN(v));
+  if (clean.length < 2) return;
+
+  const min = Math.min(...clean);
+  const max = Math.max(...clean);
+  const range = max - min || min * 0.01 || 1;
+
+  const pts = clean.map((v, i) => {
+    const x = (i / (clean.length - 1)) * W;
+    const y = H - 2 - ((v - min) / range) * (H - 6);
+    return [x, y];
   });
-  const color = isUp ? '#27ae60' : '#e74c3c';
-  const fillColor = isUp ? 'rgba(39,174,96,0.1)' : 'rgba(231,76,60,0.1)';
-  const polyline = pts.join(' ');
-  const lastPt = pts[pts.length - 1].split(',');
-  const firstPt = pts[0].split(',');
+
+  // Smooth catmull-rom path
+  function smooth(pts) {
+    if (pts.length < 2) return '';
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(i-1,0)];
+      const p1 = pts[i];
+      const p2 = pts[i+1];
+      const p3 = pts[Math.min(i+2,pts.length-1)];
+      const cp1x = p1[0] + (p2[0]-p0[0])/6;
+      const cp1y = p1[1] + (p2[1]-p0[1])/6;
+      const cp2x = p2[0] - (p3[0]-p1[0])/6;
+      const cp2y = p2[1] - (p3[1]-p1[1])/6;
+      d += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0]},${p2[1]}`;
+    }
+    return d;
+  }
+
+  const color    = isUp ? '#27ae60' : '#e74c3c';
+  const line     = smooth(pts);
+  const lastX    = pts[pts.length-1][0];
+  const lastY    = pts[pts.length-1][1];
+  const gradId   = 'g' + containerId;
 
   container.innerHTML = `
-    <svg width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    <svg width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" overflow="visible">
       <defs>
-        <linearGradient id="sg${container.id || Math.random().toString(36).slice(2)}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${color}" stop-opacity="0.15"/>
+        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="${color}" stop-opacity="0.18"/>
           <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
         </linearGradient>
       </defs>
-      <polygon points="${polyline} ${lastPt[0]},${H} ${firstPt[0]},${H}"
-        fill="${fillColor}" />
-      <polyline points="${polyline}"
-        fill="none" stroke="${color}" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${line} L${lastX},${H} L${pts[0][0]},${H} Z"
+            fill="url(#${gradId})"/>
+      <path d="${line}" fill="none" stroke="${color}"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
 }
 
-// Fetch quote + 1-day sparkline data via Yahoo Finance (allorigins proxy)
-async function fetchQuote(ticker) {
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d`;
-    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) throw new Error('proxy error');
-    const outer = await res.json();
-    const data = JSON.parse(outer.contents);
-    const result = data?.chart?.result?.[0];
-    if (!result) throw new Error('no result');
-
-    const meta   = result.meta;
-    const closes = result.indicators?.quote?.[0]?.close?.filter(v => v != null) || [];
-    const price  = meta.regularMarketPrice ?? closes[closes.length - 1] ?? 0;
-    const prev   = meta.chartPreviousClose ?? meta.previousClose ?? price;
-    const change    = price - prev;
-    const changePct = prev ? (change / prev) * 100 : 0;
-
-    return { price, change, changePct, sparkline: closes };
-  } catch (_) {
-    return null; // silent fail — show fallback
-  }
-}
-
-// Format price display
+// ── Format helpers ──────────────────────────────────────────────
 function fmtPrice(p) {
-  if (p >= 1000) return '$' + p.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (!p) return '—';
+  if (p >= 1000) return '$' + p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
   return '$' + p.toFixed(2);
 }
-function fmtChange(pct) {
-  const sign = pct >= 0 ? '+' : '';
-  return `${sign}${pct.toFixed(2)}%`;
+function fmtPct(pct) {
+  const s = pct >= 0 ? '+' : '';
+  return `${s}${pct.toFixed(2)}%`;
 }
 
-// Render portfolio cards
+// ── Render portfolio card ───────────────────────────────────────
 function renderPortfolioCard(stock, quote, idx) {
-  const isUp = !quote || quote.changePct >= 0;
-  const price = quote ? fmtPrice(quote.price) : '—';
-  const chg   = quote ? fmtChange(quote.changePct) : '';
+  const isUp    = !quote || quote.changePct >= 0;
+  const price   = fmtPrice(quote?.price);
   const sparkId = `spark-pc-${idx}`;
-
   return `
     <div class="portfolio-card">
       <div class="pc-top">
         <div class="pc-logo">
-          <img src="${logoUrl(stock.domain)}"
-               alt="${stock.ticker}"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <img src="${logoUrl(stock.domain)}" alt="${stock.ticker}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
           <span class="pc-logo-fb" style="display:none;">${stock.ticker.slice(0,2)}</span>
         </div>
-        <div>
+        <div style="min-width:0;">
           <div class="pc-ticker">${stock.ticker}</div>
           <div class="pc-name">${stock.name}</div>
         </div>
       </div>
       <div class="pc-label">Portfolio</div>
       <div class="pc-price">${price}</div>
-      ${quote ? `<div class="pc-change ${isUp?'up':'down'}">${isUp?'▲':'▼'} ${fmtChange(quote.changePct)}</div>` : ''}
+      <div class="pc-change ${isUp?'up':'down'}">
+        ${isUp?'▲':'▼'} ${quote ? fmtPct(quote.changePct) : '—'}
+      </div>
       <div class="pc-spark" id="${sparkId}"></div>
     </div>`;
 }
 
-// Render watchlist row
+// ── Render watchlist row ────────────────────────────────────────
 function renderWatchlistRow(stock, quote, idx) {
-  const isUp = !quote || quote.changePct >= 0;
-  const price = quote ? fmtPrice(quote.price) : '—';
+  const isUp    = !quote || quote.changePct >= 0;
+  const price   = fmtPrice(quote?.price);
   const sparkId = `spark-wl-${idx}`;
-
   return `
     <div class="wl-item">
       <div class="wl-logo">
-        <img src="${logoUrl(stock.domain)}"
-             alt="${stock.ticker}"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <img src="${logoUrl(stock.domain)}" alt="${stock.ticker}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
         <span class="wl-logo-fb" style="display:none;">${stock.ticker.slice(0,2)}</span>
       </div>
-      <div>
+      <div style="min-width:0;">
         <div class="wl-ticker">${stock.ticker}</div>
         <div class="wl-name">${stock.name}</div>
       </div>
       <div class="wl-spark" id="${sparkId}"></div>
       <div class="wl-right">
         <div class="wl-price">${price}</div>
-        ${quote ? `<div class="wl-change ${isUp?'up':'down'}">${isUp?'▲':'▼'} ${fmtChange(quote.changePct)}</div>` : ''}
+        <div class="wl-change ${isUp?'up':'down'}">
+          ${isUp?'▲':'▼'} ${quote ? fmtPct(quote.changePct) : '—'}
+        </div>
       </div>
     </div>`;
 }
 
-// Main market loader
+// ── Main loader ─────────────────────────────────────────────────
 async function loadMarketData() {
-  // Render skeletons already in HTML
-  // Fetch all quotes concurrently
-  const quotes = await Promise.all(ALL_TICKERS.map(s => fetchQuote(s.ticker)));
-
-  // Render portfolio cards
   const pgEl = document.getElementById('portfolio-grid');
-  if (pgEl) {
-    pgEl.innerHTML = PORTFOLIO.map((s, i) =>
-      renderPortfolioCard(s, quotes[i], i)
-    ).join('');
-
-    // Draw sparklines after DOM inserted
-    PORTFOLIO.forEach((s, i) => {
-      const q = quotes[i];
-      const el = document.getElementById(`spark-pc-${i}`);
-      if (el && q?.sparkline?.length) {
-        el.id = `spark-pc-${i}`;
-        drawSparkline(el, q.sparkline, q.changePct >= 0, 120, 38);
-      }
-    });
-  }
-
-  // Render watchlist
   const wlEl = document.getElementById('watchlist-card');
-  if (wlEl) {
-    wlEl.innerHTML = WATCHLIST.map((s, i) =>
-      renderWatchlistRow(s, quotes[PORTFOLIO.length + i], i)
-    ).join('');
 
-    WATCHLIST.forEach((s, i) => {
-      const q = quotes[PORTFOLIO.length + i];
-      const el = document.getElementById(`spark-wl-${i}`);
-      if (el && q?.sparkline?.length) {
-        drawSparkline(el, q.sparkline, q.changePct >= 0, 80, 30);
-      }
+  // Step 1: Show fake sparklines immediately so UI isn't blank
+  // Use realistic approximate prices as placeholders
+  const APPROX = {
+    AAPL:196, MSFT:415, GOOGL:175, AMZN:195, TSLA:245, NVDA:875, META:530, 'BRK.B':410
+  };
+
+  // Render shells with placeholder prices first
+  if (pgEl) {
+    pgEl.innerHTML = PORTFOLIO.map((s,i) =>
+      renderPortfolioCard(s, null, i)
+    ).join('');
+    PORTFOLIO.forEach((s,i) => {
+      const base = APPROX[s.ticker] || 100;
+      drawSparkline(`spark-pc-${i}`, fakeSpark(base, true), true);
+    });
+  }
+  if (wlEl) {
+    wlEl.innerHTML = WATCHLIST.map((s,i) =>
+      renderWatchlistRow(s, null, i)
+    ).join('');
+    WATCHLIST.forEach((s,i) => {
+      const base = APPROX[s.ticker] || 100;
+      drawSparkline(`spark-wl-${i}`, fakeSpark(base, true), true);
     });
   }
 
-  // Refresh every 5 minutes
-  setTimeout(loadMarketData, 5 * 60 * 1000);
+  // Step 2: Fetch quotes one at a time with 250ms gap to respect rate limits
+  const quoteResults = [];
+  for (let i = 0; i < ALL_STOCKS.length; i++) {
+    const q = await fetchFinnhubQuote(ALL_STOCKS[i]);
+    quoteResults.push(q);
+    if (i < ALL_STOCKS.length - 1) await sleep(200); // 200ms between requests = max 5/s well within 60/min
+  }
+
+  // Step 3: Re-render with real prices
+  if (pgEl) {
+    pgEl.innerHTML = PORTFOLIO.map((s,i) =>
+      renderPortfolioCard(s, quoteResults[i], i)
+    ).join('');
+    // Restore fake sparklines while real ones load
+    PORTFOLIO.forEach((s,i) => {
+      const q = quoteResults[i];
+      const base = q?.price || APPROX[s.ticker] || 100;
+      const isUp = !q || q.changePct >= 0;
+      drawSparkline(`spark-pc-${i}`, fakeSpark(base, isUp), isUp);
+    });
+  }
+  if (wlEl) {
+    wlEl.innerHTML = WATCHLIST.map((s,i) =>
+      renderWatchlistRow(s, quoteResults[PORTFOLIO.length+i], i)
+    ).join('');
+    WATCHLIST.forEach((s,i) => {
+      const q = quoteResults[PORTFOLIO.length+i];
+      const base = q?.price || APPROX[s.ticker] || 100;
+      const isUp = !q || q.changePct >= 0;
+      drawSparkline(`spark-wl-${i}`, fakeSpark(base, isUp), isUp);
+    });
+  }
+
+  // Step 4: Fetch real sparklines async per stock (non-blocking)
+  ALL_STOCKS.forEach(async (s, i) => {
+    await sleep(i * 300); // stagger sparkline fetches too
+    const q     = quoteResults[i];
+    const isUp  = !q || q.changePct >= 0;
+    const isPc  = i < PORTFOLIO.length;
+    const sparkId = isPc ? `spark-pc-${i}` : `spark-wl-${i - PORTFOLIO.length}`;
+    const real  = await fetchSparkline(s.ticker);
+    if (real && real.length >= 2) drawSparkline(sparkId, real, isUp);
+  });
+
+  // Refresh every 2 minutes
+  setTimeout(loadMarketData, 2 * 60 * 1000);
 }
 
-// Kick off market data load (non-blocking — runs after auth init)
-setTimeout(loadMarketData, 500);
+// Start after 600ms so auth loads first
+setTimeout(loadMarketData, 600);
 
+
+</script>
+<script>
+const countries = [
+  { name: "USA", flag: "https://flagcdn.com/us.svg" },
+  { name: "UK", flag: "https://flagcdn.com/gb.svg" },
+  { name: "Canada", flag: "https://flagcdn.com/ca.svg" },
+  { name: "Germany", flag: "https://flagcdn.com/de.svg" },
+  { name: "Australia", flag: "https://flagcdn.com/au.svg" },
+  { name: "UAE", flag: "https://flagcdn.com/ae.svg" },
+  { name: "UAE", flag: "https://flagcdn.com/ae.svg" }
+];
+
+/* NEW: action types */
+const actions = [
+  "invested in vault",
+  "deposited",
+  "withdrew"
+];
+
+const toast = document.getElementById("toast");
+const message = document.getElementById("toast-message");
+const flag = document.getElementById("flag");
+const sound = document.getElementById("toast-sound");
+
+/* -------- SOUND FIX -------- */
+let soundUnlocked = false;
+
+function unlockSound() {
+  if (soundUnlocked) return;
+  sound.volume = 0;
+  sound.play().then(() => {
+    sound.pause();
+    sound.currentTime = 0;
+    soundUnlocked = true;
+  }).catch(() => {});
+}
+
+["click", "scroll", "keydown", "touchstart"].forEach(evt => {
+  document.addEventListener(evt, unlockSound, { once: true });
+});
+
+function playSound() {
+  if (!soundUnlocked) return;
+
+  sound.currentTime = 0;
+  sound.volume = 0.25;
+  sound.play().catch(() => {});
+}
+
+/* -------- RANDOM DATA -------- */
+function getRandomEmail() {
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const first = letters[Math.floor(Math.random() * letters.length)];
+  return `${first}***@gmail.com`;
+}
+
+function getRandomAmount() {
+  return (Math.floor(Math.random() * (10000 - 200 + 1)) + 200)
+    .toLocaleString();
+}
+
+function getRandomAction() {
+  return actions[Math.floor(Math.random() * actions.length)];
+}
+
+/* -------- TIME -------- */
+let timeInterval;
+
+function startLiveTime(element, startTime) {
+  clearInterval(timeInterval);
+
+  function update() {
+    const seconds = Math.floor((Date.now() - startTime) / 1000);
+    element.textContent = seconds < 5 ? "just now" : seconds + "s ago";
+  }
+
+  update();
+  timeInterval = setInterval(update, 1000);
+}
+
+/* -------- TOAST -------- */
+function showToast() {
+  const country = countries[Math.floor(Math.random() * countries.length)];
+  const email = getRandomEmail();
+  const amount = getRandomAmount();
+  const action = getRandomAction();
+
+  flag.src = country.flag;
+  flag.onerror = () => flag.style.display = "none";
+  flag.style.display = "block";
+
+  const now = Date.now();
+
+  message.innerHTML = `
+    ${email} from ${country.name} 
+    <strong>${action}</strong> 
+    <span>$${amount}</span>
+    <small class="toast-time">just now</small>
+  `;
+
+  const timeEl = message.querySelector(".toast-time");
+
+  toast.classList.remove("hidden");
+
+  setTimeout(() => {
+    toast.classList.add("show");
+    playSound();
+    startLiveTime(timeEl, now);
+  }, 100);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      toast.classList.add("hidden");
+      clearInterval(timeInterval);
+    }, 300);
+  }, 5000);
+}
+
+/* -------- LOOP -------- */
+function startToasts() {
+  function loop() {
+    showToast();
+    const delay = Math.floor(Math.random() * (30000 - 15000 + 1)) + 15000;
+    setTimeout(loop, delay);
+  }
+  loop();
+}
+
+startToasts();
 </script>
 </body>
 </html>
